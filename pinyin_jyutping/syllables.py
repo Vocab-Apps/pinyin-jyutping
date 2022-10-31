@@ -1,3 +1,5 @@
+from . import logic
+
 
 class PinyinSyllable():
     def __init__(self, initial, final, tone):
@@ -6,7 +8,7 @@ class PinyinSyllable():
         self.tone = tone
 
     def render_tone_mark(self):
-        return f'{self.initial.name}{self.final.name}'
+        return f'{self.initial.name}{logic.apply_tone_mark(self.final, self.tone)}'
 
     def render_tone_number(self):
         return f'{self.initial.name}{self.final.name}{self.tone.tone_number}'

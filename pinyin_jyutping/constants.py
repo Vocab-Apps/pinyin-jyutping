@@ -3,19 +3,13 @@ import enum
 class PinyinInitials(enum.Enum):
     m = enum.auto()
 
-PinyinInitialsMap = {initial.name:initial for initial in PinyinInitials}
-
 class PinyinFinals(enum.Enum):
-    a = ('ā', 'á', 'ǎ', 'à')
-    o = ('ō', 'ó', 'ǒ', 'ò')
+    a = (1, 0)
+    o = (1, 0)
 
-    def __init__(self, t1, t2, t3, t4):
-        self.t1 = t1
-        self.t2 = t2
-        self.t3 = t3
-        self.t4 = t4
-
-PinyinFinalsMap = {final.name:final for final in PinyinFinals}
+    def __init__(self, vowel_count, vowel_location):
+        self.vowel_count = vowel_count
+        self.vowel_location = vowel_location
 
 class PinyinTones(enum.Enum):
     tone_1 = (1)
@@ -26,3 +20,23 @@ class PinyinTones(enum.Enum):
 
     def __init__(self, tone_number):
         self.tone_number = tone_number
+
+VowelToneMap = {
+    'a': {
+        PinyinTones.tone_1: 'ā', 
+        PinyinTones.tone_2: 'á', 
+        PinyinTones.tone_3: 'ǎ', 
+        PinyinTones.tone_4: 'à',
+        PinyinTones.tone_neutral: 'a'
+    },
+    'o': {
+        # ('ō', 'ó', 'ǒ', 'ò')
+        PinyinTones.tone_1: 'ō',
+        PinyinTones.tone_2: 'ó',
+        PinyinTones.tone_3: 'ǒ',
+        PinyinTones.tone_4: 'ò',
+        PinyinTones.tone_neutral: 'o'
+    }
+}
+
+
