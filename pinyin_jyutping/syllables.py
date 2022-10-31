@@ -5,6 +5,12 @@ class PinyinSyllable():
         self.final = final
         self.tone = tone
 
+    def render_tone_mark(self):
+        return f'{self.initial.name}{self.final.name}'
+
+    def render_tone_number(self):
+        return f'{self.initial.name}{self.final.name}{self.tone.tone_number}'
+
     def __eq__(self, other):
         if other == None:
             return False

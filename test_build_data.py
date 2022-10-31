@@ -12,6 +12,8 @@ class BuildTests(unittest.TestCase):
             pinyin_jyutping.constants.PinyinFinals.a, 
             pinyin_jyutping.constants.PinyinTones.tone_3)
         self.assertEqual(syllable, expected_syllable)
+        # self.assertEqual(syllable.render_tone_marks(), 'mǎ')
+        self.assertEqual(syllable.render_tone_number(), 'ma3')
 
 if __name__ == '__main__':
     main()
