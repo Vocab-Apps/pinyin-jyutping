@@ -30,7 +30,6 @@ VowelToneMap = {
         PinyinTones.tone_neutral: 'a'
     },
     'o': {
-        # ('ō', 'ó', 'ǒ', 'ò')
         PinyinTones.tone_1: 'ō',
         PinyinTones.tone_2: 'ó',
         PinyinTones.tone_3: 'ǒ',

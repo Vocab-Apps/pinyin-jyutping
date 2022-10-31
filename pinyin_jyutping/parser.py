@@ -10,15 +10,17 @@ def parse_pinyin(text):
     # look for initial
     # check first 2 letters
     first_2 = text[0:2]
-    remaining_text = text[2:]
-    if first_2 in cache.PinyinInitialsMap:
+    cache_hit = cache.PinyinInitialsMap.get(first_2, None)
+    if cache_hit != None:
+        remaining_text = text[2:]
         logger.debug(f'found initial: {first_2}')
-        return parse_final_and_tone(constants.PinyinInitials[first_2], remaining_text)
+        return parse_final_and_tone(cache_hit, remaining_text)
     first_1 = text[0:1]
-    remaining_text = text[1:]
-    if first_1 in cache.PinyinInitialsMap:
+    cache_hit = cache.PinyinInitialsMap.get(first_1, None)
+    if cache_hit != None:
+        remaining_text = text[1:]
         logger.debug(f'found initial {first_1}')
-        return parse_final_and_tone(constants.PinyinInitials[first_1], remaining_text)
+        return parse_final_and_tone(cache_hit, remaining_text)
     raise Exception(f"couldn't find initial: {text}")
 
 def parse_final_and_tone(initial, text):
