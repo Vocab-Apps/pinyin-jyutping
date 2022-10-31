@@ -13,3 +13,8 @@ for final in constants.PinyinFinals:
             'final': final,
             'tone': tone
         }
+        with_tone_number = f'{final.name}{tone.tone_number}'
+        PinyinFinalsMap[with_tone_number] = {
+            'final': final,
+            'tone': tone
+        }

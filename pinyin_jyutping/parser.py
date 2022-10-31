@@ -24,10 +24,11 @@ def parse_pinyin(text):
     raise Exception(f"couldn't find initial: {text}")
 
 def parse_final_and_tone(initial, text):
+    first_4 = text[0:4]
     first_3 = text[0:3]
     first_2 = text[0:2]
     first_1 = text[0:1]
-    for candidate in [first_3, first_2, first_1]:
+    for candidate in [first_4, first_3, first_2, first_1]:
         cache_hit = cache.PinyinFinalsMap.get(candidate, None)
         if cache_hit != None:
             final = cache_hit['final']

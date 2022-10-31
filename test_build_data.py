@@ -25,6 +25,11 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(syllable.render_tone_mark(), 'xiē')
         self.assertEqual(syllable.render_tone_number(), 'xie1')
 
+        text = 'xie1'
+        syllable = pinyin_jyutping.parser.parse_pinyin(text)
+        self.assertEqual(syllable, expected_syllable)
+
+
 
 if __name__ == '__main__':
     main()
