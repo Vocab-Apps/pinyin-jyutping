@@ -1,11 +1,34 @@
 import enum
 
 class PinyinInitials(enum.Enum):
+    b = enum.auto()
+    p = enum.auto()
     m = enum.auto()
+    f = enum.auto()
+    d = enum.auto()
+    t = enum.auto()
+    n = enum.auto()
+    l = enum.auto()
+    g = enum.auto()
+    k = enum.auto()
+    h = enum.auto()
+    j = enum.auto()
+    q = enum.auto()
+    x = enum.auto()
+    zh = enum.auto()
+    ch = enum.auto()
+    sh = enum.auto()
+    r = enum.auto()
+    z = enum.auto()
+    c = enum.auto()
+    s = enum.auto()
+    y = enum.auto()
+    w = enum.auto()
 
 class PinyinFinals(enum.Enum):
-    a = (1, 0)
-    o = (1, 0)
+    a  = (1, 0)
+    o  = (1, 0)
+    ie = (2, 0)
 
     def __init__(self, vowel_count, vowel_location):
         self.vowel_count = vowel_count
@@ -35,6 +58,13 @@ VowelToneMap = {
         PinyinTones.tone_3: 'ǒ',
         PinyinTones.tone_4: 'ò',
         PinyinTones.tone_neutral: 'o'
+    },
+    'e': {
+        PinyinTones.tone_1: 'ē',
+        PinyinTones.tone_2: 'é',
+        PinyinTones.tone_3: 'ě',
+        PinyinTones.tone_4: 'è',
+        PinyinTones.tone_neutral: 'e'
     }
 }
 
