@@ -28,11 +28,21 @@ class PinyinInitials(enum.Enum):
 class PinyinFinals(enum.Enum):
     a  = (1, 0)
     o  = (1, 0)
+    e  = (1, 0)
+    i  = (1, 0)
+    u  = (1, 0)
+    v  = (1, 0, 'ü') # ü
     ie = (2, 0)
 
-    def __init__(self, vowel_count, vowel_location):
+    def __init__(self, vowel_count, vowel_location, override_final=None):
         self.vowel_count = vowel_count
         self.vowel_location = vowel_location
+        self.override_final = override_final
+
+    def final_text(self):
+        if self.override_final != None:
+            return self.override_final
+        return self.name
 
 class PinyinTones(enum.Enum):
     tone_1 = (1)
@@ -65,7 +75,29 @@ VowelToneMap = {
         PinyinTones.tone_3: 'ě',
         PinyinTones.tone_4: 'è',
         PinyinTones.tone_neutral: 'e'
-    }
+    },
+    'i': {
+        PinyinTones.tone_1: 'ī',
+        PinyinTones.tone_2: 'í',
+        PinyinTones.tone_3: 'ǐ',
+        PinyinTones.tone_4: 'ì',
+        PinyinTones.tone_neutral: 'i'
+    },
+    'u': {
+        PinyinTones.tone_1: 'ū',
+        PinyinTones.tone_2: 'ú',
+        PinyinTones.tone_3: 'ǔ',
+        PinyinTones.tone_4: 'ù',
+        PinyinTones.tone_neutral: 'u'
+    },
+    'ü': {
+        PinyinTones.tone_1: 'ǖ',
+        PinyinTones.tone_2: 'ǘ',
+        PinyinTones.tone_3: 'ǚ',
+        PinyinTones.tone_4: 'ǜ',
+        PinyinTones.tone_neutral: 'ü'
+    },    
+
 }
 
 

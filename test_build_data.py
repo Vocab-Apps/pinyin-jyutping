@@ -7,6 +7,13 @@ from pinyin_jyutping.syllables import PinyinSyllable
 from pinyin_jyutping.constants import PinyinInitials, PinyinFinals, PinyinTones
 
 class BuildTests(unittest.TestCase):
+    def verify_parsing(self, text, initial, final, tone, tone_mark_render, tone_number_render):
+        syllable = pinyin_jyutping.parser.parse_pinyin(text)
+        expected_syllable = PinyinSyllable(initial, final, tone)
+        self.assertEqual(syllable, expected_syllable)
+        self.assertEqual(syllable.render_tone_mark(), tone_mark_render)
+        self.assertEqual(syllable.render_tone_number(), tone_number_render)
+
     def test_1(self):
         text = 'mǎ'
         syllable = pinyin_jyutping.parser.parse_pinyin(text)
@@ -29,6 +36,7 @@ class BuildTests(unittest.TestCase):
         syllable = pinyin_jyutping.parser.parse_pinyin(text)
         self.assertEqual(syllable, expected_syllable)
 
+        self.verify_parsing('nǚ', PinyinInitials.n, PinyinFinals.v, PinyinTones.tone_3, 'nǚ', 'nv3')
 
 
 if __name__ == '__main__':
