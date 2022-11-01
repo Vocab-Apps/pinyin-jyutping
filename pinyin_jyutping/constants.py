@@ -26,15 +26,33 @@ class PinyinInitials(enum.Enum):
     w = enum.auto()
 
 class PinyinFinals(enum.Enum):
-    a  = (1, 0)
-    o  = (1, 0)
-    e  = (1, 0)
-    i  = (1, 0)
-    u  = (1, 0)
-    v  = (1, 0, 'ü') # ü
-    ie = (2, 0)
+    a  = (enum.auto(), 1, 0)
+    o  = (enum.auto(), 1, 0)
+    e  = (enum.auto(), 1, 0)
+    i  = (enum.auto(), 1, 0)
+    u  = (enum.auto(), 1, 0)
+    v  = (enum.auto(), 1, 0, 'ü') # ü
+    ai = (enum.auto(), 2, 0)
+    ei = (enum.auto(), 2, 0)
+    ui = (enum.auto(), 2, 0)
+    ao = (enum.auto(), 2, 0)
+    ou = (enum.auto(), 2, 0)
+    iu = (enum.auto(), 2, 0)
+    ie = (enum.auto(), 2, 0)
+    ve = (enum.auto(), 2, 0, 'üe')
+    er = (enum.auto(), 1, 0)
+    an = (enum.auto(), 1, 0)
+    en = (enum.auto(), 1, 0)
+    in_ = (enum.auto(), 1, 0, 'in') # reserved keyword in python
+    un = (enum.auto(), 1, 0)
+    vn = (enum.auto(), 1, 0, 'ün')
+    ang = (enum.auto(), 1, 0)
+    eng = (enum.auto(), 1, 0)
+    ing = (enum.auto(), 1, 0)
+    ong = (enum.auto(), 1, 0)
 
-    def __init__(self, vowel_count, vowel_location, override_final=None):
+    def __init__(self, value, vowel_count, vowel_location, override_final=None):
+        self.val = value
         self.vowel_count = vowel_count
         self.vowel_location = vowel_location
         self.override_final = override_final

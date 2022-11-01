@@ -38,6 +38,10 @@ class BuildTests(unittest.TestCase):
 
         self.verify_parsing('nǚ', PinyinInitials.n, PinyinFinals.v, PinyinTones.tone_3, 'nǚ', 'nv3')
 
+    def test_show_pinyin_finals(self):
+        print(len(PinyinFinals))
+        print(list(PinyinFinals))
+
 
 if __name__ == '__main__':
     main()

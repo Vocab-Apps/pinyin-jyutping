@@ -1,4 +1,5 @@
 import logging
+import pprint
 
 from . import constants
 from . import syllables
@@ -28,7 +29,10 @@ def parse_final_and_tone(initial, text):
     first_3 = text[0:3]
     first_2 = text[0:2]
     first_1 = text[0:1]
+    logger.debug(f'looking for final in {text}')
+    # pprint.pprint(cache.PinyinFinalsMap)    
     for candidate in [first_4, first_3, first_2, first_1]:
+        logger.debug(f'scanning for {candidate}, map size: {len(cache.PinyinFinalsMap)}')
         cache_hit = cache.PinyinFinalsMap.get(candidate, None)
         if cache_hit != None:
             final = cache_hit['final']
