@@ -38,9 +38,13 @@ class BuildTests(unittest.TestCase):
 
         self.verify_parsing('nǚ', PinyinInitials.n, PinyinFinals.v, PinyinTones.tone_3, 'nǚ', 'nv3')
 
-    def test_show_pinyin_finals(self):
-        print(len(PinyinFinals))
-        print(list(PinyinFinals))
+    def test_special_cases(self):
+        self.verify_parsing('er4', PinyinInitials.er, PinyinFinals.er, PinyinTones.tone_4, 'èr', 'er4')
+
+    def test_load_cedict(self):
+        filename = 'source_data/cedict_1_0_ts_utf-8_mdbg.txt'
+        pinyin_jyutping.parser.parse_cedict(filename)
+
 
 
 if __name__ == '__main__':

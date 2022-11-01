@@ -24,6 +24,7 @@ class PinyinInitials(enum.Enum):
     s = enum.auto()
     y = enum.auto()
     w = enum.auto()
+    er = enum.auto() # special case, single syllable
 
 class PinyinFinals(enum.Enum):
     a  = (enum.auto(), 1, 0)
