@@ -35,14 +35,28 @@ def parse_final_and_tone(initial, text):
     first_1 = text[0:1]
     logger.debug(f'looking for final in {text}')
     # pprint.pprint(cache.PinyinFinalsMap)    
-    for candidate in [first_4, first_3, first_2, first_1]:
+    for candidate_length in reversed(range(4)):
+        candidate = text[0:candidate_length]
+        remaining_text = text[candidate_length:]
         logger.debug(f'scanning for {candidate}, map size: {len(cache.PinyinFinalsMap)}')
         cache_hit = cache.PinyinFinalsMap.get(candidate, None)
         if cache_hit != None:
             final = cache_hit['final']
             tone = cache_hit['tone']
-            return syllables.PinyinSyllable(initial, final, tone)
+            return syllables.PinyinSyllable(initial, final, tone), remaining_text
     raise Exception(f'could not find final: {text}')
+
+def parse_pinyin_word(text):
+    syllables = []
+    while len(text) > 0:
+        logger.debug(f'parsing pinyin word: {text}')
+        # remove leading space
+        text = text.lstrip()
+        syllable, text = parse_pinyin(text)
+        logger.debug(f'parsed {syllable}, remaining text: {text}')
+        syllables.append(syllable)
+    return syllables
+
 
 def parse_cedict(filepath):
     with open(filepath, 'r', encoding="utf8") as filehandle:
