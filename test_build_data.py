@@ -62,7 +62,7 @@ class BuildTests(unittest.TestCase):
             PinyinSyllable(PinyinInitials.zh, PinyinFinals.ou, PinyinTones.tone_1),            
         ])
 
-    @pytest.mark.skip(reason="wait until parsing is more advanced")
+    @pytest.mark.skip(reason="a bit slow")
     def test_load_cedict(self):
         filename = 'source_data/cedict_1_0_ts_utf-8_mdbg.txt'
         simplified_word_map, traditional_word_map = pinyin_jyutping.parser.parse_cedict(filename)
