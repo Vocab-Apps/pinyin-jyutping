@@ -52,10 +52,27 @@ class BuildTests(unittest.TestCase):
         output = pinyin_jyutping.parser.parse_pinyin_word(text)
         self.assertEqual(output, expected_output)
 
+    def test_parse_cedict(self):
+        line = '上周 上周 [shang4 zhou1] /last week/'
+        simplified, traditional, syllables = pinyin_jyutping.parser.parse_cedict_line(line)
+        self.assertEqual(simplified, '上周')
+        self.assertEqual(traditional, '上周')
+        self.assertEqual(syllables, [
+            PinyinSyllable(PinyinInitials.sh, PinyinFinals.ang, PinyinTones.tone_4),
+            PinyinSyllable(PinyinInitials.zh, PinyinFinals.ou, PinyinTones.tone_1),            
+        ])
+
     @pytest.mark.skip(reason="wait until parsing is more advanced")
     def test_load_cedict(self):
         filename = 'source_data/cedict_1_0_ts_utf-8_mdbg.txt'
-        pinyin_jyutping.parser.parse_cedict(filename)
+        simplified_word_map, traditional_word_map = pinyin_jyutping.parser.parse_cedict(filename)
+
+        self.assertEqual(simplified_word_map['上周'],
+            [
+                PinyinSyllable(PinyinInitials.sh, PinyinFinals.ang, PinyinTones.tone_4),
+                PinyinSyllable(PinyinInitials.zh, PinyinFinals.ou, PinyinTones.tone_1),
+            ]
+        )
 
 
 

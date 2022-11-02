@@ -5,6 +5,7 @@ import re
 from . import constants
 from . import syllables
 from . import cache
+from . import errors
 
 logger = logging.getLogger(__file__)
 
@@ -26,16 +27,12 @@ def parse_pinyin(text):
         remaining_text = text[1:]
         logger.debug(f'found initial {first_1}')
         return parse_final_and_tone(cache_hit, remaining_text)
-    raise Exception(f"couldn't find initial: {text}")
+    raise errors.PinyinParsingError(f"couldn't find initial: {text}")
 
 def parse_final_and_tone(initial, text):
-    first_4 = text[0:4]
-    first_3 = text[0:3]
-    first_2 = text[0:2]
-    first_1 = text[0:1]
     logger.debug(f'looking for final in {text}')
     # pprint.pprint(cache.PinyinFinalsMap)    
-    for candidate_length in reversed(range(4)):
+    for candidate_length in reversed(range(6)):
         candidate = text[0:candidate_length]
         remaining_text = text[candidate_length:]
         logger.debug(f'scanning for {candidate}, map size: {len(cache.PinyinFinalsMap)}')
@@ -44,7 +41,7 @@ def parse_final_and_tone(initial, text):
             final = cache_hit['final']
             tone = cache_hit['tone']
             return syllables.PinyinSyllable(initial, final, tone), remaining_text
-    raise Exception(f'could not find final: {text}')
+    raise errors.PinyinParsingError(f"couldn't find final: {text}")
 
 def parse_pinyin_word(text):
     syllables = []
@@ -59,13 +56,24 @@ def parse_pinyin_word(text):
 
 
 def parse_cedict(filepath):
+    simplified_word_map = {}
+    traditional_word_map = {}
     with open(filepath, 'r', encoding="utf8") as filehandle:
         for line in filehandle:
             first_char = line[:1]
             if first_char != '#' and line != "and add boilerplate:\n":
-                parse_cedict_line(line)            
+                try:
+                    simplified, traditional, syllables = parse_cedict_line(line)
+                    simplified_word_map[simplified] = syllables
+                    traditional_word_map[traditional] = syllables
+                except errors.PinyinParsingError as e:
+                    logger.error(e)
+
+    return simplified_word_map, traditional_word_map
+
 
 def parse_cedict_line(line):
+    logger.debug(f'parsing cedict line: {line}')
     m = re.match('([^\s]+)\s([^\s]+)\s\[([^\]]*)\]\s\/([^\/]+)\/.*', line)
     if m == None:
         logger.info(line)
@@ -74,4 +82,5 @@ def parse_cedict_line(line):
     pinyin = m.group(3)
     definition = m.group(4)        
     # parse the pinyin
-    parse_pinyin(pinyin)
+    syllables = parse_pinyin_word(pinyin)
+    return simplified_chinese, traditional_chinese, syllables
