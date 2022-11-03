@@ -2,12 +2,12 @@
 class WordMapping():
     def __init__(self, syllables):
         self.syllables = syllables
-        self.occurences = 0
+        self.occurences = 1
 
 class CharacterMapping():
     def __init__(self, syllable):
         self.syllable = syllable
-        self.occurences = 0
+        self.occurences = 1
 
 class WordAndCharacterMaps():
     def __init__(self):

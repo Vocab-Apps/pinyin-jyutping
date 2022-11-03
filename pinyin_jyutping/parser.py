@@ -102,12 +102,41 @@ def process_simplified_word(simplified, syllables, data):
 def process_traditional_word(traditional, syllables, data):
     process_word(traditional, syllables, data.traditional_map)
 
+
+
 def process_word(chinese, syllables, map):
     def add_character_mapping(chinese, character_map, syllable):
         # insert into character map
         if chinese not in character_map:
-            character_map[chinese] = data.CharacterMapping(syllable)
-        character_map[chinese].occurences += 1
+            character_map[chinese] = [data.CharacterMapping(syllable)]
+        else:
+            # does this syllable exist already ?
+            matching_entries = [x for x in character_map[chinese] if x.syllable == syllable]
+            if len(matching_entries) == 1:
+                # we already have this pinyin
+                matching_entries[0].occurences += 1 
+            elif len(matching_entries) == 0:
+                # need to insert
+                character_map[chinese].append(data.CharacterMapping(syllable))
+            else:
+                raise Exception(f'found {len(matching_syllables)} for {chinese}')
+
+    def add_word_mapping(chinese, word_map, syllables):
+        # insert into word map
+        if chinese not in word_map:
+            word_map[chinese] = [data.WordMapping(syllables)]
+        else:
+            # does this pinyin exist already ?
+            matching_entries = [x for x in character_map[chinese] if x.syllables == syllables]
+            if len(matching_entries) == 1:
+                # we already have this pinyin
+                matching_entries[0].occurences += 1 
+            elif len(matching_entries) == 0:
+                # need to insert
+                word_map[chinese].append(data.WordMapping(syllables))
+            else:
+                raise Exception(f'found {len(matching_syllables)} for {chinese}')
+
 
     if len(chinese) == 1:
         # insert into character map

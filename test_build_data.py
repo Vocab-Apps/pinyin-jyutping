@@ -4,6 +4,7 @@ import pinyin_jyutping.parser
 import pinyin_jyutping.data
 import unittest
 import pytest
+import pprint
 
 from pinyin_jyutping.syllables import PinyinSyllable
 from pinyin_jyutping.constants import PinyinInitials, PinyinFinals, PinyinTones
@@ -73,7 +74,20 @@ class BuildTests(unittest.TestCase):
         ]
         pinyin_jyutping.parser.parse_cedict_entries(lines, data)
 
-        
+        # pprint.pprint(data)
+        self.assertEqual(len(data.simplified_map.character_map['谁']), 2)
+
+        # check first character mapping
+        character_mapping_1 = data.simplified_map.character_map['谁'][0]
+        self.assertEqual(character_mapping_1.syllable, 
+            PinyinSyllable(PinyinInitials.sh, PinyinFinals.ei, PinyinTones.tone_2),)
+        self.assertEqual(character_mapping_1.occurences, 2)
+
+        # check second character mapping
+        character_mapping_2 = data.simplified_map.character_map['谁'][1]
+        self.assertEqual(character_mapping_2.syllable, 
+            PinyinSyllable(PinyinInitials.sh, PinyinFinals.ui, PinyinTones.tone_2),)
+        self.assertEqual(character_mapping_2.occurences, 1)
 
 
 
