@@ -6,6 +6,7 @@ from . import constants
 from . import syllables
 from . import cache
 from . import errors
+from . import data
 
 logger = logging.getLogger(__file__)
 
@@ -96,7 +97,29 @@ def parse_cedict_line(line):
     return simplified_chinese, traditional_chinese, syllables
 
 def process_simplified_word(simplified, syllables, data):
-    pass
+    process_word(simplified, syllables, data.simplified_map)
 
-def process_traditional_word(simplified, syllables, data):
-    pass
+def process_traditional_word(traditional, syllables, data):
+    process_word(traditional, syllables, data.traditional_map)
+
+def process_word(chinese, syllables, map):
+    def add_character_mapping(chinese, character_map, syllable):
+        # insert into character map
+        if chinese not in character_map:
+            character_map[chinese] = data.CharacterMapping(syllable)
+        character_map[chinese].occurences += 1
+
+    if len(chinese) == 1:
+        # insert into character map
+        add_character_mapping(chinese, map.character_map, syllables[0])
+    else:
+        # word with multiple characters
+        if chinese not in map.word_map:
+            map.word_map[chinese] = data.WordMapping(syllables)
+        map.word_map[chinese].occurences += 1
+        # add each character
+        for chinese_char, syllable in zip(chinese, syllables):
+            add_character_mapping(chinese_char, map.character_map, syllable)
+
+
+        

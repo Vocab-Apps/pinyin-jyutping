@@ -1,12 +1,12 @@
 
 class WordMapping():
-    def __init__(self):
-        self.syllables = None
+    def __init__(self, syllables):
+        self.syllables = syllables
         self.occurences = 0
 
 class CharacterMapping():
-    def __init__(self):
-        self.syllable = None
+    def __init__(self, syllable):
+        self.syllable = syllable
         self.occurences = 0
 
 class WordAndCharacterMaps():
@@ -17,4 +17,4 @@ class WordAndCharacterMaps():
 class Data():
     def __init__(self):
         self.simplified_map = WordAndCharacterMaps()
-        self.traditonal_map = WordAndCharacterMaps()
+        self.traditional_map = WordAndCharacterMaps()

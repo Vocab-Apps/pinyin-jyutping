@@ -68,9 +68,13 @@ class BuildTests(unittest.TestCase):
         data = pinyin_jyutping.data.Data()
         lines = [
             '誰 谁 [shei2] /who/also pr. [shui2]/',
+            '誰知 谁知 [shei2 zhi1] /who would have thought/unexpectedly/',
             '阿誰 阿谁 [a1 shui2] /who/'
         ]
         pinyin_jyutping.parser.parse_cedict_entries(lines, data)
+
+        
+
 
 
     @pytest.mark.skip(reason="a bit slow")
