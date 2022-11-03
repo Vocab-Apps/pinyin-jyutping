@@ -58,29 +58,29 @@ def parse_pinyin_word(text):
         syllables.append(syllable)
     return syllables
 
+ 
+def parse_cedict(filepath, data):
+    generator = parse_cedict_file_generator(filepath)
+    parse_cedict_entries(generator, data)
 
 # this is a generator
-def parse_cedict_file(filepath):
+def parse_cedict_file_generator(filepath):
     simplified_word_map = {}
     traditional_word_map = {}
     with open(filepath, 'r', encoding="utf8") as filehandle:
         for line in filehandle:
             first_char = line[:1]
             if first_char != '#' and line != "and add boilerplate:\n":
-                try:
-                    simplified, traditional, syllables = parse_cedict_line(line)
-                    simplified_word_map[simplified] = syllables
-                    traditional_word_map[traditional] = syllables
-                except errors.PinyinParsingError as e:
-                    logger.error(e)
-
-    return simplified_word_map, traditional_word_map
+                yield line
 
 def parse_cedict_entries(generator, data):
     for line in generator:
-        simplified, traditional, syllables = parse_cedict_line(line)
-        process_simplified_word(simplified, syllables, data)
-        process_traditional_word(simplified, syllables, data)
+        try:
+            simplified, traditional, syllables = parse_cedict_line(line)
+            process_simplified_word(simplified, syllables, data)
+            process_traditional_word(simplified, syllables, data)
+        except errors.PinyinParsingError as e:
+            logger.warning(e)
 
 
 def parse_cedict_line(line):
@@ -133,7 +133,7 @@ def process_word(chinese, syllables, map):
             word_map[chinese] = [data.WordMapping(syllables)]
         else:
             # does this pinyin exist already ?
-            matching_entries = [x for x in character_map[chinese] if x.syllables == syllables]
+            matching_entries = [x for x in word_map[chinese] if x.syllables == syllables]
             if len(matching_entries) == 1:
                 # we already have this pinyin
                 matching_entries[0].occurences += 1 
