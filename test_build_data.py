@@ -1,6 +1,7 @@
 
 import pinyin_jyutping
 import pinyin_jyutping.parser
+import pinyin_jyutping.data
 import unittest
 import pytest
 
@@ -41,6 +42,7 @@ class BuildTests(unittest.TestCase):
 
     def test_special_cases(self):
         self.verify_parsing('er4', PinyinInitials.er, PinyinFinals.er, PinyinTones.tone_4, 'èr', 'er4')
+        self.verify_parsing('a1', PinyinInitials.a, PinyinFinals.a, PinyinTones.tone_1, 'ā', 'a1')
 
     def test_parse_pinyin_word(self):
         text = 'yi1 ge5 ban4'
@@ -61,6 +63,15 @@ class BuildTests(unittest.TestCase):
             PinyinSyllable(PinyinInitials.sh, PinyinFinals.ang, PinyinTones.tone_4),
             PinyinSyllable(PinyinInitials.zh, PinyinFinals.ou, PinyinTones.tone_1),            
         ])
+
+    def test_build_data_cedict(self):
+        data = pinyin_jyutping.data.Data()
+        lines = [
+            '誰 谁 [shei2] /who/also pr. [shui2]/',
+            '阿誰 阿谁 [a1 shui2] /who/'
+        ]
+        pinyin_jyutping.parser.parse_cedict_entries(lines, data)
+
 
     @pytest.mark.skip(reason="a bit slow")
     def test_load_cedict(self):

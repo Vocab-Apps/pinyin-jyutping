@@ -24,6 +24,9 @@ def parse_pinyin(text):
     first_1 = text[0:1]
     cache_hit = cache.PinyinInitialsMap.get(first_1, None)
     if cache_hit != None:
+        # special case for 'a'
+        if cache_hit == constants.PinyinInitials.a:
+            return parse_final_and_tone(cache_hit, text)                    
         remaining_text = text[1:]
         logger.debug(f'found initial {first_1}')
         return parse_final_and_tone(cache_hit, remaining_text)
@@ -55,7 +58,8 @@ def parse_pinyin_word(text):
     return syllables
 
 
-def parse_cedict(filepath):
+# this is a generator
+def parse_cedict_file(filepath):
     simplified_word_map = {}
     traditional_word_map = {}
     with open(filepath, 'r', encoding="utf8") as filehandle:
@@ -71,6 +75,12 @@ def parse_cedict(filepath):
 
     return simplified_word_map, traditional_word_map
 
+def parse_cedict_entries(generator, data):
+    for line in generator:
+        simplified, traditional, syllables = parse_cedict_line(line)
+        process_simplified_word(simplified, syllables, data)
+        process_traditional_word(simplified, syllables, data)
+
 
 def parse_cedict_line(line):
     logger.debug(f'parsing cedict line: {line}')
@@ -84,3 +94,9 @@ def parse_cedict_line(line):
     # parse the pinyin
     syllables = parse_pinyin_word(pinyin)
     return simplified_chinese, traditional_chinese, syllables
+
+def process_simplified_word(simplified, syllables, data):
+    pass
+
+def process_traditional_word(simplified, syllables, data):
+    pass

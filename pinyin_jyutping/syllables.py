@@ -10,12 +10,12 @@ class PinyinSyllable():
 
     def render_tone_mark(self):
         # special case for 'er'
-        if self.initial == constants.PinyinInitials.er:
+        if self.initial in [constants.PinyinInitials.er, constants.PinyinInitials.a]:
             return f'{logic.apply_tone_mark(self.final, self.tone)}'
         return f'{self.initial.name}{logic.apply_tone_mark(self.final, self.tone)}'
 
     def render_tone_number(self):
-        if self.initial == constants.PinyinInitials.er:
+        if self.initial in [constants.PinyinInitials.er, constants.PinyinInitials.a]:
             return f'{self.final.name}{self.tone.tone_number}'
         return f'{self.initial.name}{self.final.name}{self.tone.tone_number}'
 
