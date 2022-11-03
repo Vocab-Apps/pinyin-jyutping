@@ -70,7 +70,8 @@ class BuildTests(unittest.TestCase):
         lines = [
             '誰 谁 [shei2] /who/also pr. [shui2]/',
             '誰知 谁知 [shei2 zhi1] /who would have thought/unexpectedly/',
-            '阿誰 阿谁 [a1 shui2] /who/'
+            '阿誰 阿谁 [a1 shui2] /who/',
+            '不准 不准 [bu4 zhun3] /not to allow/to forbid/to prohibit/'
         ]
         pinyin_jyutping.parser.parse_cedict_entries(lines, data)
 
@@ -88,6 +89,15 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(character_mapping_2.syllable, 
             PinyinSyllable(PinyinInitials.sh, PinyinFinals.ui, PinyinTones.tone_2),)
         self.assertEqual(character_mapping_2.occurences, 1)
+
+        # check word
+        self.assertEqual(len(data.simplified_map.word_map['不准']), 1)
+        self.assertEqual(data.simplified_map.word_map['不准'][0].syllables,
+        [
+            PinyinSyllable(PinyinInitials.b, PinyinFinals.u, PinyinTones.tone_4),
+            PinyinSyllable(PinyinInitials.zh, PinyinFinals.un, PinyinTones.tone_3)
+        ]
+        )
 
 
 

@@ -142,10 +142,8 @@ def process_word(chinese, syllables, map):
         # insert into character map
         add_character_mapping(chinese, map.character_map, syllables[0])
     else:
-        # word with multiple characters
-        if chinese not in map.word_map:
-            map.word_map[chinese] = data.WordMapping(syllables)
-        map.word_map[chinese].occurences += 1
+        # insert into word mapping
+        add_word_mapping(chinese, map.word_map, syllables)
         # add each character
         for chinese_char, syllable in zip(chinese, syllables):
             add_character_mapping(chinese_char, map.character_map, syllable)
