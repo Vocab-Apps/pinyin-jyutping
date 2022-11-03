@@ -99,6 +99,31 @@ class BuildTests(unittest.TestCase):
         ]
         )
 
+    def test_build_data_cedict_ordering(self):
+        data = pinyin_jyutping.data.Data()
+        lines = [
+            '誰 谁 [shei2] /who/also pr. [shui2]/',
+            '誰 谁 [shei2] /test 1/',
+            '誰 谁 [shui2] /test 2/',
+            '誰 谁 [shui2] /test 3/',
+            '誰 谁 [shui2] /test 4/',
+        ]
+        pinyin_jyutping.parser.parse_cedict_entries(lines, data)
+
+        # pprint.pprint(data)
+        self.assertEqual(len(data.simplified_map.character_map['谁']), 2)
+
+        # check first character mapping
+        character_mapping_1 = data.simplified_map.character_map['谁'][0]
+        self.assertEqual(character_mapping_1.syllable, 
+            PinyinSyllable(PinyinInitials.sh, PinyinFinals.ui, PinyinTones.tone_2),)
+        self.assertEqual(character_mapping_1.occurences, 3)
+
+        # check second character mapping
+        character_mapping_2 = data.simplified_map.character_map['谁'][1]
+        self.assertEqual(character_mapping_2.syllable, 
+            PinyinSyllable(PinyinInitials.sh, PinyinFinals.ei, PinyinTones.tone_2),)
+        self.assertEqual(character_mapping_2.occurences, 2)
 
 
     @pytest.mark.skip(reason="a bit slow")

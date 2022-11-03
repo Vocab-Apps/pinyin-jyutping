@@ -118,6 +118,10 @@ def process_word(chinese, syllables, map):
             elif len(matching_entries) == 0:
                 # need to insert
                 character_map[chinese].append(data.CharacterMapping(syllable))
+                # sort by number of occurences, descending
+                def get_occurences(x):
+                    return x.occurences
+                character_map[chinese].sort(key=get_occurences)
             else:
                 raise Exception(f'found {len(matching_syllables)} for {chinese}')
 
