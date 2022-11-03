@@ -105,6 +105,10 @@ def process_traditional_word(traditional, syllables, data):
 
 
 def process_word(chinese, syllables, map):
+    # this is the sorting key
+    def get_occurences(x):
+        return x.occurences
+
     def add_character_mapping(chinese, character_map, syllable):
         # insert into character map
         if chinese not in character_map:
@@ -118,12 +122,10 @@ def process_word(chinese, syllables, map):
             elif len(matching_entries) == 0:
                 # need to insert
                 character_map[chinese].append(data.CharacterMapping(syllable))
-                # sort by number of occurences, descending
-                def get_occurences(x):
-                    return x.occurences
-                character_map[chinese].sort(key=get_occurences)
             else:
                 raise Exception(f'found {len(matching_syllables)} for {chinese}')
+            # sort by number of occurences, descending
+            character_map[chinese].sort(key=get_occurences, reverse=True)
 
     def add_word_mapping(chinese, word_map, syllables):
         # insert into word map
@@ -140,6 +142,7 @@ def process_word(chinese, syllables, map):
                 word_map[chinese].append(data.WordMapping(syllables))
             else:
                 raise Exception(f'found {len(matching_syllables)} for {chinese}')
+            word_map[chinese].sort(key=get_occurences, reverse=True)
 
 
     if len(chinese) == 1:
