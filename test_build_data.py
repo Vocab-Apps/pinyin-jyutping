@@ -1,7 +1,7 @@
-
 import pinyin_jyutping
 import pinyin_jyutping.parser
 import pinyin_jyutping.data
+import pickle
 import unittest
 import pytest
 import pprint
@@ -126,7 +126,7 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(character_mapping_2.occurences, 2)
 
 
-    # @pytest.mark.skip(reason="a bit slow")
+    @pytest.mark.skip(reason="a bit slow")
     def test_load_cedict(self):
         data = pinyin_jyutping.data.Data()
         filename = 'source_data/cedict_1_0_ts_utf-8_mdbg.txt'
@@ -141,7 +141,24 @@ class BuildTests(unittest.TestCase):
             ]
         )
 
-
+    
+    def test_save_pickle(self):
+        data = pinyin_jyutping.data.Data()
+        sample_data_only = False
+        if sample_data_only:
+            lines = [
+                '誰 谁 [shei2] /who/also pr. [shui2]/',
+                '誰知 谁知 [shei2 zhi1] /who would have thought/unexpectedly/',
+                '阿誰 阿谁 [a1 shui2] /who/',
+                '不准 不准 [bu4 zhun3] /not to allow/to forbid/to prohibit/'
+            ]
+            pinyin_jyutping.parser.parse_cedict_entries(lines, data)
+        else:
+            filename = 'source_data/cedict_1_0_ts_utf-8_mdbg.txt'
+            pinyin_jyutping.parser.parse_cedict(filename, data)            
+        data_file = open('pinyin.pkl', 'wb')
+        pickle.dump(data, data_file)
+        data_file.close()
 
 
 if __name__ == '__main__':
