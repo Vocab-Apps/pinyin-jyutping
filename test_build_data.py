@@ -133,6 +133,13 @@ class BuildTests(unittest.TestCase):
         pinyin_jyutping.parser.parse_cedict(filename, data)
 
         self.assertIn('上周', data.simplified_map.word_map)
+        self.assertEqual(len(data.simplified_map.word_map['上周']), 1)
+        self.assertEqual(data.simplified_map.word_map['上周'][0].syllables,
+            [ 
+                PinyinSyllable(PinyinInitials.sh, PinyinFinals.ang, PinyinTones.tone_4),
+                PinyinSyllable(PinyinInitials.zh, PinyinFinals.ou, PinyinTones.tone_1)
+            ]
+        )
 
 
 
