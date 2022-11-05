@@ -3,6 +3,7 @@ pyenv/
 
 # cached file
 pinyin_jyutping_sentence/mandarin_cantonese_data.pkl
+*.pkl
 
 # Compiled python modules.
 *.pyc
@@ -18,3 +19,4 @@ pinyin_jyutping_sentence/mandarin_cantonese_data.pkl
 
 # tox
 .tox/
+

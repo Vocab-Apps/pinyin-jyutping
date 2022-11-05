@@ -141,7 +141,24 @@ class BuildTests(unittest.TestCase):
             ]
         )
 
-    
+
+    def test_dump_load_pickle(self):
+        data = pinyin_jyutping.data.Data()
+        lines = [
+            '上周 上周 [shang4 zhou1] /last week/',
+            '誰 谁 [shei2] /who/also pr. [shui2]/',
+            '誰知 谁知 [shei2 zhi1] /who would have thought/unexpectedly/',
+            '阿誰 阿谁 [a1 shui2] /who/',
+            '不准 不准 [bu4 zhun3] /not to allow/to forbid/to prohibit/'
+        ]
+        pinyin_jyutping.parser.parse_cedict_entries(lines, data)
+
+        pickled_data = pickle.dumps(data)
+
+        unpickled_data = pickle.loads(pickled_data)
+
+
+    @pytest.mark.skip(reason="still experimenting with pickle")
     def test_save_pickle(self):
         data = pinyin_jyutping.data.Data()
         sample_data_only = False
@@ -159,6 +176,13 @@ class BuildTests(unittest.TestCase):
         data_file = open('pinyin.pkl', 'wb')
         pickle.dump(data, data_file)
         data_file.close()
+    
+    @pytest.mark.skip(reason="still experimenting with pickle")
+    def test_load_pickle(self):
+        data_file = open('pinyin.pkl', 'rb')
+        data = pickle.load(data_file)
+        data_file.close()
+
 
 
 if __name__ == '__main__':
