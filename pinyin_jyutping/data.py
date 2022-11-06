@@ -9,12 +9,8 @@ class CharacterMapping():
         self.syllable = syllable
         self.occurences = 1
 
-class WordAndCharacterMaps():
+class Data():
     def __init__(self):
         self.character_map = {}
         self.word_map = {}
 
-class Data():
-    def __init__(self):
-        self.simplified_map = WordAndCharacterMaps()
-        self.traditional_map = WordAndCharacterMaps()

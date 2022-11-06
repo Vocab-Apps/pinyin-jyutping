@@ -76,23 +76,23 @@ class BuildTests(unittest.TestCase):
         pinyin_jyutping.parser.parse_cedict_entries(lines, data)
 
         # pprint.pprint(data)
-        self.assertEqual(len(data.simplified_map.character_map['谁']), 2)
+        self.assertEqual(len(data.character_map['谁']), 2)
 
         # check first character mapping
-        character_mapping_1 = data.simplified_map.character_map['谁'][0]
+        character_mapping_1 = data.character_map['谁'][0]
         self.assertEqual(character_mapping_1.syllable, 
             PinyinSyllable(PinyinInitials.sh, PinyinFinals.ei, PinyinTones.tone_2),)
         self.assertEqual(character_mapping_1.occurences, 2)
 
         # check second character mapping
-        character_mapping_2 = data.simplified_map.character_map['谁'][1]
+        character_mapping_2 = data.character_map['谁'][1]
         self.assertEqual(character_mapping_2.syllable, 
             PinyinSyllable(PinyinInitials.sh, PinyinFinals.ui, PinyinTones.tone_2),)
         self.assertEqual(character_mapping_2.occurences, 1)
 
         # check word
-        self.assertEqual(len(data.simplified_map.word_map['不准']), 1)
-        self.assertEqual(data.simplified_map.word_map['不准'][0].syllables,
+        self.assertEqual(len(data.word_map['不准']), 1)
+        self.assertEqual(data.word_map['不准'][0].syllables,
         [
             PinyinSyllable(PinyinInitials.b, PinyinFinals.u, PinyinTones.tone_4),
             PinyinSyllable(PinyinInitials.zh, PinyinFinals.un, PinyinTones.tone_3)
@@ -111,16 +111,16 @@ class BuildTests(unittest.TestCase):
         pinyin_jyutping.parser.parse_cedict_entries(lines, data)
 
         # pprint.pprint(data)
-        self.assertEqual(len(data.simplified_map.character_map['谁']), 2)
+        self.assertEqual(len(data.character_map['谁']), 2)
 
         # check first character mapping
-        character_mapping_1 = data.simplified_map.character_map['谁'][0]
+        character_mapping_1 = data.character_map['谁'][0]
         self.assertEqual(character_mapping_1.syllable, 
             PinyinSyllable(PinyinInitials.sh, PinyinFinals.ui, PinyinTones.tone_2),)
         self.assertEqual(character_mapping_1.occurences, 3)
 
         # check second character mapping
-        character_mapping_2 = data.simplified_map.character_map['谁'][1]
+        character_mapping_2 = data.character_map['谁'][1]
         self.assertEqual(character_mapping_2.syllable, 
             PinyinSyllable(PinyinInitials.sh, PinyinFinals.ei, PinyinTones.tone_2),)
         self.assertEqual(character_mapping_2.occurences, 2)

@@ -77,8 +77,8 @@ def parse_cedict_entries(generator, data):
     for line in generator:
         try:
             simplified, traditional, syllables = parse_cedict_line(line)
-            process_simplified_word(simplified, syllables, data)
-            process_traditional_word(simplified, syllables, data)
+            process_word(simplified, syllables, data)
+            process_word(traditional, syllables, data)
         except errors.PinyinParsingError as e:
             logger.warning(e)
 
@@ -95,13 +95,6 @@ def parse_cedict_line(line):
     # parse the pinyin
     syllables = parse_pinyin_word(pinyin)
     return simplified_chinese, traditional_chinese, syllables
-
-def process_simplified_word(simplified, syllables, data):
-    process_word(simplified, syllables, data.simplified_map)
-
-def process_traditional_word(traditional, syllables, data):
-    process_word(traditional, syllables, data.traditional_map)
-
 
 
 def process_word(chinese, syllables, map):
