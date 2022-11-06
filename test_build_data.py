@@ -17,7 +17,7 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(syllable.render_tone_mark(), tone_mark_render)
         self.assertEqual(syllable.render_tone_number(), tone_number_render)
 
-    def test_1(self):
+    def test_parse_pinyin(self):
         text = 'mǎ'
         syllable, remaining_text = pinyin_jyutping.parser.parse_pinyin(text)
         expected_syllable = PinyinSyllable(
@@ -41,7 +41,7 @@ class BuildTests(unittest.TestCase):
 
         self.verify_parsing('nǚ', PinyinInitials.n, PinyinFinals.v, PinyinTones.tone_3, 'nǚ', 'nv3')
 
-    def test_special_cases(self):
+    def test_pinyin_parsing_special_cases(self):
         self.verify_parsing('er4', PinyinInitials.er, PinyinFinals.er, PinyinTones.tone_4, 'èr', 'er4')
         self.verify_parsing('a1', PinyinInitials.a, PinyinFinals.a, PinyinTones.tone_1, 'ā', 'a1')
 
@@ -186,4 +186,4 @@ class BuildTests(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    main()
+    pass
