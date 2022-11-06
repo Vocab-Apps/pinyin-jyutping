@@ -1,5 +1,7 @@
 import enum
 
+PICKLE_DATA_FILENAME='pinyin_jyutping.pkl'
+
 class PinyinInitials(enum.Enum):
     b  =  1
     p  =  2

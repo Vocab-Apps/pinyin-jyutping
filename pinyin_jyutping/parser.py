@@ -12,28 +12,33 @@ logger = logging.getLogger(__file__)
 
 def parse_pinyin(text):
     # look for initial
+
+    # memorize whether there is a capital on the first letter
+    capital = text[0].isupper()
+    text = text.lower()
+
     # check first 2 letters
     first_2 = text[0:2]
     cache_hit = cache.PinyinInitialsMap.get(first_2, None)
     if cache_hit != None:
         # special case for 'er'
         if cache_hit == constants.PinyinInitials.er:
-            return parse_final_and_tone(cache_hit, text)
+            return parse_final_and_tone(cache_hit, text, capital)
         remaining_text = text[2:]
         logger.debug(f'found initial: {first_2}')
-        return parse_final_and_tone(cache_hit, remaining_text)
+        return parse_final_and_tone(cache_hit, remaining_text, capital)
     first_1 = text[0:1]
     cache_hit = cache.PinyinInitialsMap.get(first_1, None)
     if cache_hit != None:
         # special case for 'a'
         if cache_hit == constants.PinyinInitials.a:
-            return parse_final_and_tone(cache_hit, text)                    
+            return parse_final_and_tone(cache_hit, text, capital)
         remaining_text = text[1:]
         logger.debug(f'found initial {first_1}')
-        return parse_final_and_tone(cache_hit, remaining_text)
+        return parse_final_and_tone(cache_hit, remaining_text, capital)
     raise errors.PinyinParsingError(f"couldn't find initial: {text}")
 
-def parse_final_and_tone(initial, text):
+def parse_final_and_tone(initial, text, capital):
     logger.debug(f'looking for final in {text}')
     # pprint.pprint(cache.PinyinFinalsMap)    
     for candidate_length in reversed(range(6)):
@@ -44,7 +49,7 @@ def parse_final_and_tone(initial, text):
         if cache_hit != None:
             final = cache_hit['final']
             tone = cache_hit['tone']
-            return syllables.build_pinyin_syllable(initial, final, tone), remaining_text
+            return syllables.build_pinyin_syllable(initial, final, tone, capital), remaining_text
     raise errors.PinyinParsingError(f"couldn't find final: {text}")
 
 def parse_pinyin_word(text):

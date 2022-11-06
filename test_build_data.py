@@ -55,6 +55,16 @@ class BuildTests(unittest.TestCase):
         output = pinyin_jyutping.parser.parse_pinyin_word(text)
         self.assertEqual(output, expected_output)
 
+    def test_parse_pinyin_word_capitalized(self):
+        text = 'Long2 feng4'
+        expected_output = [
+            PinyinSyllable(PinyinInitials.l, PinyinFinals.ong, PinyinTones.tone_2, capital=True),
+            PinyinSyllable(PinyinInitials.f, PinyinFinals.eng, PinyinTones.tone_4),
+        ]
+        output = pinyin_jyutping.parser.parse_pinyin_word(text)
+        self.assertEqual(output, expected_output)
+
+
     def test_parse_cedict(self):
         line = '上周 上周 [shang4 zhou1] /last week/'
         simplified, traditional, syllables = pinyin_jyutping.parser.parse_cedict_line(line)
@@ -158,7 +168,7 @@ class BuildTests(unittest.TestCase):
         unpickled_data = pickle.loads(pickled_data)
 
 
-    # @pytest.mark.skip(reason="still experimenting with pickle")
+    @pytest.mark.skip(reason="still experimenting with pickle")
     def test_save_pickle(self):
         data = pinyin_jyutping.data.Data()
         sample_data_only = False

@@ -4,10 +4,11 @@ import functools
 
 
 class PinyinSyllable():
-    def __init__(self, initial, final, tone):
+    def __init__(self, initial, final, tone, capital=False):
         self.initial = initial
         self.final = final
         self.tone = tone
+        self.capital=capital
 
     def render_tone_mark(self):
         # special case for 'er'
@@ -31,9 +32,10 @@ class PinyinSyllable():
             return False
         return self.initial == other.initial and \
                self.final == other.final and \
-               self.tone == other.tone
+               self.tone == other.tone and \
+               self.capital == other.capital
 
 
 @functools.lru_cache(maxsize=None)
-def build_pinyin_syllable(initial, final, tone):
-    return PinyinSyllable(initial, final, tone)
+def build_pinyin_syllable(initial, final, tone, capital):
+    return PinyinSyllable(initial, final, tone, capital=capital)
