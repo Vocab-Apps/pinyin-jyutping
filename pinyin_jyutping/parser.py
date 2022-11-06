@@ -123,7 +123,7 @@ def process_word(chinese, syllables, map):
                 # need to insert
                 character_map[chinese].append(data.CharacterMapping(syllable))
             else:
-                raise Exception(f'found {len(matching_syllables)} for {chinese}')
+                raise Exception(f'found {len(matching_entries)} for {chinese}')
             # sort by number of occurences, descending
             character_map[chinese].sort(key=get_occurences, reverse=True)
 
@@ -141,7 +141,7 @@ def process_word(chinese, syllables, map):
                 # need to insert
                 word_map[chinese].append(data.WordMapping(syllables))
             else:
-                raise Exception(f'found {len(matching_syllables)} for {chinese}')
+                raise Exception(f'found {len(matching_entries)} for {chinese}')
             word_map[chinese].sort(key=get_occurences, reverse=True)
 
 
