@@ -44,7 +44,7 @@ def parse_final_and_tone(initial, text):
         if cache_hit != None:
             final = cache_hit['final']
             tone = cache_hit['tone']
-            return syllables.PinyinSyllable(initial, final, tone), remaining_text
+            return syllables.build_pinyin_syllable(initial, final, tone), remaining_text
     raise errors.PinyinParsingError(f"couldn't find final: {text}")
 
 def parse_pinyin_word(text):

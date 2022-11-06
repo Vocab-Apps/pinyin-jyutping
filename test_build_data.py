@@ -158,7 +158,7 @@ class BuildTests(unittest.TestCase):
         unpickled_data = pickle.loads(pickled_data)
 
 
-    @pytest.mark.skip(reason="still experimenting with pickle")
+    # @pytest.mark.skip(reason="still experimenting with pickle")
     def test_save_pickle(self):
         data = pinyin_jyutping.data.Data()
         sample_data_only = False

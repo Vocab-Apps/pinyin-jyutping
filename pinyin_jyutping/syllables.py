@@ -1,5 +1,6 @@
 from . import logic
 from . import constants
+import functools
 
 
 class PinyinSyllable():
@@ -31,3 +32,8 @@ class PinyinSyllable():
         return self.initial == other.initial and \
                self.final == other.final and \
                self.tone == other.tone
+
+
+@functools.lru_cache(maxsize=None)
+def build_pinyin_syllable(initial, final, tone):
+    return PinyinSyllable(initial, final, tone)
