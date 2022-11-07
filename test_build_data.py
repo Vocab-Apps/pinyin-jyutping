@@ -59,8 +59,15 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(output, expected_output)
 
     def test_parse_pinyin_syllable_list(self):
-        text = 'yue4'
         # expected_syllable
+        entries = [
+            {'text': 'yue4', 'expected_syllable': PinyinSyllable(PinyinInitials.y, PinyinFinals.ve, PinyinTones.tone_4)}
+        ]
+        for entry in entries:
+            text = entry['text']
+            expected_syllable = entry['expected_syllable']
+            syllable, remaining_text = pinyin_jyutping.parser.parse_pinyin(text)
+            self.assertEqual(syllable, expected_syllable)
 
     def test_parse_pinyin_word_list(self):
         pass

@@ -10,16 +10,19 @@ class PinyinSyllable():
         self.tone = tone
         self.capital=capital
 
+    def get_initial_str(self):
+        result = ''
+        if self.initial != constants.PinyinInitials.empty:
+            result = self.initial.name
+        if self.capital:
+            result = result.capitalize()
+        return result
+
     def render_tone_mark(self):
-        # special case for 'er'
-        if self.initial == constants.PinyinInitials.empty:
-            return f'{logic.apply_tone_mark(self.final, self.tone)}'
-        return f'{self.initial.name}{logic.apply_tone_mark(self.final, self.tone)}'
+        return f'{self.get_initial_str()}{logic.apply_tone_mark(self.final, self.tone)}'
 
     def render_tone_number(self):
-        if self.initial == constants.PinyinInitials.empty:
-            return f'{self.final.name}{self.tone.tone_number}'
-        return f'{self.initial.name}{self.final.name}{self.tone.tone_number}'
+        return f'{self.get_initial_str()}{self.final.name}{self.tone.tone_number}'
 
     def __repr__(self):
         return f'{self.initial.name}{self.final.name}{self.tone.tone_number}'
