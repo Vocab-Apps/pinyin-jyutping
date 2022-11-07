@@ -10,48 +10,23 @@ from . import data
 
 logger = logging.getLogger(__file__)
 
+
+
 def parse_pinyin(text):
     # look for initial
     original_text = text
 
-    # memorize whether there is a capital on the first letter
-    capital = text[0].isupper()
-    text = text.lower()
-
-    # check first 2 letters
-    first_2 = text[0:2]
-    cache_hit = cache.PinyinInitialsMap.get(first_2, None)
-    if cache_hit != None:
-        # special case for 'er'
-        if cache_hit == constants.PinyinInitials.er:
-            return parse_final_and_tone(cache_hit, text, capital, original_text)
-        remaining_text = text[2:]
-        logger.debug(f'found initial: {first_2}')
-        return parse_final_and_tone(cache_hit, remaining_text, capital, original_text)
-    first_1 = text[0:1]
-    cache_hit = cache.PinyinInitialsMap.get(first_1, None)
-    if cache_hit != None:
-        # special case for 'a'
-        if cache_hit == constants.PinyinInitials.a:
-            return parse_final_and_tone(cache_hit, text, capital, original_text)
-        remaining_text = text[1:]
-        logger.debug(f'found initial {first_1}')
-        return parse_final_and_tone(cache_hit, remaining_text, capital, original_text)
-    raise errors.PinyinParsingError(f"couldn't find initial: {text} [{original_text}]")
-
-def parse_final_and_tone(initial, text, capital, original_text):
-    logger.debug(f'looking for final in {text}')
+    logger.debug(f'looking for pinyin syllable in {text}')
     # pprint.pprint(cache.PinyinFinalsMap)    
-    for candidate_length in reversed(range(6)):
+    for candidate_length in reversed(range(cache.PINYIN_SYLLABLE_MAX_LENGTH + 1)):
         candidate = text[0:candidate_length]
         remaining_text = text[candidate_length:]
-        logger.debug(f'scanning for {candidate}, map size: {len(cache.PinyinFinalsMap)}')
-        cache_hit = cache.PinyinFinalsMap.get(candidate, None)
+        # logger.debug(f'scanning for {candidate}, map size: {len(cache.PinyinFinalsMap)}')
+        cache_hit = cache.PinyinSyllablesMap.get(candidate, None)
         if cache_hit != None:
-            final = cache_hit['final']
-            tone = cache_hit['tone']
-            return syllables.build_pinyin_syllable(initial, final, tone, capital), remaining_text
-    raise errors.PinyinParsingError(f"couldn't find final: {text} [{original_text}]")
+            return cache_hit, remaining_text
+    raise errors.PinyinParsingError(f"couldn't find pinyin syllable: {text} [{original_text}]")
+
 
 def parse_pinyin_word(text):
     syllables = []

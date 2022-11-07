@@ -1,7 +1,6 @@
 import enum
 
 PICKLE_DATA_FILENAME='pinyin_jyutping.pkl'
-
 class PinyinInitials(enum.Enum):
     b  =  1
     p  =  2
@@ -26,8 +25,7 @@ class PinyinInitials(enum.Enum):
     s  = 21
     y  = 22
     w  = 23
-    er = 24 # special case, single vowel
-    a  = 25 # special case, single vowel
+    empty = 24
 
 class PinyinFinals(enum.Enum):
     a   = ( 1, 1, 0)

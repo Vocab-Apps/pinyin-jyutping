@@ -45,8 +45,8 @@ class BuildTests(unittest.TestCase):
         self.verify_parsing('nǚ', PinyinInitials.n, PinyinFinals.v, PinyinTones.tone_3, 'nǚ', 'nv3')
 
     def test_pinyin_parsing_special_cases(self):
-        self.verify_parsing('er4', PinyinInitials.er, PinyinFinals.er, PinyinTones.tone_4, 'èr', 'er4')
-        self.verify_parsing('a1', PinyinInitials.a, PinyinFinals.a, PinyinTones.tone_1, 'ā', 'a1')
+        self.verify_parsing('er4', PinyinInitials.empty, PinyinFinals.er, PinyinTones.tone_4, 'èr', 'er4')
+        self.verify_parsing('a1', PinyinInitials.empty, PinyinFinals.a, PinyinTones.tone_1, 'ā', 'a1')
 
     def test_parse_pinyin_word(self):
         text = 'yi1 ge5 ban4'
@@ -60,6 +60,7 @@ class BuildTests(unittest.TestCase):
 
     def test_parse_pinyin_syllable_list(self):
         text = 'yue4'
+        # expected_syllable
 
     def test_parse_pinyin_word_list(self):
         pass
