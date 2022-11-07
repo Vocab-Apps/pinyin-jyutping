@@ -5,6 +5,9 @@ import pickle
 import unittest
 import pytest
 import pprint
+import logging
+
+logger = logging.getLogger(__file__)
 
 from pinyin_jyutping.syllables import PinyinSyllable
 from pinyin_jyutping.constants import PinyinInitials, PinyinFinals, PinyinTones
@@ -54,6 +57,24 @@ class BuildTests(unittest.TestCase):
         ]
         output = pinyin_jyutping.parser.parse_pinyin_word(text)
         self.assertEqual(output, expected_output)
+
+    def test_parse_pinyin_syllable_list(self):
+        text = 'yue4'
+
+    def test_parse_pinyin_word_list(self):
+        pass
+        # long2 teng2 hu3 yue4
+
+        text = 'long2 teng2 hu3 yue4'
+        expected_output = [
+            PinyinSyllable(PinyinInitials.l, PinyinFinals.ong, PinyinTones.tone_2),
+            PinyinSyllable(PinyinInitials.t, PinyinFinals.eng, PinyinTones.tone_2),
+            PinyinSyllable(PinyinInitials.h, PinyinFinals.u, PinyinTones.tone_3),
+            PinyinSyllable(PinyinInitials.y, PinyinFinals.u, PinyinTones.tone_3),
+        ]
+        output = pinyin_jyutping.parser.parse_pinyin_word(text)
+        self.assertEqual(output, expected_output)        
+
 
     def test_parse_pinyin_word_capitalized(self):
         text = 'Long2 feng4'
@@ -192,6 +213,18 @@ class BuildTests(unittest.TestCase):
         data_file = open('pinyin.pkl', 'rb')
         data = pickle.load(data_file)
         data_file.close()
+
+
+    def test_verify_parse_output_pinyin(self):
+        """parse all of cedict, and make sure we can faithfully output the pinyin"""
+        filename = 'source_data/cedict_1_0_ts_utf-8_mdbg.txt'
+        generator = pinyin_jyutping.parser.parse_cedict_file_generator(filename)
+        for line in generator:
+            traditional_chinese, simplified_chinese, pinyin, definition = pinyin_jyutping.parser.unpack_cedict_line(line)
+            try:
+                syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
+            except pinyin_jyutping.errors.PinyinParsingError as e:
+                logger.error(f'while parsing line: [{line}] error: {e}')
 
 
 

@@ -12,6 +12,7 @@ logger = logging.getLogger(__file__)
 
 def parse_pinyin(text):
     # look for initial
+    original_text = text
 
     # memorize whether there is a capital on the first letter
     capital = text[0].isupper()
@@ -23,22 +24,22 @@ def parse_pinyin(text):
     if cache_hit != None:
         # special case for 'er'
         if cache_hit == constants.PinyinInitials.er:
-            return parse_final_and_tone(cache_hit, text, capital)
+            return parse_final_and_tone(cache_hit, text, capital, original_text)
         remaining_text = text[2:]
         logger.debug(f'found initial: {first_2}')
-        return parse_final_and_tone(cache_hit, remaining_text, capital)
+        return parse_final_and_tone(cache_hit, remaining_text, capital, original_text)
     first_1 = text[0:1]
     cache_hit = cache.PinyinInitialsMap.get(first_1, None)
     if cache_hit != None:
         # special case for 'a'
         if cache_hit == constants.PinyinInitials.a:
-            return parse_final_and_tone(cache_hit, text, capital)
+            return parse_final_and_tone(cache_hit, text, capital, original_text)
         remaining_text = text[1:]
         logger.debug(f'found initial {first_1}')
-        return parse_final_and_tone(cache_hit, remaining_text, capital)
-    raise errors.PinyinParsingError(f"couldn't find initial: {text}")
+        return parse_final_and_tone(cache_hit, remaining_text, capital, original_text)
+    raise errors.PinyinParsingError(f"couldn't find initial: {text} [{original_text}]")
 
-def parse_final_and_tone(initial, text, capital):
+def parse_final_and_tone(initial, text, capital, original_text):
     logger.debug(f'looking for final in {text}')
     # pprint.pprint(cache.PinyinFinalsMap)    
     for candidate_length in reversed(range(6)):
@@ -50,7 +51,7 @@ def parse_final_and_tone(initial, text, capital):
             final = cache_hit['final']
             tone = cache_hit['tone']
             return syllables.build_pinyin_syllable(initial, final, tone, capital), remaining_text
-    raise errors.PinyinParsingError(f"couldn't find final: {text}")
+    raise errors.PinyinParsingError(f"couldn't find final: {text} [{original_text}]")
 
 def parse_pinyin_word(text):
     syllables = []
@@ -87,6 +88,17 @@ def parse_cedict_entries(generator, data):
         except errors.PinyinParsingError as e:
             logger.warning(e)
 
+
+def unpack_cedict_line(line):
+    logger.debug(f'parsing cedict line: {line}')
+    m = re.match('([^\s]+)\s([^\s]+)\s\[([^\]]*)\]\s\/([^\/]+)\/.*', line)
+    if m == None:
+        logger.info(line)
+    traditional_chinese = m.group(1)
+    simplified_chinese = m.group(2)
+    pinyin = m.group(3)
+    definition = m.group(4)
+    return traditional_chinese, simplified_chinese, pinyin, definition    
 
 def parse_cedict_line(line):
     logger.debug(f'parsing cedict line: {line}')
