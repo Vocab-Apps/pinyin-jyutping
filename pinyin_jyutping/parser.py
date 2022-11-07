@@ -34,6 +34,8 @@ def parse_pinyin_word(text):
         logger.debug(f'parsing pinyin word: {text}')
         # remove leading space
         text = text.lstrip()
+        text = text.replace(',', '')
+        text = text.replace('·', '')
         syllable, text = parse_pinyin(text)
         logger.debug(f'parsed {syllable}, remaining text: {text}')
         syllables.append(syllable)

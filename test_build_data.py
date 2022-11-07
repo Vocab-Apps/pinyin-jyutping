@@ -238,7 +238,7 @@ class BuildTests(unittest.TestCase):
         data_file.close()
 
 
-    @pytest.mark.skip(reason="skip")
+    # @pytest.mark.skip(reason="skip")
     def test_verify_parse_output_pinyin(self):
         # pytest test_build_data.py  -k test_verify_parse_output_pinyin -s -rPP
         """parse all of cedict, and make sure we can faithfully output the pinyin"""
