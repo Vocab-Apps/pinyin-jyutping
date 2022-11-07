@@ -33,7 +33,7 @@ class PinyinFinals(enum.Enum):
     e   = ( 3, 1, 0)
     i   = ( 4, 1, 0)
     u   = ( 5, 1, 0)
-    v   = ( 6, 1, 0, 'ü') # ü
+    v   = ( 6, 1, 0, 'ü', ['u:']) # ü
     ai  = ( 7, 2, 0)
     ei  = ( 8, 2, 0)
     ui  = ( 9, 2, 0)
@@ -42,7 +42,7 @@ class PinyinFinals(enum.Enum):
     iu  = (12, 2, 0)
     ie  = (13, 2, 0)
     ve  = (14, 2, 0, 'üe')
-    er  = (15, 1, 0)
+    er  = (15, 1, 0, None, ['r'])
     an  = (16, 1, 0)
     en  = (17, 1, 0)
     in_ = (18, 1, 0, 'in') # reserved keyword in python
@@ -53,11 +53,12 @@ class PinyinFinals(enum.Enum):
     ing = (23, 1, 0)
     ong = (24, 1, 0)
 
-    def __init__(self, value, vowel_count, vowel_location, override_final=None):
+    def __init__(self, value, vowel_count, vowel_location, override_final=None, variants=[]):
         self.val = value
         self.vowel_count = vowel_count
         self.vowel_location = vowel_location
         self.override_final = override_final
+        self.variants = variants
 
     def final_text(self):
         if self.override_final != None:

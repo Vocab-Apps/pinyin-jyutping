@@ -7,20 +7,42 @@ logger = logging.getLogger(__file__)
 
 PINYIN_SYLLABLE_MAX_LENGTH=0
 
-def build_pinyin_syllable_map():
-    max_length = 0
-    result_map = {}
+def all_syllables_generator():
     for initial in constants.PinyinInitials:
         for final in constants.PinyinFinals:
             for tone in constants.PinyinTones:
                 for capital in [True, False]:
                     syllable = syllables.build_pinyin_syllable(initial, final, tone, capital)
                     tone_marks = syllable.render_tone_mark()
-                    result_map[tone_marks] = syllable
+                    yield {
+                        'syllable': syllable,
+                        'pinyin': tone_marks
+                    }
                     tone_numbers = syllable.render_tone_number()
-                    result_map[tone_numbers] = syllable
+                    yield {
+                        'syllable': syllable,
+                        'pinyin': tone_numbers
+                    }
+                    # are there any variants on the final ?
+                    for final_variant in final.variants:
+                        tone_numbers = syllable.render_tone_number(final_variant=final_variant)
+                        yield {
+                            'syllable': syllable,
+                            'pinyin': tone_numbers
+                        }                        
 
-                    max_length = max(len(tone_numbers), max(len(tone_marks), max_length))
+
+
+def build_pinyin_syllable_map():
+    max_length = 0
+    result_map = {}
+    for entry in all_syllables_generator():    
+
+        syllable = entry['syllable']
+        pinyin = entry['pinyin']
+        result_map[pinyin] = syllable
+
+        max_length = max(len(pinyin),  max_length)
 
     return result_map, max_length
 

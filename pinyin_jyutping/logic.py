@@ -55,5 +55,8 @@ def get_final_str(initial, final):
 def render_tone_mark(initial, final, tone, capital):
     return f'{get_initial_str(initial, capital)}{apply_tone_mark(final, tone)}'
 
-def render_tone_number(initial, final, tone, capital):
-     return f'{get_initial_str(initial, capital)}{get_final_str(initial, final)}{tone.tone_number}'
+def render_tone_number(initial, final, tone, capital, final_variant=None):
+    final_str = get_final_str(initial, final)
+    if final_variant != None:
+        final_str = final_variant
+    return f'{get_initial_str(initial, capital)}{final_str}{tone.tone_number}'

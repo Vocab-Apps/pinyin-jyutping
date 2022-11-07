@@ -1,6 +1,7 @@
 import pinyin_jyutping
 import pinyin_jyutping.parser
 import pinyin_jyutping.data
+import pinyin_jyutping.logic
 import pickle
 import unittest
 import pytest
@@ -61,7 +62,9 @@ class BuildTests(unittest.TestCase):
     def test_parse_pinyin_syllable_list(self):
         # expected_syllable
         entries = [
-            {'text': 'yue4', 'expected_syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ve, PinyinTones.tone_4)}
+            {'text': 'yue4', 'expected_syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ve, PinyinTones.tone_4)},
+            {'text': 'r5', 'expected_syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.er, PinyinTones.tone_neutral)},
+            {'text': 'lu:4', 'expected_syllable': PinyinSyllable(PinyinInitials.l, PinyinFinals.v, PinyinTones.tone_4)}
         ]
         for entry in entries:
             text = entry['text']
@@ -93,6 +96,18 @@ class BuildTests(unittest.TestCase):
         output = pinyin_jyutping.parser.parse_pinyin_word(text)
         self.assertEqual(output, expected_output)
 
+    def test_render_final_variant(self):
+        self.assertEqual(pinyin_jyutping.logic.render_tone_number(PinyinInitials.empty, 
+            PinyinFinals.er, 
+            PinyinTones.tone_neutral, 
+            False),
+            'er5')
+        self.assertEqual(pinyin_jyutping.logic.render_tone_number(PinyinInitials.empty, 
+            PinyinFinals.er, 
+            PinyinTones.tone_neutral, 
+            False,
+            'r'),
+            'r5')            
 
     def test_parse_cedict(self):
         line = '上周 上周 [shang4 zhou1] /last week/'
@@ -223,7 +238,9 @@ class BuildTests(unittest.TestCase):
         data_file.close()
 
 
+    @pytest.mark.skip(reason="skip")
     def test_verify_parse_output_pinyin(self):
+        # pytest test_build_data.py  -k test_verify_parse_output_pinyin -s -rPP
         """parse all of cedict, and make sure we can faithfully output the pinyin"""
         filename = 'source_data/cedict_1_0_ts_utf-8_mdbg.txt'
         generator = pinyin_jyutping.parser.parse_cedict_file_generator(filename)
