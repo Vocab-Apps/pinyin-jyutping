@@ -227,12 +227,17 @@ class BuildTests(unittest.TestCase):
         """parse all of cedict, and make sure we can faithfully output the pinyin"""
         filename = 'source_data/cedict_1_0_ts_utf-8_mdbg.txt'
         generator = pinyin_jyutping.parser.parse_cedict_file_generator(filename)
+        error_count = 0
         for line in generator:
             traditional_chinese, simplified_chinese, pinyin, definition = pinyin_jyutping.parser.unpack_cedict_line(line)
             try:
                 syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
             except pinyin_jyutping.errors.PinyinParsingError as e:
                 logger.error(f'while parsing line: [{line}] error: {e}')
+                error_count += 1
+
+        if error_count > 0:
+            logger.error(f'found {error_count} errors')
 
 
 
