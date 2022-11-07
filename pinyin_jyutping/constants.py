@@ -41,7 +41,7 @@ class PinyinFinals(enum.Enum):
     ou  = (11, 2, 0)
     iu  = (12, 2, 0)
     ie  = (13, 2, 0)
-    ve  = (14, 2, 0, 'üe')
+    ve  = (14, 2, 0, 'üe', ['u:e'])
     er  = (15, 1, 0, None, ['r'])
     an  = (16, 1, 0)
     en  = (17, 1, 0)

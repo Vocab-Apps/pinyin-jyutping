@@ -30,12 +30,10 @@ def apply_tone_mark(pinyin_final, tone):
     return apply_tone_mark_on_vowel(pinyin_final, vowel, tone)
 
 
-def get_initial_str(initial, capital):
+def get_initial_str(initial):
     result = ''
     if initial != constants.PinyinInitials.empty:
         result = initial.name
-    if capital:
-        result = result.capitalize()
     return result
 
 def get_final_str(initial, final):
@@ -53,10 +51,16 @@ def get_final_str(initial, final):
     return result
 
 def render_tone_mark(initial, final, tone, capital):
-    return f'{get_initial_str(initial, capital)}{apply_tone_mark(final, tone)}'
+    result = f'{get_initial_str(initial)}{apply_tone_mark(final, tone)}'
+    if capital:
+        result = result.capitalize()
+    return result
 
 def render_tone_number(initial, final, tone, capital, final_variant=None):
     final_str = get_final_str(initial, final)
     if final_variant != None:
         final_str = final_variant
-    return f'{get_initial_str(initial, capital)}{final_str}{tone.tone_number}'
+    result = f'{get_initial_str(initial)}{final_str}{tone.tone_number}'
+    if capital:
+        result = result.capitalize()
+    return result

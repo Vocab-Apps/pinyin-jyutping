@@ -64,7 +64,8 @@ class BuildTests(unittest.TestCase):
         entries = [
             {'text': 'yue4', 'expected_syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ve, PinyinTones.tone_4)},
             {'text': 'r5', 'expected_syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.er, PinyinTones.tone_neutral)},
-            {'text': 'lu:4', 'expected_syllable': PinyinSyllable(PinyinInitials.l, PinyinFinals.v, PinyinTones.tone_4)}
+            {'text': 'lu:4', 'expected_syllable': PinyinSyllable(PinyinInitials.l, PinyinFinals.v, PinyinTones.tone_4)},
+            {'text': 'E2', 'expected_syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.e, PinyinTones.tone_2, capital=True)}
         ]
         for entry in entries:
             text = entry['text']
@@ -95,6 +96,16 @@ class BuildTests(unittest.TestCase):
         ]
         output = pinyin_jyutping.parser.parse_pinyin_word(text)
         self.assertEqual(output, expected_output)
+
+    def test_render_syllables_tone_number(self):
+        entries = [
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.e, PinyinTones.tone_2, capital=True), 'pinyin': 'E2'}
+        ]
+        for entry in entries:
+            syllable = entry['syllable']
+            expected_pinyin = entry['pinyin']
+            pinyin = syllable.render_tone_number()
+            self.assertEqual(pinyin, expected_pinyin)
 
     def test_render_final_variant(self):
         self.assertEqual(pinyin_jyutping.logic.render_tone_number(PinyinInitials.empty, 
