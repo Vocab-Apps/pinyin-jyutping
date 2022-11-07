@@ -42,7 +42,7 @@ class BuildTests(unittest.TestCase):
         syllable, remaining_text = pinyin_jyutping.parser.parse_pinyin(text)
         self.assertEqual(syllable, expected_syllable)
 
-        self.verify_parsing('nǚ', PinyinInitials.n, PinyinFinals.v, PinyinTones.tone_3, 'nǚ', 'nv3')
+        self.verify_parsing('nǚ', PinyinInitials.n, PinyinFinals.v, PinyinTones.tone_3, 'nǚ', 'nü3')
 
     def test_pinyin_parsing_special_cases(self):
         self.verify_parsing('er4', PinyinInitials.empty, PinyinFinals.er, PinyinTones.tone_4, 'èr', 'er4')
@@ -61,7 +61,7 @@ class BuildTests(unittest.TestCase):
     def test_parse_pinyin_syllable_list(self):
         # expected_syllable
         entries = [
-            {'text': 'yue4', 'expected_syllable': PinyinSyllable(PinyinInitials.y, PinyinFinals.ve, PinyinTones.tone_4)}
+            {'text': 'yue4', 'expected_syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ve, PinyinTones.tone_4)}
         ]
         for entry in entries:
             text = entry['text']
@@ -78,7 +78,7 @@ class BuildTests(unittest.TestCase):
             PinyinSyllable(PinyinInitials.l, PinyinFinals.ong, PinyinTones.tone_2),
             PinyinSyllable(PinyinInitials.t, PinyinFinals.eng, PinyinTones.tone_2),
             PinyinSyllable(PinyinInitials.h, PinyinFinals.u, PinyinTones.tone_3),
-            PinyinSyllable(PinyinInitials.y, PinyinFinals.u, PinyinTones.tone_3),
+            PinyinSyllable(PinyinInitials.empty, PinyinFinals.ve, PinyinTones.tone_4),
         ]
         output = pinyin_jyutping.parser.parse_pinyin_word(text)
         self.assertEqual(output, expected_output)        

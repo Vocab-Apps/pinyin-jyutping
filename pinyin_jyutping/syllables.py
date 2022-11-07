@@ -19,10 +19,10 @@ class PinyinSyllable():
         return result
 
     def render_tone_mark(self):
-        return f'{self.get_initial_str()}{logic.apply_tone_mark(self.final, self.tone)}'
+        return logic.render_tone_mark(self.initial, self.final, self.tone, self.capital)
 
     def render_tone_number(self):
-        return f'{self.get_initial_str()}{self.final.name}{self.tone.tone_number}'
+        return logic.render_tone_number(self.initial, self.final, self.tone, self.capital)
 
     def __repr__(self):
         return f'{self.initial.name}{self.final.name}{self.tone.tone_number}'

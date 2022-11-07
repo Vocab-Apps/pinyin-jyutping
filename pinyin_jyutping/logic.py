@@ -28,3 +28,32 @@ def vowel_for_tone_mark(pinyin_final, tone):
 def apply_tone_mark(pinyin_final, tone):
     vowel = vowel_for_tone_mark(pinyin_final, tone)
     return apply_tone_mark_on_vowel(pinyin_final, vowel, tone)
+
+
+def get_initial_str(initial, capital):
+    result = ''
+    if initial != constants.PinyinInitials.empty:
+        result = initial.name
+    if capital:
+        result = result.capitalize()
+    return result
+
+def get_final_str(initial, final):
+    result = final.final_text()
+    if initial == constants.PinyinInitials.empty:
+        # apply replacements
+        # from https://en.wikipedia.org/wiki/Pinyin_table
+        if result[0] == 'i':
+            result = 'y' + result[1:]
+        elif result[0] == 'u':
+            result = 'w' + result[1:]
+        elif result[0] == 'ü':
+            result = 'yu' + result[1:]
+
+    return result
+
+def render_tone_mark(initial, final, tone, capital):
+    return f'{get_initial_str(initial, capital)}{apply_tone_mark(final, tone)}'
+
+def render_tone_number(initial, final, tone, capital):
+     return f'{get_initial_str(initial, capital)}{get_final_str(initial, final)}{tone.tone_number}'
