@@ -97,10 +97,6 @@ def parse_cedict_line(line):
 def cedict_ignore(traditional_chinese, simplified_chinese, pinyin):
     if re.match('.*[A-Za-z].*', simplified_chinese) != None:
         return True                                
-    if re.match('[A-Z]', pinyin) != None:
-        return True                
-    if re.match('[A-Z]+\s', pinyin) != None:
-        return True    
     if 'xx' in pinyin:
         return True
     if 'm2' in pinyin:
