@@ -94,6 +94,20 @@ def parse_cedict_line(line):
     syllables = parse_pinyin_word(pinyin)
     return simplified_chinese, traditional_chinese, syllables
 
+def cedict_ignore(traditional_chinese, simplified_chinese, pinyin):
+    if re.match('.*[A-Za-z].*', simplified_chinese) != None:
+        return True                                
+    if re.match('[A-Z]', pinyin) != None:
+        return True                
+    if re.match('[A-Z]+\s', pinyin) != None:
+        return True    
+    if 'xx' in pinyin:
+        return True
+    if 'm2' in pinyin:
+        return True        
+    if 'm4' in pinyin:
+        return True                
+    return False
 
 def process_word(chinese, syllables, map):
     # this is the sorting key

@@ -293,13 +293,7 @@ class BuildTests(unittest.TestCase):
             traditional_chinese, simplified_chinese, pinyin, definition = pinyin_jyutping.parser.unpack_cedict_line(line)
             try:
                 # should we skip this character ?
-                skip = False
-                if re.match('.*[A-Za-z].*', simplified_chinese) != None:
-                    skip = True                                
-                if re.match('[A-Z]', pinyin) != None:
-                    skip = True                
-                if re.match('[A-Z]+\s', pinyin) != None:
-                    skip = True
+                skip = pinyin_jyutping.parser.cedict_ignore(traditional_chinese, simplified_chinese, pinyin)
                 if not skip:
                     syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
                     pinyin_tone_numbers = ' '.join([self.render_syllable_for_cedict(x) for x in syllables])
@@ -307,7 +301,7 @@ class BuildTests(unittest.TestCase):
                     clean_pinyin = self.transform_pinyin_from_cedict(clean_pinyin)
                     self.assertEqual(clean_pinyin, pinyin_tone_numbers, f'while parsing pinyin: {pinyin}')
             except pinyin_jyutping.errors.PinyinParsingError as e:
-                logger.warning(f'while parsing line: [{line}] error: {e}')
+                logger.error(f'while parsing line: [{line}] error: {e}')
                 error_count += 1
 
         if error_count > 0:
