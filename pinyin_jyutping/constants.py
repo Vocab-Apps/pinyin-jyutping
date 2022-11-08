@@ -27,31 +27,50 @@ class PinyinInitials(enum.Enum):
     w  = 23
     empty = 24
 
+# https://en.wikipedia.org/wiki/Pinyin_table
 class PinyinFinals(enum.Enum):
-    a   = ( 1, 1, 0)
-    o   = ( 2, 1, 0)
-    e   = ( 3, 1, 0)
-    i   = ( 4, 1, 0)
-    u   = ( 5, 1, 0)
-    v   = ( 6, 1, 0, 'ü', ['u:']) # ü
-    ai  = ( 7, 2, 0)
-    ei  = ( 8, 2, 0)
-    ui  = ( 9, 2, 0)
-    ao  = (10, 2, 0)
-    ou  = (11, 2, 0)
-    iu  = (12, 2, 0)
-    ie  = (13, 2, 0)
-    ve  = (14, 2, 0, 'üe', ['u:e'])
-    er  = (15, 1, 0, None, ['r'])
-    an  = (16, 1, 0)
-    en  = (17, 1, 0)
-    in_ = (18, 1, 0, 'in') # reserved keyword in python
-    un  = (19, 1, 0)
-    vn  = (20, 1, 0, 'ün')
-    ang = (21, 1, 0)
-    eng = (22, 1, 0)
-    ing = (23, 1, 0)
-    ong = (24, 1, 0)
+    # group a finals
+    i   =  ( 1, 1, 0)
+    a   =  ( 2, 1, 0)
+    o   =  ( 3, 1, 0)
+    e   =  ( 4, 1, 0)
+    ai  =  ( 5, 2, 0)
+    ei  =  ( 6, 2, 0)
+    ao  =  ( 7, 2, 0)
+    ou  =  ( 8, 2, 0)
+    an  =  ( 9, 1, 0)
+    en  =  (10, 1, 0)
+    ang =  (11, 1, 0)
+    eng =  (12, 1, 0)
+    ong =  (13, 1, 0)
+    er  =  (14, 1, 0, None, ['r'])
+    # group i finals
+    ia  =  (15, 2, 0)
+    io  =  (16, 2, 0)
+    ie  =  (17, 2, 0)
+    iai =  (18, 3, 0)
+    iao =  (19, 3, 0)
+    iu  =  (20, 2, 0)
+    ian =  (21, 2, 0)
+    in_ =  (22, 1, 0, 'in')
+    iang = (23, 2, 0)
+    ing =  (24, 1, 0)
+    iong = (25, 2, 0)
+    # group u finals
+    u   =  (26, 1, 0)
+    ua  =  (27, 2, 0)
+    uo  =  (28, 2, 0)
+    uai =  (29, 3, 0)
+    ui  =  (30, 2, 0)
+    uan  = (31, 2, 0)
+    un   = (32, 1, 0)
+    uang = (33, 2, 0)
+    ueng = (34, 2, 0)
+    # group ü finals
+    v   =  (35, 1, 0, 'ü', ['u:']) # ü
+    ve  =  (36, 2, 0, 'üe', ['u:e'])
+    van =  (37, 3, 0, 'üan', ['u:an'])
+    vn  =  (38, 1, 0, 'ün')
 
     def __init__(self, value, vowel_count, vowel_location, override_final=None, variants=[]):
         self.val = value

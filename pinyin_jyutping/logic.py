@@ -9,7 +9,7 @@ def vowel_for_tone_mark(pinyin_final, tone):
     if pinyin_final.vowel_count == 1:
         location = pinyin_final.vowel_location
         return pinyin_final.final_text()[location]
-    elif pinyin_final.vowel_count == 2:
+    elif pinyin_final.vowel_count > 1:
         vowel = 'a'
         if vowel in pinyin_final.name:
             return vowel
@@ -24,6 +24,7 @@ def vowel_for_tone_mark(pinyin_final, tone):
             location = pinyin_final.vowel_location + 1
             vowel = pinyin_final.name[location]
             return vowel
+    raise Exception(f'could not find vowel for tone mark, final: {pinyin_final}')
 
 def apply_tone_mark(pinyin_final, tone):
     vowel = vowel_for_tone_mark(pinyin_final, tone)
