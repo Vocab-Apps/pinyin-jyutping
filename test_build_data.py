@@ -291,22 +291,16 @@ class BuildTests(unittest.TestCase):
         error_count = 0
         for line in generator:
             traditional_chinese, simplified_chinese, pinyin, definition = pinyin_jyutping.parser.unpack_cedict_line(line)
-            try:
-                # should we skip this character ?
-                skip = pinyin_jyutping.parser.cedict_ignore(traditional_chinese, simplified_chinese, pinyin)
-                if not skip:
-                    syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
-                    pinyin_tone_numbers = ' '.join([self.render_syllable_for_cedict(x) for x in syllables])
-                    clean_pinyin = pinyin_jyutping.parser.clean_pinyin(pinyin)
-                    clean_pinyin = self.transform_pinyin_from_cedict(clean_pinyin)
-                    self.assertEqual(clean_pinyin, pinyin_tone_numbers, f'while parsing pinyin: {pinyin}')
-            except pinyin_jyutping.errors.PinyinParsingError as e:
-                logger.error(f'while parsing line: [{line}] error: {e}')
-                error_count += 1
+            # should we skip this character ?
+            skip = pinyin_jyutping.parser.cedict_ignore(traditional_chinese, simplified_chinese, pinyin)
+            if not skip:
+                syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
+                pinyin_tone_numbers = ' '.join([self.render_syllable_for_cedict(x) for x in syllables])
+                clean_pinyin = pinyin_jyutping.parser.clean_pinyin(pinyin)
+                clean_pinyin = self.transform_pinyin_from_cedict(clean_pinyin)
+                self.assertEqual(clean_pinyin, pinyin_tone_numbers, f'while parsing pinyin: {pinyin}')
 
-        if error_count > 0:
-            logger.error(f'found {error_count} errors')
-        self.assertLess(error_count, 150)
+
 
 
 
