@@ -49,8 +49,20 @@ def get_final_str(initial, final):
         elif result[0] == 'ü':
             result = 'yu' + result[1:]
 
-    if initial == constants.PinyinInitials.q and final == constants.PinyinFinals.ve:
-        return 'ue'
+    jqx_mappings = {
+            constants.PinyinFinals.v: 'u',
+            constants.PinyinFinals.ve: 'ue',
+            constants.PinyinFinals.van: 'uan',
+            constants.PinyinFinals.vn: 'un',            
+    }
+    special_mappings = {
+        constants.PinyinInitials.j: jqx_mappings,        
+        constants.PinyinInitials.q: jqx_mappings,
+        constants.PinyinInitials.x: jqx_mappings
+    }
+    altered_final = special_mappings.get(initial, {}).get(final, None)
+    if altered_final != None:
+        return altered_final
 
     return result
 
