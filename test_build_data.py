@@ -271,12 +271,18 @@ class BuildTests(unittest.TestCase):
     def render_syllable_for_cedict(self, syllable):
         result = syllable.render_tone_number()
         result = result.replace('ü', 'u:')
-        if syllable.final == pinyin_jyutping.constants.PinyinFinals.er and \
-            syllable.tone == pinyin_jyutping.constants.PinyinTones.tone_neutral:
-            result = result.replace('er', 'r')
+        # if syllable.final == pinyin_jyutping.constants.PinyinFinals.er and \
+        #     syllable.tone == pinyin_jyutping.constants.PinyinTones.tone_neutral:
+        #     result = result.replace('er', 'r')
         return result
 
-    @pytest.mark.skip(reason="skip")
+    def transform_pinyin_from_cedict(self, pinyin):
+        if pinyin == 'r5':
+            return 'er5'
+        pinyin = pinyin.replace(' r5', ' er5')
+        return pinyin
+
+    # @pytest.mark.skip(reason="skip")
     def test_verify_parse_output_pinyin(self):
         # pytest test_build_data.py  -k test_verify_parse_output_pinyin -s -rPP
         """parse all of cedict, and make sure we can faithfully output the pinyin"""
@@ -298,6 +304,7 @@ class BuildTests(unittest.TestCase):
                     syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
                     pinyin_tone_numbers = ' '.join([self.render_syllable_for_cedict(x) for x in syllables])
                     clean_pinyin = pinyin_jyutping.parser.clean_pinyin(pinyin)
+                    clean_pinyin = self.transform_pinyin_from_cedict(clean_pinyin)
                     self.assertEqual(clean_pinyin, pinyin_tone_numbers, f'while parsing pinyin: {pinyin}')
             except pinyin_jyutping.errors.PinyinParsingError as e:
                 logger.warning(f'while parsing line: [{line}] error: {e}')
