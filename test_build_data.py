@@ -289,6 +289,7 @@ class BuildTests(unittest.TestCase):
         filename = 'source_data/cedict_1_0_ts_utf-8_mdbg.txt'
         generator = pinyin_jyutping.parser.parse_cedict_file_generator(filename)
         error_count = 0
+        processed_entries = 0
         for line in generator:
             traditional_chinese, simplified_chinese, pinyin, definition = pinyin_jyutping.parser.unpack_cedict_line(line)
             # should we skip this character ?
@@ -299,6 +300,8 @@ class BuildTests(unittest.TestCase):
                 clean_pinyin = pinyin_jyutping.parser.clean_pinyin(pinyin)
                 clean_pinyin = self.transform_pinyin_from_cedict(clean_pinyin)
                 self.assertEqual(clean_pinyin, pinyin_tone_numbers, f'while parsing pinyin: {pinyin}')
+                processed_entries += 1
+        self.assertGreater(processed_entries, 97000)
 
 
 
