@@ -7,6 +7,7 @@ import unittest
 import pytest
 import pprint
 import logging
+import re
 
 logger = logging.getLogger(__file__)
 
@@ -67,7 +68,8 @@ class BuildTests(unittest.TestCase):
             {'text': 'lu:4', 'expected_syllable': PinyinSyllable(PinyinInitials.l, PinyinFinals.v, PinyinTones.tone_4)},
             {'text': 'E2', 'expected_syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.e, PinyinTones.tone_2, capital=True)},
             {'text': 'guan1', 'expected_syllable': PinyinSyllable(PinyinInitials.g, PinyinFinals.uan, PinyinTones.tone_1)},
-            {'text': 'jiao1', 'expected_syllable': PinyinSyllable(PinyinInitials.j, PinyinFinals.iao, PinyinTones.tone_1)}
+            {'text': 'jiao1', 'expected_syllable': PinyinSyllable(PinyinInitials.j, PinyinFinals.iao, PinyinTones.tone_1)},
+            {'text': 'que4', 'expected_syllable': PinyinSyllable(PinyinInitials.q, PinyinFinals.ve, PinyinTones.tone_4)}
         ]
         for entry in entries:
             text = entry['text']
@@ -101,7 +103,8 @@ class BuildTests(unittest.TestCase):
 
     def test_render_syllables_tone_number(self):
         entries = [
-            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.e, PinyinTones.tone_2, capital=True), 'pinyin': 'E2'}
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.e, PinyinTones.tone_2, capital=True), 'pinyin': 'E2'},
+            { 'syllable': PinyinSyllable(PinyinInitials.q, PinyinFinals.ve, PinyinTones.tone_4), 'pinyin': 'que4'},
         ]
         for entry in entries:
             syllable = entry['syllable']
@@ -261,9 +264,16 @@ class BuildTests(unittest.TestCase):
         for line in generator:
             traditional_chinese, simplified_chinese, pinyin, definition = pinyin_jyutping.parser.unpack_cedict_line(line)
             try:
-                syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
-                pinyin_tone_numbers = ' '.join([x.render_tone_number() for x in syllables])
-                self.assertEqual(pinyin, pinyin_tone_numbers)
+                # should we skip this character ?
+                skip = False
+                if re.match('[A-Z]', pinyin) != None:
+                    skip = True                
+                if re.match('[A-Z]+\s', pinyin) != None:
+                    skip = True
+                if not skip:
+                    syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
+                    pinyin_tone_numbers = ' '.join([x.render_tone_number() for x in syllables])
+                    self.assertEqual(pinyin, pinyin_tone_numbers, f'while parsing pinyin: {pinyin}')
             except pinyin_jyutping.errors.PinyinParsingError as e:
                 logger.error(f'while parsing line: [{line}] error: {e}')
                 error_count += 1

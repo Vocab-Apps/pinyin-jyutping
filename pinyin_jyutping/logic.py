@@ -49,6 +49,9 @@ def get_final_str(initial, final):
         elif result[0] == 'ü':
             result = 'yu' + result[1:]
 
+    if initial == constants.PinyinInitials.q and final == constants.PinyinFinals.ve:
+        return 'ue'
+
     return result
 
 def render_tone_mark(initial, final, tone, capital):
