@@ -2,6 +2,7 @@ import pinyin_jyutping
 import pinyin_jyutping.parser
 import pinyin_jyutping.data
 import pinyin_jyutping.logic
+import pinyin_jyutping.constants
 import pickle
 import unittest
 import pytest
@@ -101,6 +102,9 @@ class BuildTests(unittest.TestCase):
         output = pinyin_jyutping.parser.parse_pinyin_word(text)
         self.assertEqual(output, expected_output)
 
+    # rendering of syllables to pinyin
+    # ================================
+
     def test_render_syllables_tone_number(self):
         entries = [
             { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.e, PinyinTones.tone_2, capital=True), 'pinyin': 'E2'},
@@ -111,6 +115,16 @@ class BuildTests(unittest.TestCase):
             expected_pinyin = entry['pinyin']
             pinyin = syllable.render_tone_number()
             self.assertEqual(pinyin, expected_pinyin)
+
+    def test_render_syllables_tone_mark(self):
+        entries = [
+            { 'syllable': PinyinSyllable(PinyinInitials.n, PinyinFinals.v, PinyinTones.tone_3), 'pinyin': 'nǚ'},
+        ]
+        for entry in entries:
+            syllable = entry['syllable']
+            expected_pinyin = entry['pinyin']
+            pinyin = syllable.render_tone_mark()
+            self.assertEqual(pinyin, expected_pinyin)            
 
     def test_render_final_variant(self):
         self.assertEqual(pinyin_jyutping.logic.render_tone_number(PinyinInitials.empty, 
@@ -254,6 +268,14 @@ class BuildTests(unittest.TestCase):
         data_file.close()
 
 
+    def render_syllable_for_cedict(self, syllable):
+        result = syllable.render_tone_number()
+        result = result.replace('ü', 'u:')
+        if syllable.final == pinyin_jyutping.constants.PinyinFinals.er and \
+            syllable.tone == pinyin_jyutping.constants.PinyinTones.tone_neutral:
+            result = result.replace('er', 'r')
+        return result
+
     @pytest.mark.skip(reason="skip")
     def test_verify_parse_output_pinyin(self):
         # pytest test_build_data.py  -k test_verify_parse_output_pinyin -s -rPP
@@ -266,16 +288,19 @@ class BuildTests(unittest.TestCase):
             try:
                 # should we skip this character ?
                 skip = False
+                if re.match('.*[A-Za-z].*', simplified_chinese) != None:
+                    skip = True                                
                 if re.match('[A-Z]', pinyin) != None:
                     skip = True                
                 if re.match('[A-Z]+\s', pinyin) != None:
                     skip = True
                 if not skip:
                     syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
-                    pinyin_tone_numbers = ' '.join([x.render_tone_number() for x in syllables])
-                    self.assertEqual(pinyin, pinyin_tone_numbers, f'while parsing pinyin: {pinyin}')
+                    pinyin_tone_numbers = ' '.join([self.render_syllable_for_cedict(x) for x in syllables])
+                    clean_pinyin = pinyin_jyutping.parser.clean_pinyin(pinyin)
+                    self.assertEqual(clean_pinyin, pinyin_tone_numbers, f'while parsing pinyin: {pinyin}')
             except pinyin_jyutping.errors.PinyinParsingError as e:
-                logger.error(f'while parsing line: [{line}] error: {e}')
+                logger.warning(f'while parsing line: [{line}] error: {e}')
                 error_count += 1
 
         if error_count > 0:

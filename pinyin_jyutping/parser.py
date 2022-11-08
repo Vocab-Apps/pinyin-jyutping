@@ -33,14 +33,18 @@ def parse_pinyin_word(text):
     while len(text) > 0:
         logger.debug(f'parsing pinyin word: {text}')
         # remove leading space
-        text = text.lstrip()
-        text = text.replace(',', '')
-        text = text.replace('·', '')
+        text = clean_pinyin(text)
         syllable, text = parse_pinyin(text)
         logger.debug(f'parsed {syllable}, remaining text: {text}')
         syllables.append(syllable)
     return syllables
 
+def clean_pinyin(text):
+    text = text.lstrip()
+    text = text.replace(',', '')
+    text = text.replace('·', '')
+    text = text.replace('  ', ' ')
+    return text
  
 def parse_cedict(filepath, data):
     generator = parse_cedict_file_generator(filepath)
