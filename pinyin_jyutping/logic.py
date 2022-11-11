@@ -1,10 +1,10 @@
 from . import constants
 
-def apply_tone_mark_on_vowel(pinyin_final, vowel, tone):
+def apply_tone_mark_on_vowel(pinyin_initial, pinyin_final, vowel, tone):
     tone_mark_vowel = constants.VowelToneMap[vowel][tone]
-    return pinyin_final.final_text().replace(vowel, tone_mark_vowel)
+    return get_final_str(pinyin_initial, pinyin_final).replace(vowel, tone_mark_vowel)
 
-def vowel_for_tone_mark(pinyin_final, tone):
+def vowel_for_tone_mark(pinyin_initial, pinyin_final, tone):
     # algorithm from https://en.wikipedia.org/wiki/Pinyin#Rules_for_placing_the_tone_mark    
     if pinyin_final.vowel_count == 1:
         location = pinyin_final.vowel_location
@@ -26,9 +26,9 @@ def vowel_for_tone_mark(pinyin_final, tone):
             return vowel
     raise Exception(f'could not find vowel for tone mark, final: {pinyin_final}')
 
-def apply_tone_mark(pinyin_final, tone):
-    vowel = vowel_for_tone_mark(pinyin_final, tone)
-    return apply_tone_mark_on_vowel(pinyin_final, vowel, tone)
+def apply_tone_mark(pinyin_initial, pinyin_final, tone):
+    vowel = vowel_for_tone_mark(pinyin_initial, pinyin_final, tone)
+    return apply_tone_mark_on_vowel(pinyin_initial, pinyin_final, vowel, tone)
 
 
 def get_initial_str(initial):
@@ -74,7 +74,7 @@ def get_final_str(initial, final):
     return result
 
 def render_tone_mark(initial, final, tone, capital):
-    result = f'{get_initial_str(initial)}{apply_tone_mark(final, tone)}'
+    result = f'{get_initial_str(initial)}{apply_tone_mark(initial, final, tone)}'
     if capital:
         result = result.capitalize()
     return result

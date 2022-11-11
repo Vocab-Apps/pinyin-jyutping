@@ -144,6 +144,16 @@ class BuildTests(unittest.TestCase):
     def test_render_syllables_tone_mark(self):
         entries = [
             { 'syllable': PinyinSyllable(PinyinInitials.n, PinyinFinals.v, PinyinTones.tone_3), 'pinyin': 'nǚ'},
+            # empty + u group finals
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.u, PinyinTones.tone_4), 'pinyin': 'wù'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ua, PinyinTones.tone_4), 'pinyin': 'wà'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.uo, PinyinTones.tone_4), 'pinyin': 'wò'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.uai, PinyinTones.tone_4), 'pinyin': 'wài'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ui, PinyinTones.tone_4), 'pinyin': 'wèi'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.uan, PinyinTones.tone_4), 'pinyin': 'wàn'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.un, PinyinTones.tone_4), 'pinyin': 'wèn'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ueng, PinyinTones.tone_4), 'pinyin': 'wèng'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.uang, PinyinTones.tone_4), 'pinyin': 'wàng'},
         ]
         for entry in entries:
             syllable = entry['syllable']
