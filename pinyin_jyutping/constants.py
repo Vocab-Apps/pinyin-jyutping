@@ -24,7 +24,6 @@ class PinyinInitials(enum.Enum):
     z  = 19
     c  = 20
     s  = 21
-    y  = 22
     empty = 23
 
 # https://en.wikipedia.org/wiki/Pinyin_table
@@ -141,3 +140,4 @@ VowelToneMap = {
 }
 
 
+ALL_VOWELS = list(VowelToneMap.keys()) + ['y']

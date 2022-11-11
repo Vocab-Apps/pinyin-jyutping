@@ -54,7 +54,7 @@ class BuildTests(unittest.TestCase):
     def test_parse_pinyin_word(self):
         text = 'yi1 ge5 ban4'
         expected_output = [
-            PinyinSyllable(PinyinInitials.y, PinyinFinals.i, PinyinTones.tone_1),
+            PinyinSyllable(PinyinInitials.empty, PinyinFinals.i, PinyinTones.tone_1),
             PinyinSyllable(PinyinInitials.g, PinyinFinals.e, PinyinTones.tone_neutral),
             PinyinSyllable(PinyinInitials.b, PinyinFinals.an, PinyinTones.tone_4),
         ]
@@ -134,6 +134,9 @@ class BuildTests(unittest.TestCase):
             { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.uang, PinyinTones.tone_4), 'pinyin': 'wang4'},
             { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.un, PinyinTones.tone_4), 'pinyin': 'wen4'},
             { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ueng, PinyinTones.tone_4), 'pinyin': 'weng4'},
+            # empty + i group finals
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.i, PinyinTones.tone_4), 'pinyin': 'yi4'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ia, PinyinTones.tone_4), 'pinyin': 'ya4'},
         ]
         for entry in entries:
             syllable = entry['syllable']
@@ -154,6 +157,17 @@ class BuildTests(unittest.TestCase):
             { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.un, PinyinTones.tone_4), 'pinyin': 'wèn'},
             { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ueng, PinyinTones.tone_4), 'pinyin': 'wèng'},
             { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.uang, PinyinTones.tone_4), 'pinyin': 'wàng'},
+            # empty + i group finals
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.i, PinyinTones.tone_4), 'pinyin': 'yì'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ia, PinyinTones.tone_4), 'pinyin': 'yà'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ie, PinyinTones.tone_4), 'pinyin': 'yè'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.iao, PinyinTones.tone_4), 'pinyin': 'yào'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.iu, PinyinTones.tone_4), 'pinyin': 'yòu'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ian, PinyinTones.tone_4), 'pinyin': 'yàn'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.iang, PinyinTones.tone_4), 'pinyin': 'yàng'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.in_, PinyinTones.tone_4), 'pinyin': 'yìn'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ing, PinyinTones.tone_4), 'pinyin': 'yìng'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.iong, PinyinTones.tone_4), 'pinyin': 'yòng'},
         ]
         for entry in entries:
             syllable = entry['syllable']

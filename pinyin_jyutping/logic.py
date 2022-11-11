@@ -1,34 +1,61 @@
+import functools
+import logging
+
 from . import constants
 
-def apply_tone_mark_on_vowel(pinyin_initial, pinyin_final, vowel, tone):
-    tone_mark_vowel = constants.VowelToneMap[vowel][tone]
-    return get_final_str(pinyin_initial, pinyin_final).replace(vowel, tone_mark_vowel)
+logger = logging.getLogger(__file__)
 
-def vowel_for_tone_mark(pinyin_initial, pinyin_final, tone):
+
+@functools.lru_cache(maxsize=None)
+def count_vowels(input):
+    count = 0
+    for char in input:
+        if char in constants.ALL_VOWELS:
+            count += 1
+    return count
+
+@functools.lru_cache(maxsize=None)
+def vowel_location(input):
+    i = 0
+    for char in input:
+        if char in constants.ALL_VOWELS:
+            return i
+        i += 1
+    return None
+
+
+
+def apply_tone_mark_on_vowel(pinyin_final_final_form, vowel, tone):
+    tone_mark_vowel = constants.VowelToneMap[vowel][tone]
+    return pinyin_final_final_form.replace(vowel, tone_mark_vowel)
+
+def vowel_for_tone_mark(pinyin_final_final_form):
     # algorithm from https://en.wikipedia.org/wiki/Pinyin#Rules_for_placing_the_tone_mark    
-    if pinyin_final.vowel_count == 1:
-        location = pinyin_final.vowel_location
-        return pinyin_final.final_text()[location]
-    elif pinyin_final.vowel_count > 1:
+    vowel_count = count_vowels(pinyin_final_final_form)
+    if vowel_count == 1:
+        location = vowel_location(pinyin_final_final_form)
+        return pinyin_final_final_form[location]
+    elif vowel_count > 1:
         vowel = 'a'
-        if vowel in pinyin_final.name:
+        if vowel in pinyin_final_final_form:
             return vowel
         vowel = 'e'
-        if vowel in pinyin_final.name:
+        if vowel in pinyin_final_final_form:
             return vowel
         vowel = 'o'
-        if 'ou' in pinyin_final.name:
+        if 'ou' in pinyin_final_final_form:
             return vowel
         else:
             # second vowel takes the tone mark
-            location = pinyin_final.vowel_location + 1
-            vowel = pinyin_final.name[location]
+            location = vowel_location(pinyin_final_final_form) + 1
+            vowel = pinyin_final_final_form[location]
             return vowel
-    raise Exception(f'could not find vowel for tone mark, final: {pinyin_final}')
+    raise Exception(f'could not find vowel for tone mark, final: {pinyin_final_final_form}')
 
 def apply_tone_mark(pinyin_initial, pinyin_final, tone):
-    vowel = vowel_for_tone_mark(pinyin_initial, pinyin_final, tone)
-    return apply_tone_mark_on_vowel(pinyin_initial, pinyin_final, vowel, tone)
+    pinyin_final_final_form = get_final_str(pinyin_initial, pinyin_final)
+    vowel = vowel_for_tone_mark(pinyin_final_final_form)
+    return apply_tone_mark_on_vowel(pinyin_final_final_form, vowel, tone)
 
 
 def get_initial_str(initial):
@@ -49,6 +76,14 @@ def get_final_str(initial, final):
             return 'wei'
         elif final == constants.PinyinFinals.un:
             return 'wen'
+        elif final == constants.PinyinFinals.i:
+            return 'yi'
+        elif final == constants.PinyinFinals.iu:
+            return 'you'
+        elif final == constants.PinyinFinals.in_:
+            return 'yin'
+        elif final == constants.PinyinFinals.ing:
+            return 'ying'
         elif result[0] == 'i':
             result = 'y' + result[1:]
         elif result[0] == 'u':
@@ -74,6 +109,7 @@ def get_final_str(initial, final):
     return result
 
 def render_tone_mark(initial, final, tone, capital):
+    # logger.warning(f'render_tone_mark {initial} {final}')
     result = f'{get_initial_str(initial)}{apply_tone_mark(initial, final, tone)}'
     if capital:
         result = result.capitalize()
