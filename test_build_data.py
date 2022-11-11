@@ -393,7 +393,7 @@ class BuildTests(unittest.TestCase):
         pinyin = pinyin.replace(' r5', ' er5')
         return pinyin
 
-    @pytest.mark.skip(reason="skip")
+    # @pytest.mark.skip(reason="skip")
     def test_verify_parse_output_pinyin(self):
         # pytest test_build_data.py  -k test_verify_parse_output_pinyin -s -rPP
         """parse all of cedict, and make sure we can faithfully output the pinyin"""
@@ -414,7 +414,7 @@ class BuildTests(unittest.TestCase):
                 processed_entries += 1
         self.assertGreater(processed_entries, 97000)
 
-    @pytest.mark.skip(reason="skip") 
+    # @pytest.mark.skip(reason="skip") 
     def test_verify_cedict_character_mapping(self):
         # pytest test_build_data.py  -k test_verify_cedict_character_mapping -s -rPP
         """parse all of cedict, and make sure we can faithfully output the pinyin"""
@@ -423,7 +423,7 @@ class BuildTests(unittest.TestCase):
         data = pinyin_jyutping.data.Data()
 
         # analyze entries which contain this character only
-        character_check = '忘'
+        character_check = '拿'
         pinyin_jyutping.parser.DEBUG_WORD = character_check
 
         for line in generator:

@@ -11,6 +11,7 @@ class PinyinConversion(unittest.TestCase):
 
     def test_simple_pinyin(self):
         self.assertEqual(self.pinyin_jyutping.pinyin('没有'), ['méiyǒu'])
+        self.assertEqual(self.pinyin_jyutping.pinyin('忘拿'), ['wàng ná'])
 
     def test_simple_chars(self):
         self.assertEqual(self.pinyin_jyutping.pinyin('忘'), ['wàng'])

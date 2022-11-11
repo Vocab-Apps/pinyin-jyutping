@@ -64,6 +64,8 @@ def parse_cedict_entries(generator, data):
     for line in generator:
         try:
             simplified, traditional, syllables = parse_cedict_line(line)
+            if (len(simplified) != len(syllables)) or (len(traditional) != len(syllables)):
+                raise errors.PinyinParsingError(f'inconsistent lengths for line {line}')
             process_word(simplified, syllables, data)
             process_word(traditional, syllables, data)
         except errors.PinyinParsingError as e:
@@ -133,9 +135,12 @@ def process_word(chinese, syllables, map):
             character_map[chinese].sort(key=get_occurences, reverse=True)
 
     def add_word_mapping(chinese, word_map, syllables):
-        if DEBUG_WORD != None:
-            if chinese == DEBUG_WORD:
-                logger.warn(f'adding word mapping: {chinese} syllable: {syllables}')
+        # if DEBUG_WORD != None:
+        #     if chinese == DEBUG_WORD:
+        #         logger.warn(f'adding word mapping: {chinese} syllable: {syllables}')
+
+        if len(chinese) != len(syllables):
+            raise Exception(f'{chinese} and {syllables}: inconsistent lengths')
 
         # insert into word map
         if chinese not in word_map:
