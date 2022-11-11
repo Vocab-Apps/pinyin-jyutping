@@ -186,6 +186,13 @@ class BuildTests(unittest.TestCase):
         # no spaces    
         self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '没有', True, False), ['mei2you3', 'mei2you4'])
 
+    def test_convert_pinyin_words(self):
+        input_data = [
+            ('没有', 'mei2 you3'),
+            ('什么', 'shen2 me5'),
+        ]
+        data = self.build_data_from_input(input_data)    
+        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '没有什么', True, False), ['mei2you3 shen2me5'])
 
 
     # pickle / data storage tests
@@ -337,7 +344,7 @@ class BuildTests(unittest.TestCase):
         pinyin = pinyin.replace(' r5', ' er5')
         return pinyin
 
-    # @pytest.mark.skip(reason="skip")
+    @pytest.mark.skip(reason="skip")
     def test_verify_parse_output_pinyin(self):
         # pytest test_build_data.py  -k test_verify_parse_output_pinyin -s -rPP
         """parse all of cedict, and make sure we can faithfully output the pinyin"""
