@@ -139,6 +139,75 @@ class BuildTests(unittest.TestCase):
             'r'),
             'r5')            
 
+    # conversion tests
+    # ================
+
+    def test_convert_pinyin(self):
+        data = pinyin_jyutping.data.Data()
+        input_data = [
+            ('没有', 'mei2 you3')
+        ]
+        for entry in input_data:
+            chinese, pinyin = entry
+            syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
+            pinyin_jyutping.parser.process_word(chinese, syllables, data)
+
+        output_pinyin = pinyin_jyutping.conversion.convert_pinyin(data, '没有', True, False)
+        self.assertEqual(output_pinyin, 'mei2you3')
+
+               
+
+
+
+    # pickle / data storage tests
+    # ===========================
+
+
+    def test_dump_load_pickle(self):
+        data = pinyin_jyutping.data.Data()
+        lines = [
+            '上周 上周 [shang4 zhou1] /last week/',
+            '誰 谁 [shei2] /who/also pr. [shui2]/',
+            '誰知 谁知 [shei2 zhi1] /who would have thought/unexpectedly/',
+            '阿誰 阿谁 [a1 shui2] /who/',
+            '不准 不准 [bu4 zhun3] /not to allow/to forbid/to prohibit/'
+        ]
+        pinyin_jyutping.parser.parse_cedict_entries(lines, data)
+
+        pickled_data = pickle.dumps(data)
+
+        unpickled_data = pickle.loads(pickled_data)
+
+
+    @pytest.mark.skip(reason="still experimenting with pickle")
+    def test_save_pickle(self):
+        data = pinyin_jyutping.data.Data()
+        sample_data_only = False
+        if sample_data_only:
+            lines = [
+                '誰 谁 [shei2] /who/also pr. [shui2]/',
+                '誰知 谁知 [shei2 zhi1] /who would have thought/unexpectedly/',
+                '阿誰 阿谁 [a1 shui2] /who/',
+                '不准 不准 [bu4 zhun3] /not to allow/to forbid/to prohibit/'
+            ]
+            pinyin_jyutping.parser.parse_cedict_entries(lines, data)
+        else:
+            filename = 'source_data/cedict_1_0_ts_utf-8_mdbg.txt'
+            pinyin_jyutping.parser.parse_cedict(filename, data)            
+        data_file = open('pinyin.pkl', 'wb')
+        pickle.dump(data, data_file)
+        data_file.close()
+    
+    @pytest.mark.skip(reason="still experimenting with pickle")
+    def test_load_pickle(self):
+        data_file = open('pinyin.pkl', 'rb')
+        data = pickle.load(data_file)
+        data_file.close()
+
+
+    # CEDICT parsing related functions
+    # ================================
+
     def test_parse_cedict(self):
         line = '上周 上周 [shang4 zhou1] /last week/'
         simplified, traditional, syllables = pinyin_jyutping.parser.parse_cedict_line(line)
@@ -223,50 +292,7 @@ class BuildTests(unittest.TestCase):
                 PinyinSyllable(PinyinInitials.sh, PinyinFinals.ang, PinyinTones.tone_4),
                 PinyinSyllable(PinyinInitials.zh, PinyinFinals.ou, PinyinTones.tone_1)
             ]
-        )
-
-
-    def test_dump_load_pickle(self):
-        data = pinyin_jyutping.data.Data()
-        lines = [
-            '上周 上周 [shang4 zhou1] /last week/',
-            '誰 谁 [shei2] /who/also pr. [shui2]/',
-            '誰知 谁知 [shei2 zhi1] /who would have thought/unexpectedly/',
-            '阿誰 阿谁 [a1 shui2] /who/',
-            '不准 不准 [bu4 zhun3] /not to allow/to forbid/to prohibit/'
-        ]
-        pinyin_jyutping.parser.parse_cedict_entries(lines, data)
-
-        pickled_data = pickle.dumps(data)
-
-        unpickled_data = pickle.loads(pickled_data)
-
-
-    @pytest.mark.skip(reason="still experimenting with pickle")
-    def test_save_pickle(self):
-        data = pinyin_jyutping.data.Data()
-        sample_data_only = False
-        if sample_data_only:
-            lines = [
-                '誰 谁 [shei2] /who/also pr. [shui2]/',
-                '誰知 谁知 [shei2 zhi1] /who would have thought/unexpectedly/',
-                '阿誰 阿谁 [a1 shui2] /who/',
-                '不准 不准 [bu4 zhun3] /not to allow/to forbid/to prohibit/'
-            ]
-            pinyin_jyutping.parser.parse_cedict_entries(lines, data)
-        else:
-            filename = 'source_data/cedict_1_0_ts_utf-8_mdbg.txt'
-            pinyin_jyutping.parser.parse_cedict(filename, data)            
-        data_file = open('pinyin.pkl', 'wb')
-        pickle.dump(data, data_file)
-        data_file.close()
-    
-    @pytest.mark.skip(reason="still experimenting with pickle")
-    def test_load_pickle(self):
-        data_file = open('pinyin.pkl', 'rb')
-        data = pickle.load(data_file)
-        data_file.close()
-
+        )    
 
     def render_syllable_for_cedict(self, syllable):
         result = syllable.render_tone_number()
