@@ -29,52 +29,50 @@ class PinyinInitials(enum.Enum):
 # https://en.wikipedia.org/wiki/Pinyin_table
 class PinyinFinals(enum.Enum):
     # group a finals
-    i   =  ( 1, 1, 0)
-    a   =  ( 2, 1, 0)
-    o   =  ( 3, 1, 0)
-    e   =  ( 4, 1, 0)
-    ai  =  ( 5, 2, 0)
-    ei  =  ( 6, 2, 0)
-    ao  =  ( 7, 2, 0)
-    ou  =  ( 8, 2, 0)
-    an  =  ( 9, 1, 0)
-    en  =  (10, 1, 0)
-    ang =  (11, 1, 0)
-    eng =  (12, 1, 0)
-    ong =  (13, 1, 0)
-    er  =  (14, 1, 0, None, ['r'])
+    i   =  ( 1 )
+    a   =  ( 2 )
+    o   =  ( 3 )
+    e   =  ( 4 )
+    ai  =  ( 5 )
+    ei  =  ( 6 )
+    ao  =  ( 7 )
+    ou  =  ( 8 )
+    an  =  ( 9 )
+    en  =  (10 )
+    ang =  (11 )
+    eng =  (12 )
+    ong =  (13 )
+    er  =  (14 , None, ['r'])
     # group i finals
-    ia  =  (15, 2, 0)
-    io  =  (16, 2, 0)
-    ie  =  (17, 2, 0)
-    iai =  (18, 3, 0)
-    iao =  (19, 3, 0)
-    iu  =  (20, 2, 0)
-    ian =  (21, 2, 0)
-    in_ =  (22, 1, 0, 'in')
-    iang = (23, 2, 0)
-    ing =  (24, 1, 0)
-    iong = (25, 2, 0)
+    ia  =  (15 )
+    io  =  (16 )
+    ie  =  (17 )
+    iai =  (18 )
+    iao =  (19 )
+    iu  =  (20 )
+    ian =  (21 )
+    in_ =  (22 , 'in')
+    iang = (23 )
+    ing =  (24 )
+    iong = (25 )
     # group u finals
-    u   =  (26, 1, 0)
-    ua  =  (27, 2, 0)
-    uo  =  (28, 2, 0)
-    uai =  (29, 3, 0)
-    ui  =  (30, 2, 0)
-    uan  = (31, 2, 0)
-    un   = (32, 1, 0)
-    uang = (33, 2, 0)
-    ueng = (34, 2, 0)
+    u   =  (26 )
+    ua  =  (27 )
+    uo  =  (28 )
+    uai =  (29 )
+    ui  =  (30 )
+    uan  = (31 )
+    un   = (32 )
+    uang = (33 )
+    ueng = (34 )
     # group ü finals
-    v   =  (35, 1, 0, 'ü', ['u:']) # ü
-    ve  =  (36, 2, 0, 'üe', ['u:e'])
-    van =  (37, 3, 0, 'üan', ['u:an'])
-    vn  =  (38, 1, 0, 'ün')
+    v   =  (35, 'ü', ['u:']) # ü
+    ve  =  (36, 'üe', ['u:e'])
+    van =  (37, 'üan', ['u:an'])
+    vn  =  (38, 'ün')
 
-    def __init__(self, value, vowel_count, vowel_location, override_final=None, variants=[]):
+    def __init__(self, value, override_final=None, variants=[]):
         self.val = value
-        self.vowel_count = vowel_count
-        self.vowel_location = vowel_location
         self.override_final = override_final
         self.variants = variants
 
