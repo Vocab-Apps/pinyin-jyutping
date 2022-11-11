@@ -25,8 +25,7 @@ class PinyinInitials(enum.Enum):
     c  = 20
     s  = 21
     y  = 22
-    w  = 23
-    empty = 24
+    empty = 23
 
 # https://en.wikipedia.org/wiki/Pinyin_table
 class PinyinFinals(enum.Enum):

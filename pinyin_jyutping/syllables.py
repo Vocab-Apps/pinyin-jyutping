@@ -25,7 +25,7 @@ class PinyinSyllable():
         return logic.render_tone_number(self.initial, self.final, self.tone, self.capital, final_variant=final_variant)
 
     def __repr__(self):
-        return f'{self.initial.name}{self.final.name}{self.tone.tone_number}'
+        return f'{self.initial.name}-{self.final.name}-{self.tone.tone_number}'
 
     def __str__(self):
         return self.render_tone_number()

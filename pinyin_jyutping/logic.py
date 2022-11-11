@@ -42,7 +42,14 @@ def get_final_str(initial, final):
     if initial == constants.PinyinInitials.empty:
         # apply replacements
         # from https://en.wikipedia.org/wiki/Pinyin_table
-        if result[0] == 'i':
+        # also: http://www.pinyin.info/rules/initials_finals.html
+        if final == constants.PinyinFinals.u:
+            result = 'wu'
+        elif final == constants.PinyinFinals.ui:
+            return 'wei'
+        elif final == constants.PinyinFinals.un:
+            return 'wen'
+        elif result[0] == 'i':
             result = 'y' + result[1:]
         elif result[0] == 'u':
             result = 'w' + result[1:]

@@ -61,6 +61,18 @@ class BuildTests(unittest.TestCase):
         output = pinyin_jyutping.parser.parse_pinyin_word(text)
         self.assertEqual(output, expected_output)
 
+    def test_parse_pinyin_word_list(self):
+        entries = [
+            {'text': 'nan2 wang4', 'expected_output': [
+                PinyinSyllable(PinyinInitials.n, PinyinFinals.an, PinyinTones.tone_2),
+                PinyinSyllable(PinyinInitials.empty, PinyinFinals.uang, PinyinTones.tone_4),
+            ]}
+        ]
+        for entry in entries:
+            output = pinyin_jyutping.parser.parse_pinyin_word(entry['text'])
+            self.assertEqual(output, entry['expected_output'])
+
+
     def test_parse_pinyin_syllable_list(self):
         # expected_syllable
         entries = [
@@ -70,7 +82,9 @@ class BuildTests(unittest.TestCase):
             {'text': 'E2', 'expected_syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.e, PinyinTones.tone_2, capital=True)},
             {'text': 'guan1', 'expected_syllable': PinyinSyllable(PinyinInitials.g, PinyinFinals.uan, PinyinTones.tone_1)},
             {'text': 'jiao1', 'expected_syllable': PinyinSyllable(PinyinInitials.j, PinyinFinals.iao, PinyinTones.tone_1)},
-            {'text': 'que4', 'expected_syllable': PinyinSyllable(PinyinInitials.q, PinyinFinals.ve, PinyinTones.tone_4)}
+            {'text': 'que4', 'expected_syllable': PinyinSyllable(PinyinInitials.q, PinyinFinals.ve, PinyinTones.tone_4)},
+            {'text': 'wu3', 'expected_syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.u, PinyinTones.tone_3)},
+            {'text': 'wei2', 'expected_syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ui, PinyinTones.tone_2)}
         ]
         for entry in entries:
             text = entry['text']
@@ -106,9 +120,20 @@ class BuildTests(unittest.TestCase):
     # ================================
 
     def test_render_syllables_tone_number(self):
+        #  pytest test_build_data.py -k test_render_syllables_tone_number
         entries = [
             { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.e, PinyinTones.tone_2, capital=True), 'pinyin': 'E2'},
             { 'syllable': PinyinSyllable(PinyinInitials.q, PinyinFinals.ve, PinyinTones.tone_4), 'pinyin': 'que4'},
+            # empty + u group tests
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.u, PinyinTones.tone_4), 'pinyin': 'wu4'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ua, PinyinTones.tone_4), 'pinyin': 'wa4'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.uo, PinyinTones.tone_4), 'pinyin': 'wo4'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.uai, PinyinTones.tone_4), 'pinyin': 'wai4'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ui, PinyinTones.tone_4), 'pinyin': 'wei4'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.uan, PinyinTones.tone_4), 'pinyin': 'wan4'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.uang, PinyinTones.tone_4), 'pinyin': 'wang4'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.un, PinyinTones.tone_4), 'pinyin': 'wen4'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ueng, PinyinTones.tone_4), 'pinyin': 'weng4'},
         ]
         for entry in entries:
             syllable = entry['syllable']
@@ -344,7 +369,7 @@ class BuildTests(unittest.TestCase):
         pinyin = pinyin.replace(' r5', ' er5')
         return pinyin
 
-    @pytest.mark.skip(reason="skip")
+    # @pytest.mark.skip(reason="skip")
     def test_verify_parse_output_pinyin(self):
         # pytest test_build_data.py  -k test_verify_parse_output_pinyin -s -rPP
         """parse all of cedict, and make sure we can faithfully output the pinyin"""
@@ -385,7 +410,7 @@ class BuildTests(unittest.TestCase):
                 skip = True
             if not skip:
                 syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
-                logger.warn(f'{simplified_chinese}: syllables: {syllables} pinyin: {pinyin}')
+                logger.warn(f'{simplified_chinese}: syllables: {syllables} pinyin: [{pinyin}]')
                 pinyin_jyutping.parser.process_word(simplified_chinese, syllables, data)
 
 
