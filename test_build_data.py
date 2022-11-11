@@ -153,6 +153,7 @@ class BuildTests(unittest.TestCase):
     def test_convert_pinyin_char(self):
         data = self.build_data_from_input([('没', 'mei2')])
         self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '没', True, False), ['mei2'])
+        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '没', False, False), ['méi'])
 
     def test_convert_pinyin_char_multiple_choice(self):
         data = self.build_data_from_input([
@@ -161,6 +162,7 @@ class BuildTests(unittest.TestCase):
             ('没', 'mei2'),
         ])
         self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '没', True, False), ['mei2', 'mei3'])
+        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '没', False, False), ['méi', 'měi'])
 
     def test_convert_pinyin(self):
         input_data = [
