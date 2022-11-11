@@ -142,20 +142,39 @@ class BuildTests(unittest.TestCase):
     # conversion tests
     # ================
 
-    def test_convert_pinyin(self):
+    def build_data_from_input(self, input_data):
         data = pinyin_jyutping.data.Data()
-        input_data = [
-            ('没有', 'mei2 you3')
-        ]
         for entry in input_data:
             chinese, pinyin = entry
             syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
             pinyin_jyutping.parser.process_word(chinese, syllables, data)
+        return data
 
-        output_pinyin = pinyin_jyutping.conversion.convert_pinyin(data, '没有', True, False)
-        self.assertEqual(output_pinyin, 'mei2you3')
+    def test_convert_pinyin_char(self):
+        data = self.build_data_from_input([('没', 'mei2')])
+        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '没', True, False), ['mei2'])
 
-               
+    def test_convert_pinyin(self):
+        input_data = [
+            ('没有', 'mei2 you3')
+        ]
+        data = self.build_data_from_input(input_data)
+
+        # no spaces    
+        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '没有', True, False), ['mei2you3'])
+        # spaces
+        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '没有', True, True), ['mei2 you3'])
+
+    def test_convert_pinyin_multiple_alternatives(self):
+        input_data = [
+            ('没有', 'mei2 you3'),
+            ('没有', 'mei2 you3'),
+            ('没有', 'mei2 you4'),
+        ]
+        data = self.build_data_from_input(input_data)
+
+        # no spaces    
+        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '没有', True, False), ['mei2you3', 'mei2you4'])
 
 
 
