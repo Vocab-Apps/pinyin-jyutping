@@ -371,11 +371,11 @@ class BuildTests(unittest.TestCase):
         """parse all of cedict, and make sure we can faithfully output the pinyin"""
         filename = 'source_data/cedict_1_0_ts_utf-8_mdbg.txt'
         generator = pinyin_jyutping.parser.parse_cedict_file_generator(filename)
-        error_count = 0
-        processed_entries = 0
+        data = pinyin_jyutping.data.Data()
 
         # analyze entries which contain this character only
         character_check = '忘'
+        pinyin_jyutping.parser.DEBUG_WORD = character_check
 
         for line in generator:
             traditional_chinese, simplified_chinese, pinyin, definition = pinyin_jyutping.parser.unpack_cedict_line(line)
@@ -385,12 +385,8 @@ class BuildTests(unittest.TestCase):
                 skip = True
             if not skip:
                 syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
-                logger.warn(f'{simplified_chinese}: syllables: {syllables}')
-                pinyin_tone_numbers = ' '.join([self.render_syllable_for_cedict(x) for x in syllables])
-                clean_pinyin = pinyin_jyutping.parser.clean_pinyin(pinyin)
-                clean_pinyin = self.transform_pinyin_from_cedict(clean_pinyin)
-                self.assertEqual(clean_pinyin, pinyin_tone_numbers, f'while parsing pinyin: {pinyin}')
-                processed_entries += 1
+                logger.warn(f'{simplified_chinese}: syllables: {syllables} pinyin: {pinyin}')
+                pinyin_jyutping.parser.process_word(simplified_chinese, syllables, data)
 
 
 

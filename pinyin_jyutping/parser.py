@@ -10,7 +10,7 @@ from . import data
 
 logger = logging.getLogger(__file__)
 
-
+DEBUG_WORD = None
 
 def parse_pinyin(text):
     # look for initial
@@ -111,6 +111,10 @@ def process_word(chinese, syllables, map):
         return x.occurences
 
     def add_character_mapping(chinese, character_map, syllable):
+        if DEBUG_WORD != None:
+            if chinese == DEBUG_WORD:
+                logger.warn(f'adding character mapping: {chinese} syllable: {syllable}')
+
         # insert into character map
         if chinese not in character_map:
             character_map[chinese] = [data.CharacterMapping(syllable)]
@@ -129,6 +133,10 @@ def process_word(chinese, syllables, map):
             character_map[chinese].sort(key=get_occurences, reverse=True)
 
     def add_word_mapping(chinese, word_map, syllables):
+        if DEBUG_WORD != None:
+            if chinese == DEBUG_WORD:
+                logger.warn(f'adding word mapping: {chinese} syllable: {syllables}')
+
         # insert into word map
         if chinese not in word_map:
             word_map[chinese] = [data.WordMapping(syllables)]
