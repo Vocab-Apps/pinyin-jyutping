@@ -27,10 +27,11 @@ def process_remaining_pinyin(data, character_list, word_list, solution_list, sol
         logger.debug(f'processing character_list: {character_list}, first_character: {first_character}')
         if first_character in data.pinyin_map:
             for entry in data.pinyin_map[first_character]:
+                assert len(entry.syllables) == 1
                 if tone_numbers:
-                    pinyin = entry.syllable.render_tone_number()
+                    pinyin = entry.syllables[0].render_tone_number()
                 else:
-                    pinyin = entry.syllable.render_tone_mark()
+                    pinyin = entry.syllables[0].render_tone_mark()
                 new_solution = solution + pinyin
                 process_remaining_pinyin(data, remaining_characters, word_list, solution_list, new_solution, tone_numbers, spaces)
         else:
