@@ -114,33 +114,6 @@ def process_word(chinese, syllables, map, add_full_text=True, add_tokenized_word
     def get_occurences(x):
         return x.occurences
 
-    # def add_character_mapping(chinese, character_map, syllable):
-    #     if DEBUG_WORD != None:
-    #         if chinese == DEBUG_WORD:
-    #             logger.warn(f'adding character mapping: {chinese} syllable: {syllable}')
-
-    #     # individual characters will always be lowercase
-    #     if syllable.capital == True:
-    #         syllable = copy.deepcopy(syllable)
-    #         syllable.capital = False
-
-    #     # insert into character map
-    #     if chinese not in character_map:
-    #         character_map[chinese] = [data.CharacterMapping(syllable)]
-    #     else:
-    #         # does this syllable exist already ?
-    #         matching_entries = [x for x in character_map[chinese] if x.syllable == syllable]
-    #         if len(matching_entries) == 1:
-    #             # we already have this pinyin
-    #             matching_entries[0].occurences += 1 
-    #         elif len(matching_entries) == 0:
-    #             # need to insert
-    #             character_map[chinese].append(data.CharacterMapping(syllable))
-    #         else:
-    #             raise Exception(f'found {len(matching_entries)} for {chinese}')
-    #         # sort by number of occurences, descending
-    #         character_map[chinese].sort(key=get_occurences, reverse=True)
-
     def add_word_mapping(chinese, word_map, syllables):
         # if DEBUG_WORD != None:
         #     if chinese == DEBUG_WORD:
