@@ -9,6 +9,9 @@ class PinyinConversion(unittest.TestCase):
         cls.maxDiff = None
         cls.pinyin_jyutping = pinyin_jyutping.PinyinJyutping()
 
+    def test_character_conversion(self):
+        self.assertEqual(self.pinyin_jyutping.pinyin('了'), ['le', 'liǎo', 'liào'])
+
     def test_simple_pinyin(self):
         self.assertEqual(self.pinyin_jyutping.pinyin('没有'), ['méiyǒu'])
         # self.assertEqual(self.pinyin_jyutping.pinyin('忘拿'), ['wàng ná'])
