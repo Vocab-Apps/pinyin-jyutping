@@ -24,8 +24,8 @@ def process_remaining_pinyin(data, character_list, word_list, solution_list, sol
     if len(character_list) > 0:
         first_character = character_list[0]
         remaining_characters = character_list[1:]
-        if first_character in data.character_map:
-            for entry in data.character_map[first_character]:
+        if first_character in data.pinyin_map:
+            for entry in data.pinyin_map[first_character]:
                 if tone_numbers:
                     pinyin = entry.syllable.render_tone_number()
                 else:
@@ -35,8 +35,8 @@ def process_remaining_pinyin(data, character_list, word_list, solution_list, sol
     elif len(word_list) > 0:
         first_word = word_list[0]
         remaining_words = word_list[1:]
-        if first_word in data.word_map:
-            for entry in data.word_map[first_word]:
+        if first_word in data.pinyin_map:
+            for entry in data.pinyin_map[first_word]:
                 if tone_numbers:
                     pinyin = leading_space + join_syllables_character.join([x.render_tone_number() for x in entry.syllables])
                 else:

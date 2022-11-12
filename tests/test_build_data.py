@@ -32,7 +32,7 @@ class BuildTests(unittest.TestCase):
         for entry in input_data:
             chinese, pinyin = entry
             syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
-            pinyin_jyutping.parser.process_word(chinese, syllables, data)
+            pinyin_jyutping.parser.process_word(chinese, syllables, data.pinyin_map)
         return data
 
     def test_convert_pinyin_char(self):
@@ -161,23 +161,23 @@ class BuildTests(unittest.TestCase):
         pinyin_jyutping.parser.parse_cedict_entries(lines, data)
 
         # pprint.pprint(data)
-        self.assertEqual(len(data.character_map['谁']), 2)
+        self.assertEqual(len(data.pinyin_map['谁']), 2)
 
         # check first character mapping
-        character_mapping_1 = data.character_map['谁'][0]
-        self.assertEqual(character_mapping_1.syllable, 
-            PinyinSyllable(PinyinInitials.sh, PinyinFinals.ei, PinyinTones.tone_2),)
-        self.assertEqual(character_mapping_1.occurences, 2)
+        character_mapping_1 = data.pinyin_map['谁'][0]
+        self.assertEqual(character_mapping_1.syllables, 
+            [PinyinSyllable(PinyinInitials.sh, PinyinFinals.ei, PinyinTones.tone_2)],)
+        self.assertEqual(character_mapping_1.occurences, 4)
 
         # check second character mapping
-        character_mapping_2 = data.character_map['谁'][1]
-        self.assertEqual(character_mapping_2.syllable, 
-            PinyinSyllable(PinyinInitials.sh, PinyinFinals.ui, PinyinTones.tone_2),)
-        self.assertEqual(character_mapping_2.occurences, 1)
+        character_mapping_2 = data.pinyin_map['谁'][1]
+        self.assertEqual(character_mapping_2.syllables, 
+            [PinyinSyllable(PinyinInitials.sh, PinyinFinals.ui, PinyinTones.tone_2)],)
+        self.assertEqual(character_mapping_2.occurences, 2)
 
         # check word
-        self.assertEqual(len(data.word_map['不准']), 1)
-        self.assertEqual(data.word_map['不准'][0].syllables,
+        self.assertEqual(len(data.pinyin_map['不准']), 1)
+        self.assertEqual(data.pinyin_map['不准'][0].syllables,
         [
             PinyinSyllable(PinyinInitials.b, PinyinFinals.u, PinyinTones.tone_4),
             PinyinSyllable(PinyinInitials.zh, PinyinFinals.un, PinyinTones.tone_3)
@@ -196,8 +196,8 @@ class BuildTests(unittest.TestCase):
         pinyin_jyutping.parser.parse_cedict_entries(lines, data)
 
         pprint.pprint(data)
-        self.assertEqual(len(data.character_map['了']), 3)
-        self.assertEqual(len(data.word_map['了']), 3)
+        self.assertEqual(len(data.pinyin_map['了']), 3)
+        self.assertEqual(len(data.pinyin_map['了']), 3)
 
     def test_build_data_cedict_ordering(self):
         data = pinyin_jyutping.data.Data()
@@ -211,19 +211,19 @@ class BuildTests(unittest.TestCase):
         pinyin_jyutping.parser.parse_cedict_entries(lines, data)
 
         # pprint.pprint(data)
-        self.assertEqual(len(data.character_map['谁']), 2)
+        self.assertEqual(len(data.pinyin_map['谁']), 2)
 
         # check first character mapping
-        character_mapping_1 = data.character_map['谁'][0]
-        self.assertEqual(character_mapping_1.syllable, 
-            PinyinSyllable(PinyinInitials.sh, PinyinFinals.ui, PinyinTones.tone_2),)
-        self.assertEqual(character_mapping_1.occurences, 3)
+        character_mapping_1 = data.pinyin_map['谁'][0]
+        self.assertEqual(character_mapping_1.syllables, 
+            [PinyinSyllable(PinyinInitials.sh, PinyinFinals.ui, PinyinTones.tone_2)],)
+        self.assertEqual(character_mapping_1.occurences, 9)
 
         # check second character mapping
-        character_mapping_2 = data.character_map['谁'][1]
-        self.assertEqual(character_mapping_2.syllable, 
-            PinyinSyllable(PinyinInitials.sh, PinyinFinals.ei, PinyinTones.tone_2),)
-        self.assertEqual(character_mapping_2.occurences, 2)
+        character_mapping_2 = data.pinyin_map['谁'][1]
+        self.assertEqual(character_mapping_2.syllables, 
+            [PinyinSyllable(PinyinInitials.sh, PinyinFinals.ei, PinyinTones.tone_2)],)
+        self.assertEqual(character_mapping_2.occurences, 6)
 
 
     @pytest.mark.skip(reason="a bit slow")
