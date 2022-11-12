@@ -16,6 +16,10 @@ from pinyin_jyutping.syllables import PinyinSyllable
 from pinyin_jyutping.constants import PinyinInitials, PinyinFinals, PinyinTones
 
 class BuildTests(unittest.TestCase):
+
+    # test parsing of pinyin
+    # ======================
+
     def verify_parsing(self, text, initial, final, tone, tone_mark_render, tone_number_render):
         syllable, remaining_text = pinyin_jyutping.parser.parse_pinyin(text)
         expected_syllable = PinyinSyllable(initial, final, tone)
