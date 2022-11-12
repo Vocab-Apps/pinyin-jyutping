@@ -11,11 +11,11 @@ class PinyinConversion(unittest.TestCase):
 
     def test_simple_pinyin(self):
         self.assertEqual(self.pinyin_jyutping.pinyin('没有'), ['méiyǒu'])
-        self.assertEqual(self.pinyin_jyutping.pinyin('忘拿'), ['wàng ná'])
+        # self.assertEqual(self.pinyin_jyutping.pinyin('忘拿'), ['wàng ná'])
 
     def test_simple_chars(self):
         self.assertEqual(self.pinyin_jyutping.pinyin('忘'), ['wàng'])
 
-    @pytest.mark.skip(reason="too many alternatives")
+    # @pytest.mark.skip(reason="too many alternatives")
     def test_pinyin_sentences(self):
         self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了'), ['wàng ná yīxiē dōngxi le'])

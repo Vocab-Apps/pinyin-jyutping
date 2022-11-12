@@ -117,6 +117,9 @@ def process_word(chinese, syllables, map):
             if chinese == DEBUG_WORD:
                 logger.warn(f'adding character mapping: {chinese} syllable: {syllable}')
 
+        # individual characters will always be lowercase
+        syllable.capital = False
+
         # insert into character map
         if chinese not in character_map:
             character_map[chinese] = [data.CharacterMapping(syllable)]
