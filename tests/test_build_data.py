@@ -259,7 +259,7 @@ class BuildTests(unittest.TestCase):
 
     @pytest.mark.skipif(ENABLE_FULL_CEDICT_PARSING_TESTS == False, reason="set FULL_CEDICT_PARSING_TESTS=yes")
     def test_verify_parse_output_pinyin(self):
-        # pytest test_build_data.py  -k test_verify_parse_output_pinyin -s -rPP
+        # FULL_CEDICT_PARSING_TESTS=yes pytest tests/test_build_data.py  -k test_verify_parse_output_pinyin -s -rPP
         """parse all of cedict, and make sure we can faithfully output the pinyin"""
         filename = 'source_data/cedict_1_0_ts_utf-8_mdbg.txt'
         generator = pinyin_jyutping.parser.parse_cedict_file_generator(filename)
@@ -276,11 +276,11 @@ class BuildTests(unittest.TestCase):
                 clean_pinyin = self.transform_pinyin_from_cedict(clean_pinyin)
                 self.assertEqual(clean_pinyin, pinyin_tone_numbers, f'while parsing pinyin: {pinyin}')
                 processed_entries += 1
-        self.assertGreater(processed_entries, 97000)
+        self.assertGreater(processed_entries, 118000)
 
     @pytest.mark.skipif(ENABLE_FULL_CEDICT_PARSING_TESTS == False, reason="set FULL_CEDICT_PARSING_TESTS=yes")
     def test_verify_cedict_character_mapping(self):
-        # pytest test_build_data.py  -k test_verify_cedict_character_mapping -s -rPP
+        # pytest tests/test_build_data.py  -k test_verify_cedict_character_mapping -s -rPP
         """parse all of cedict, and make sure we can faithfully output the pinyin"""
         filename = 'source_data/cedict_1_0_ts_utf-8_mdbg.txt'
         generator = pinyin_jyutping.parser.parse_cedict_file_generator(filename)
