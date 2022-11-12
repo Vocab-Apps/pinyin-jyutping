@@ -21,6 +21,14 @@ class PinyinConversion(unittest.TestCase):
         self.assertEqual(self.pinyin_jyutping.pinyin('没有'), ['méiyǒu'])
         # self.assertEqual(self.pinyin_jyutping.pinyin('忘拿'), ['wàng ná'])
 
+    def test_simple_pinyin_traditional(self):
+        self.assertEqual(self.pinyin_jyutping.pinyin('上課'), ['shàngkè'])
+
+    def test_pinyin_non_recognized_chars(self):
+        # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_pinyin_non_recognized_chars
+        self.assertEqual(self.pinyin_jyutping.pinyin('請問，你叫什麼名字？')[0], 'qǐngwèn ， nǐ jiào shénme míngzi ？')
+        # self.assertEqual(self.pinyin_jyutping.pinyin('請問，你叫什麼名字？'), ['qǐngwèn ， nǐ jiào shénme míngzì ？'])
+
     def test_simple_chars(self):
         self.assertEqual(self.pinyin_jyutping.pinyin('忘'), ['wàng'])
 

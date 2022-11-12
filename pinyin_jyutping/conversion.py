@@ -6,7 +6,7 @@ logger = logging.getLogger(__file__)
 # def process_pinyin_word(data, solutions, solution_id)
 
 def process_remaining_pinyin(data, character_list, word_list, solution_list, solution, tone_numbers, spaces):
-    logger.info(f'process_remaining_pinyin character_list: {character_list}, word_list: {word_list}')
+    logger.debug(f'process_remaining_pinyin character_list: {character_list}, word_list: {word_list}')
 
     join_syllables_character = ''
     if spaces:
@@ -24,6 +24,7 @@ def process_remaining_pinyin(data, character_list, word_list, solution_list, sol
     if len(character_list) > 0:
         first_character = character_list[0]
         remaining_characters = character_list[1:]
+        logger.debug(f'processing character_list: {character_list}, first_character: {first_character}')
         if first_character in data.pinyin_map:
             for entry in data.pinyin_map[first_character]:
                 if tone_numbers:
@@ -32,9 +33,14 @@ def process_remaining_pinyin(data, character_list, word_list, solution_list, sol
                     pinyin = entry.syllable.render_tone_mark()
                 new_solution = solution + pinyin
                 process_remaining_pinyin(data, remaining_characters, word_list, solution_list, new_solution, tone_numbers, spaces)
+        else:
+            # leave character as is
+            new_solution = solution + first_character
+            process_remaining_pinyin(data, remaining_characters, word_list, solution_list, new_solution, tone_numbers, spaces)
     elif len(word_list) > 0:
         first_word = word_list[0]
         remaining_words = word_list[1:]
+        logger.debug(f'processing word_list ({len(word_list)}) first_word: {first_word}')
         if first_word in data.pinyin_map:
             for entry in data.pinyin_map[first_word]:
                 if tone_numbers:
