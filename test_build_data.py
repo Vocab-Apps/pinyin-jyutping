@@ -348,6 +348,21 @@ class BuildTests(unittest.TestCase):
         ]
         )
 
+    def test_build_data_cedict_le(self):
+        data = pinyin_jyutping.data.Data()
+        # liao4 gets added to word map only, so when breaking down into characters, it gets ignored
+        lines = [
+            '瞭 了 [liao4] /unofficial variant of 瞭[liao4]/',
+            '賣光了 卖光了 [mai4 guang1 le5] /to be sold out/to be out of stock/',
+            '受得了 受得了 [shou4 de5 liao3] /to put up with/to endure/',
+            '又來了 又来了 [you4 lai2 le5] /Here we go again./'
+        ]
+        pinyin_jyutping.parser.parse_cedict_entries(lines, data)
+
+        pprint.pprint(data)
+        self.assertEqual(len(data.character_map['了']), 3)
+        self.assertEqual(len(data.word_map['了']), 3)
+
     def test_build_data_cedict_ordering(self):
         data = pinyin_jyutping.data.Data()
         lines = [

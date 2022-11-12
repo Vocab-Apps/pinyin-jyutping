@@ -1,12 +1,14 @@
 import logging
 import pprint
 import re
+import copy
 
 from . import constants
 from . import syllables
 from . import cache
 from . import errors
 from . import data
+from . import conversion
 
 logger = logging.getLogger(__file__)
 
@@ -118,7 +120,9 @@ def process_word(chinese, syllables, map):
                 logger.warn(f'adding character mapping: {chinese} syllable: {syllable}')
 
         # individual characters will always be lowercase
-        syllable.capital = False
+        if syllable.capital == True:
+            syllable = copy.deepcopy(syllable)
+            syllable.capital = False
 
         # insert into character map
         if chinese not in character_map:
@@ -158,7 +162,8 @@ def process_word(chinese, syllables, map):
                 # need to insert
                 word_map[chinese].append(data.WordMapping(syllables))
             else:
-                raise Exception(f'found {len(matching_entries)} for {chinese}')
+                pprint.pprint(word_map[chinese])
+                raise Exception(f'found {len(matching_entries)} entries for [{chinese}], while processing {syllables}')
             word_map[chinese].sort(key=get_occurences, reverse=True)
 
 
@@ -168,6 +173,15 @@ def process_word(chinese, syllables, map):
     else:
         # insert into word mapping
         add_word_mapping(chinese, map.word_map, syllables)
+        # add each word after jieba segmentation
+        word_list = conversion.tokenize(chinese)
+        remaining_syllables = syllables
+        while len(word_list) > 0:
+            chinese_word = word_list[0]
+            word_list = word_list[1:]
+            syllables_for_word = remaining_syllables[0:len(chinese_word)]
+            remaining_syllables = remaining_syllables[len(chinese_word):]
+            add_word_mapping(chinese_word, map.word_map, syllables_for_word)
         # add each character
         for chinese_char, syllable in zip(chinese, syllables):
             add_character_mapping(chinese_char, map.character_map, syllable)
