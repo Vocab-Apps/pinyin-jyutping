@@ -12,7 +12,12 @@ def process_remaining_pinyin(data, character_list, word_list, solution_list, sol
     if spaces:
         join_syllables_character = ' '    
 
+    leading_space = ''
+    if len(solution ) > 0:
+        leading_space = ' '
+
     if len(character_list) == 0 and len(word_list) == 0:
+        # done with the recursion
         solution_list.append(solution)
         return
 
@@ -32,9 +37,6 @@ def process_remaining_pinyin(data, character_list, word_list, solution_list, sol
         remaining_words = word_list[1:]
         if first_word in data.word_map:
             for entry in data.word_map[first_word]:
-                leading_space = ''
-                if len(solution ) > 0:
-                    leading_space = ' '
                 if tone_numbers:
                     pinyin = leading_space + join_syllables_character.join([x.render_tone_number() for x in entry.syllables])
                 else:
@@ -44,7 +46,8 @@ def process_remaining_pinyin(data, character_list, word_list, solution_list, sol
         else:
             # process as characters
             character_list = first_word
-            process_remaining_pinyin(data, character_list, remaining_words, solution_list, solution, tone_numbers, spaces)
+            new_solution = solution + leading_space
+            process_remaining_pinyin(data, character_list, remaining_words, solution_list, new_solution, tone_numbers, spaces)
 
 
 def convert_pinyin(data, text, tone_numbers, spaces):
