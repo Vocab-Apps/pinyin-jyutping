@@ -48,6 +48,14 @@ def clean_pinyin(text):
     text = text.replace('  ', ' ')
     return text
  
+def clean_chinese(text):
+    text = text.strip()
+    text = text.replace(',', '')
+    text = text.replace('·', '')
+    text = text.replace(' ', '')
+    text = text.replace('，', '')
+    return text    
+
 def parse_cedict(filepath, data):
     generator = parse_cedict_file_generator(filepath)
     parse_cedict_entries(generator, data)
@@ -65,7 +73,7 @@ def parse_cedict_file_generator(filepath):
 def parse_cedict_entries(generator, data):
     for line in generator:
         try:
-            simplified, traditional, syllables = parse_cedict_line(line)
+            simplified, traditional, syllables = parse_cedict_line_decode_pinyin(line)
             if (len(simplified) != len(syllables)) or (len(traditional) != len(syllables)):
                 raise errors.PinyinParsingError(f'inconsistent lengths for line {line}')
             process_word(simplified, syllables, data.pinyin_map)
@@ -74,29 +82,27 @@ def parse_cedict_entries(generator, data):
             logger.warning(e)
 
 
-def unpack_cedict_line(line):
-    logger.debug(f'parsing cedict line: {line}')
-    m = re.match('([^\s]+)\s([^\s]+)\s\[([^\]]*)\]\s\/([^\/]+)\/.*', line)
-    if m == None:
-        logger.info(line)
-    traditional_chinese = m.group(1)
-    simplified_chinese = m.group(2)
-    pinyin = m.group(3)
-    definition = m.group(4)
-    return traditional_chinese, simplified_chinese, pinyin, definition    
-
+# returns raw pinyin text
 def parse_cedict_line(line):
     logger.debug(f'parsing cedict line: {line}')
-    m = re.match('([^\s]+)\s([^\s]+)\s\[([^\]]*)\]\s\/([^\/]+)\/.*', line)
+    m = re.match('(.+)\s\[([^\]]*)\]\s\/([^\/]+)\/.*', line)
     if m == None:
         logger.info(line)
-    traditional_chinese = m.group(1)
-    simplified_chinese = m.group(2)
-    pinyin = m.group(3)
-    definition = m.group(4)        
-    # parse the pinyin
-    syllables = parse_pinyin_word(pinyin)
-    return simplified_chinese, traditional_chinese, syllables
+    traditional_simplified_chinese = m.group(1)
+    pinyin = m.group(2)
+    definition = m.group(3)
+    traditional_simplified_chinese = traditional_simplified_chinese.strip()
+    # uneven length, because of the central space
+    assert len(traditional_simplified_chinese) % 2 == 1, f'length: {len(traditional_simplified_chinese)}, [{traditional_simplified_chinese}]'
+    half_length = int(len(traditional_simplified_chinese) / 2)
+    traditional_chinese = clean_chinese(traditional_simplified_chinese[0:half_length])
+    simplified_chinese = clean_chinese(traditional_simplified_chinese[half_length + 1:])
+    return simplified_chinese, traditional_chinese, pinyin
+
+# returns parsed pinyin
+def parse_cedict_line_decode_pinyin(line):
+    simplified_chinese, traditional_chinese, pinyin = parse_cedict_line(line)
+    return simplified_chinese, traditional_chinese, parse_pinyin_word(pinyin)
 
 def cedict_ignore(traditional_chinese, simplified_chinese, pinyin):
     if re.match('.*[A-Za-z].*', simplified_chinese) != None:

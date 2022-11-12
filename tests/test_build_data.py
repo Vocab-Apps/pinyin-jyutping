@@ -22,6 +22,8 @@ import pinyin_jyutping.constants
 from pinyin_jyutping.syllables import PinyinSyllable
 from pinyin_jyutping.constants import PinyinInitials, PinyinFinals, PinyinTones
 
+ENABLE_FULL_CEDICT_PARSING_TESTS = os.environ.get('FULL_CEDICT_PARSING_TESTS', 'no') == 'yes'
+
 class BuildTests(unittest.TestCase):
 
     # conversion tests
@@ -142,7 +144,7 @@ class BuildTests(unittest.TestCase):
 
     def test_parse_cedict(self):
         line = '上周 上周 [shang4 zhou1] /last week/'
-        simplified, traditional, syllables = pinyin_jyutping.parser.parse_cedict_line(line)
+        simplified, traditional, syllables = pinyin_jyutping.parser.parse_cedict_line_decode_pinyin(line)
         self.assertEqual(simplified, '上周')
         self.assertEqual(traditional, '上周')
         self.assertEqual(syllables, [
@@ -255,7 +257,7 @@ class BuildTests(unittest.TestCase):
         pinyin = pinyin.replace(' r5', ' er5')
         return pinyin
 
-    @pytest.mark.skip(reason="skip")
+    @pytest.mark.skipif(ENABLE_FULL_CEDICT_PARSING_TESTS == False, reason="set FULL_CEDICT_PARSING_TESTS=yes")
     def test_verify_parse_output_pinyin(self):
         # pytest test_build_data.py  -k test_verify_parse_output_pinyin -s -rPP
         """parse all of cedict, and make sure we can faithfully output the pinyin"""
@@ -264,7 +266,7 @@ class BuildTests(unittest.TestCase):
         error_count = 0
         processed_entries = 0
         for line in generator:
-            traditional_chinese, simplified_chinese, pinyin, definition = pinyin_jyutping.parser.unpack_cedict_line(line)
+            traditional_chinese, simplified_chinese, pinyin = pinyin_jyutping.parser.parse_cedict_line(line)
             # should we skip this character ?
             skip = pinyin_jyutping.parser.cedict_ignore(traditional_chinese, simplified_chinese, pinyin)
             if not skip:
@@ -276,7 +278,7 @@ class BuildTests(unittest.TestCase):
                 processed_entries += 1
         self.assertGreater(processed_entries, 97000)
 
-    @pytest.mark.skip(reason="skip") 
+    @pytest.mark.skipif(ENABLE_FULL_CEDICT_PARSING_TESTS == False, reason="set FULL_CEDICT_PARSING_TESTS=yes")
     def test_verify_cedict_character_mapping(self):
         # pytest test_build_data.py  -k test_verify_cedict_character_mapping -s -rPP
         """parse all of cedict, and make sure we can faithfully output the pinyin"""
@@ -289,7 +291,7 @@ class BuildTests(unittest.TestCase):
         pinyin_jyutping.parser.DEBUG_WORD = character_check
 
         for line in generator:
-            traditional_chinese, simplified_chinese, pinyin, definition = pinyin_jyutping.parser.unpack_cedict_line(line)
+            traditional_chinese, simplified_chinese, pinyin = pinyin_jyutping.parser.parse_cedict_line(line)
             # should we skip this character ?
             skip = pinyin_jyutping.parser.cedict_ignore(traditional_chinese, simplified_chinese, pinyin)
             if character_check not in simplified_chinese:
@@ -297,7 +299,7 @@ class BuildTests(unittest.TestCase):
             if not skip:
                 syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
                 logger.warn(f'{simplified_chinese}: syllables: {syllables} pinyin: [{pinyin}]')
-                pinyin_jyutping.parser.process_word(simplified_chinese, syllables, data)
+                pinyin_jyutping.parser.process_word(simplified_chinese, syllables, data.pinyin_map)
 
 
 
