@@ -18,4 +18,4 @@ class PinyinConversion(unittest.TestCase):
 
     # @pytest.mark.skip(reason="too many alternatives")
     def test_pinyin_sentences(self):
-        self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了'), ['wàng ná yīxiē dōngxi le'])
+        self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了')[0], 'wàng ná yīxiē dōngxi le')

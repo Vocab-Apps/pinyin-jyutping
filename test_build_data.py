@@ -243,6 +243,17 @@ class BuildTests(unittest.TestCase):
         data = self.build_data_from_input(input_data)    
         self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '没有什么', True, False), ['mei2you3 shen2me5'])
 
+    def test_convert_pinyin_sentences(self):
+        input_data = [
+            ('忘', 'wang4'),
+            ('拿', 'na2'),
+            ('一些', 'yīxiē'),
+            ('东西', 'dōngxi'),
+            ('了', 'le'),
+        ]
+        data = self.build_data_from_input(input_data)    
+        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '忘拿一些东西了', True, False)[0], 'wang4 na2 yi1xie1 dong1xi5 le5')
+
 
     # pickle / data storage tests
     # ===========================
