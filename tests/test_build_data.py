@@ -265,18 +265,25 @@ class BuildTests(unittest.TestCase):
         generator = pinyin_jyutping.parser.parse_cedict_file_generator(filename)
         error_count = 0
         processed_entries = 0
+        syllable_not_found_errors = 0
         for line in generator:
             traditional_chinese, simplified_chinese, pinyin = pinyin_jyutping.parser.parse_cedict_line(line)
             # should we skip this character ?
             skip = pinyin_jyutping.parser.cedict_ignore(traditional_chinese, simplified_chinese, pinyin)
             if not skip:
-                syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
-                pinyin_tone_numbers = ' '.join([self.render_syllable_for_cedict(x) for x in syllables])
-                clean_pinyin = pinyin_jyutping.parser.clean_pinyin(pinyin)
-                clean_pinyin = self.transform_pinyin_from_cedict(clean_pinyin)
-                self.assertEqual(clean_pinyin, pinyin_tone_numbers, f'while parsing pinyin: {pinyin}')
-                processed_entries += 1
+                try:
+                    syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
+                    pinyin_tone_numbers = ' '.join([self.render_syllable_for_cedict(x) for x in syllables])
+                    clean_pinyin = pinyin_jyutping.parser.clean_pinyin(pinyin)
+                    clean_pinyin = self.transform_pinyin_from_cedict(clean_pinyin)
+                    self.assertEqual(clean_pinyin, pinyin_tone_numbers, f'while parsing pinyin: {pinyin}')
+                    processed_entries += 1
+                except pinyin_jyutping.errors.PinyinSyllableNotFound as e:
+                    syllable_not_found_errors += 1
+                    logger.error(e)
+
         self.assertGreater(processed_entries, 118000)
+        self.assertLess(syllable_not_found_errors, 5)
 
     @pytest.mark.skipif(ENABLE_FULL_CEDICT_PARSING_TESTS == False, reason="set FULL_CEDICT_PARSING_TESTS=yes")
     def test_verify_cedict_character_mapping(self):

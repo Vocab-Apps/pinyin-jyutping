@@ -27,7 +27,7 @@ def parse_pinyin(text):
         cache_hit = cache.PinyinSyllablesMap.get(candidate, None)
         if cache_hit != None:
             return cache_hit, remaining_text
-    raise errors.PinyinParsingError(f"couldn't find pinyin syllable: {text} [{original_text}]")
+    raise errors.PinyinSyllableNotFound(f"couldn't find pinyin syllable: {text} [{original_text}]")
 
 
 def parse_pinyin_word(text):
