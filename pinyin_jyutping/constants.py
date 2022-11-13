@@ -26,53 +26,60 @@ class PinyinInitials(enum.Enum):
     s  = 21
     empty = 23
 
+class PinyinFinalGroup(enum.Enum):
+    group_a = 1
+    group_i = 2
+    group_u = 3
+    group_v = 4
+
 # https://en.wikipedia.org/wiki/Pinyin_table
 class PinyinFinals(enum.Enum):
     # group a finals
-    i   =  ( 1 )
-    a   =  ( 2 )
-    o   =  ( 3 )
-    e   =  ( 4 )
-    ai  =  ( 5 )
-    ei  =  ( 6 )
-    ao  =  ( 7 )
-    ou  =  ( 8 )
-    an  =  ( 9 )
-    en  =  (10 )
-    ang =  (11 )
-    eng =  (12 )
-    ong =  (13 )
-    er  =  (14 , None, ['r'])
+    i   =  ( 1 , PinyinFinalGroup.group_a )
+    a   =  ( 2 , PinyinFinalGroup.group_a )
+    o   =  ( 3 , PinyinFinalGroup.group_a )
+    e   =  ( 4 , PinyinFinalGroup.group_a )
+    ai  =  ( 5 , PinyinFinalGroup.group_a )
+    ei  =  ( 6 , PinyinFinalGroup.group_a )
+    ao  =  ( 7 , PinyinFinalGroup.group_a )
+    ou  =  ( 8 , PinyinFinalGroup.group_a )
+    an  =  ( 9 , PinyinFinalGroup.group_a )
+    en  =  (10 , PinyinFinalGroup.group_a )
+    ang =  (11 , PinyinFinalGroup.group_a )
+    eng =  (12 , PinyinFinalGroup.group_a )
+    ong =  (13 , PinyinFinalGroup.group_a )
+    er  =  (14 , PinyinFinalGroup.group_a, None, ['r'])
     # group i finals
-    ia  =  (15 )
-    io  =  (16 )
-    ie  =  (17 )
-    iai =  (18 )
-    iao =  (19 )
-    iu  =  (20 )
-    ian =  (21 )
-    in_ =  (22 , 'in')
-    iang = (23 )
-    ing =  (24 )
-    iong = (25 )
+    ia  =  (15 , PinyinFinalGroup.group_i )
+    io  =  (16 , PinyinFinalGroup.group_i )
+    ie  =  (17 , PinyinFinalGroup.group_i )
+    iai =  (18 , PinyinFinalGroup.group_i )
+    iao =  (19 , PinyinFinalGroup.group_i )
+    iu  =  (20 , PinyinFinalGroup.group_i )
+    ian =  (21 , PinyinFinalGroup.group_i )
+    in_ =  (22 , PinyinFinalGroup.group_i, 'in')
+    iang = (23 , PinyinFinalGroup.group_i )
+    ing =  (24 , PinyinFinalGroup.group_i )
+    iong = (25 , PinyinFinalGroup.group_i )
     # group u finals
-    u   =  (26 )
-    ua  =  (27 )
-    uo  =  (28 )
-    uai =  (29 )
-    ui  =  (30 )
-    uan  = (31 )
-    un   = (32 )
-    uang = (33 )
-    ueng = (34 )
+    u   =  (26 , PinyinFinalGroup.group_u )
+    ua  =  (27 , PinyinFinalGroup.group_u )
+    uo  =  (28 , PinyinFinalGroup.group_u )
+    uai =  (29 , PinyinFinalGroup.group_u )
+    ui  =  (30 , PinyinFinalGroup.group_u )
+    uan  = (31 , PinyinFinalGroup.group_u )
+    un   = (32 , PinyinFinalGroup.group_u )
+    uang = (33 , PinyinFinalGroup.group_u )
+    ueng = (34 , PinyinFinalGroup.group_u )
     # group ü finals
-    v   =  (35, 'ü', ['u:']) # ü
-    ve  =  (36, 'üe', ['u:e'])
-    van =  (37, 'üan', ['u:an'])
-    vn  =  (38, 'ün')
+    v   =  (35, PinyinFinalGroup.group_v, 'ü', ['u:']) # ü
+    ve  =  (36, PinyinFinalGroup.group_v, 'üe', ['u:e'])
+    van =  (37, PinyinFinalGroup.group_v, 'üan', ['u:an'])
+    vn  =  (38, PinyinFinalGroup.group_v, 'ün')
 
-    def __init__(self, value, override_final=None, variants=[]):
+    def __init__(self, value, final_group, override_final=None, variants=[]):
         self.val = value
+        self.final_group = final_group
         self.override_final = override_final
         self.variants = variants
 

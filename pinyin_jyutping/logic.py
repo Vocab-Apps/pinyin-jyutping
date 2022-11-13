@@ -123,3 +123,7 @@ def render_tone_number(initial, final, tone, capital, final_variant=None):
     if capital:
         result = result.capitalize()
     return result
+
+
+def valid_combination(initial, final):
+    return True

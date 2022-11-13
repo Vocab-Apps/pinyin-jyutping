@@ -10,26 +10,27 @@ PINYIN_SYLLABLE_MAX_LENGTH=0
 def all_syllables_generator():
     for initial in constants.PinyinInitials:
         for final in constants.PinyinFinals:
-            for tone in constants.PinyinTones:
-                for capital in [True, False]:
-                    syllable = syllables.build_pinyin_syllable(initial, final, tone, capital)
-                    tone_marks = syllable.render_tone_mark()
-                    yield {
-                        'syllable': syllable,
-                        'pinyin': tone_marks
-                    }
-                    tone_numbers = syllable.render_tone_number()
-                    yield {
-                        'syllable': syllable,
-                        'pinyin': tone_numbers
-                    }
-                    # are there any variants on the final ?
-                    for final_variant in final.variants:
-                        tone_numbers = syllable.render_tone_number(final_variant=final_variant)
+            if logic.valid_combination(initial, final):
+                for tone in constants.PinyinTones:
+                    for capital in [True, False]:
+                        syllable = syllables.build_pinyin_syllable(initial, final, tone, capital)
+                        tone_marks = syllable.render_tone_mark()
+                        yield {
+                            'syllable': syllable,
+                            'pinyin': tone_marks
+                        }
+                        tone_numbers = syllable.render_tone_number()
                         yield {
                             'syllable': syllable,
                             'pinyin': tone_numbers
-                        }                        
+                        }
+                        # are there any variants on the final ?
+                        for final_variant in final.variants:
+                            tone_numbers = syllable.render_tone_number(final_variant=final_variant)
+                            yield {
+                                'syllable': syllable,
+                                'pinyin': tone_numbers
+                            }                        
 
 
 
