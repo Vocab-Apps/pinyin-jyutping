@@ -178,6 +178,8 @@ def valid_combination(initial, final):
                 return True
             return False            
 
-    
+    if final == constants.PinyinFinals.er:
+        if initial != constants.PinyinInitials.empty:
+            return False
 
     return True
