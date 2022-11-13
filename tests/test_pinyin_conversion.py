@@ -3,6 +3,11 @@ import pytest
 import sys
 import os
 import json
+import pprint
+import requests
+import logging
+
+logger = logging.getLogger(__file__)
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -43,18 +48,67 @@ class PinyinConversion(unittest.TestCase):
         self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了', tone_numbers=True)[0], 'wang4 na2 yi1xie1 dong1xi5 le5')
         self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了', tone_numbers=True, spaces=True)[0], 'wang4 na2 yi1 xie1 dong1 xi5 le5')
 
+    def get_baserow_records(self):
+        more_results = True
 
-    @pytest.mark.skip(reason="work in progress")
+        records = []
+
+        url = "https://api.baserow.io/api/database/rows/table/114466/?user_field_names=true&size=200"
+        while more_results == True:
+            logger.info(f'get_baserow_records querying url {url}')
+            # load baserow table
+            response = requests.get(
+                url,
+                headers={
+                    "Authorization": f"Token {os.environ['BASEROW_API_TOKEN']}"
+            })
+            if response.status_code != 200:
+                raise Exception(response.content)
+            data = response.json()
+
+            results = data['results']
+            logger.info(f'received {len(results)} records')
+            records.extend(results)
+
+            more_results = data['next'] != None
+            url = data['next']
+
+        return records
+
+    def get_baserow_records_map(self):
+        records = self.get_baserow_records()
+        result = {}
+        for record in records:
+            result[record['chinese']] = record
+        return result
+
+
+    def update_baserow_records(self, records):
+        response = requests.patch(
+            "https://api.baserow.io/api/database/rows/table/114466/batch/?user_field_names=true",
+            headers={
+                "Authorization": f"Token {os.environ['BASEROW_API_TOKEN']}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "items": records
+            }        
+        )
+        if response.status_code != 200:
+            raise Exception(response.content)
+
+
+    @pytest.mark.skipif('COMPARE_ANKI_DECKS' not in os.environ, reason="set COMPARE_ANKI_DECKS=yes")
     def test_compare_anki_decks(self):
+        # COMPARE_ANKI_DECKS=yes BASEROW_API_TOKEN=<api token> 
+        # pytest tests/test_pinyin_conversion.py -k test_compare_anki_decks -s -rPP  --log-cli-level=INFO
         filename = 'source_data/anki_deck_1.json'
         f = open(filename)
         data = json.load(f)
         f.close()
 
-        success_count = 0
-        failure_count = 0
-
-        error_records = []
+        baserow_record_map = self.get_baserow_records_map()
+        record_updates = []
 
         for record in data:
             chinese = record['chinese']
@@ -65,25 +119,25 @@ class PinyinConversion(unittest.TestCase):
                 expected_pinyin_syllables = pinyin_jyutping.parser.parse_pinyin_word(expected_pinyin)
                 converted_pinyin_syllables = pinyin_jyutping.parser.parse_pinyin_word(converted_pinyin)
 
-                # self.assertEqual(expected_pinyin_syllables, converted_pinyin_syllables, f'{chinese}, {expected_pinyin}, {converted_pinyin}')
+                status = 313817 # failure
                 if expected_pinyin_syllables == converted_pinyin_syllables:
-                    success_count += 1
-                else:
-                    error_records.append({
-                        'expected_pinyin': expected_pinyin,
-                        'expected_syllables': str(expected_pinyin_syllables),
-                        'converted_pinyin': converted_pinyin,
-                        'converted_pinyin_syllables': str(converted_pinyin_syllables)
-                    })
-                    failure_count += 1
+                    status = 313816 # success
+
+                record_updates.append({
+                    'id': baserow_record_map[chinese]['id'],
+                    'expected_pinyin': expected_pinyin,
+                    'expected_syllables': str(expected_pinyin_syllables),
+                    'converted_pinyin': converted_pinyin,
+                    'converted_pinyin_syllables': str(converted_pinyin_syllables),
+                    'status': status
+                })            
+
             except pinyin_jyutping.errors.PinyinParsingError as e:
-                failure_count += 1
+                logger.error(e)
 
-        import pandas
-
-        errors_df = pandas.DataFrame(error_records)
-        errors_df.to_csv('source_data/anki_deck_errors.csv')
-
-        self.assertEqual(failure_count, 0, f'success: {success_count}, failures: {failure_count}')
-
-            # print(record)
+            if len(record_updates) >= 100:
+                logger.info('flushing baserow updates')
+                # flush to baserow
+                self.update_baserow_records(record_updates)
+                record_updates = []
+                
