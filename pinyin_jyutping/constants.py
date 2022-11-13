@@ -35,7 +35,6 @@ class PinyinFinalGroup(enum.Enum):
 # https://en.wikipedia.org/wiki/Pinyin_table
 class PinyinFinals(enum.Enum):
     # group a finals
-    i   =  ( 1 , PinyinFinalGroup.group_a )
     a   =  ( 2 , PinyinFinalGroup.group_a )
     o   =  ( 3 , PinyinFinalGroup.group_a )
     e   =  ( 4 , PinyinFinalGroup.group_a )
@@ -50,6 +49,7 @@ class PinyinFinals(enum.Enum):
     ong =  (13 , PinyinFinalGroup.group_a )
     er  =  (14 , PinyinFinalGroup.group_a, None, ['r'])
     # group i finals
+    i   =  ( 1 , PinyinFinalGroup.group_i )    
     ia  =  (15 , PinyinFinalGroup.group_i )
     io  =  (16 , PinyinFinalGroup.group_i )
     ie  =  (17 , PinyinFinalGroup.group_i )

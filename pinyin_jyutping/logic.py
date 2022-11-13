@@ -126,4 +126,14 @@ def render_tone_number(initial, final, tone, capital, final_variant=None):
 
 
 def valid_combination(initial, final):
+    if initial in [ 
+        constants.PinyinInitials.j,
+        constants.PinyinInitials.q,
+        constants.PinyinInitials.x]:
+        if final.final_group in [
+            constants.PinyinFinalGroup.group_a,
+            constants.PinyinFinalGroup.group_u,
+        ]:
+            return False
+    
     return True
