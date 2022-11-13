@@ -154,6 +154,26 @@ def valid_combination(initial, final):
         if final.final_group in [
             constants.PinyinFinalGroup.group_v
         ]:
+            return False
+
+
+    if initial in [
+        constants.PinyinInitials.z,
+        constants.PinyinInitials.c,
+        constants.PinyinInitials.s,
+        constants.PinyinInitials.zh,
+        constants.PinyinInitials.ch,
+        constants.PinyinInitials.sh,
+        constants.PinyinInitials.r
+        ]:
+        if final.final_group in [
+            constants.PinyinFinalGroup.group_i,
+            constants.PinyinFinalGroup.group_v
+        ]:
+            if final == constants.PinyinFinals.i:
+                return True
             return False            
+
+    
 
     return True
