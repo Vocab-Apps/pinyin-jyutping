@@ -116,7 +116,7 @@ class PinyinConversion(unittest.TestCase):
         for record in data:
             chinese = record['chinese']
             expected_pinyin = record['pinyin']
-            converted_pinyin = self.pinyin_jyutping.pinyin(chinese)[0]
+            converted_pinyin = self.pinyin_jyutping.pinyin(chinese, spaces=True)[0]
 
             try:
                 expected_pinyin_syllables = pinyin_jyutping.parser.parse_pinyin_word(expected_pinyin)
