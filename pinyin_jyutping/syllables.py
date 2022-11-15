@@ -39,6 +39,18 @@ class PinyinSyllable():
                self.capital == other.capital
 
 
+# for characters we don't recognize, just pass them through
+class PassThroughSyllable():
+    def __init__(self, character):
+        self.character = character
+
+    def render_tone_mark(self):
+        return self.character
+
+    def render_tone_number(self):
+        return self.character
+
+
 @functools.lru_cache(maxsize=None)
 def build_pinyin_syllable(initial, final, tone, capital):
     return PinyinSyllable(initial, final, tone, capital=capital)

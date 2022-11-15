@@ -1,6 +1,7 @@
 import jieba
 import logging
 import copy
+from . import syllables
 
 logger = logging.getLogger(__file__)
 
@@ -19,7 +20,10 @@ def fill_pinyin_solution_for_characters(data, characters, current_solution, all_
             fill_pinyin_solution_for_characters(data, remaining_characters, new_solution, all_solutions)
     else:
         # implement pass through syllable here
-        raise Exception('pass through syllable not implemented yet')
+        syllable = syllables.PassThroughSyllable(current_character)
+        new_solution = copy.copy(current_solution)
+        new_solution.append(syllable)
+        fill_pinyin_solution_for_characters(data, remaining_characters, new_solution, all_solutions)        
 
 def get_pinyin_solutions_for_characters(data, word):
     all_solutions = []
