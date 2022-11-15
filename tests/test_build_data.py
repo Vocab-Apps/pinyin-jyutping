@@ -170,6 +170,48 @@ class BuildTests(unittest.TestCase):
         output = pinyin_jyutping.conversion.get_pinyin_solutions(data, ['忘', '拿', '东西'])
         self.assertEqual(output,  expected_result)        
 
+    def test_expand_all_pinyin_solutions(self):
+        input_data = [
+            ('忘', 'wang4'),
+            ('拿', 'na2'),
+            ('拿', 'na3'),
+            ('东西', 'dong1 xi5')
+        ]
+        data = self.build_data_from_input(input_data)    
+
+        solution_1 = [
+                [ # syllables
+                    PinyinSyllable(PinyinInitials.empty, PinyinFinals.uang, PinyinTones.tone_4),
+                ],
+                [ # syllables
+                    PinyinSyllable(PinyinInitials.n, PinyinFinals.a, PinyinTones.tone_2),
+                ],
+                [ # syllables
+                    PinyinSyllable(PinyinInitials.d, PinyinFinals.ong, PinyinTones.tone_1),
+                    PinyinSyllable(PinyinInitials.x, PinyinFinals.i, PinyinTones.tone_neutral),
+                ],
+        ]
+        solution_2 = [
+                [ # syllables
+                    PinyinSyllable(PinyinInitials.empty, PinyinFinals.uang, PinyinTones.tone_4),
+                ],
+                [ # syllables
+                    PinyinSyllable(PinyinInitials.n, PinyinFinals.a, PinyinTones.tone_3),
+                ],
+                [ # syllables
+                    PinyinSyllable(PinyinInitials.d, PinyinFinals.ong, PinyinTones.tone_1),
+                    PinyinSyllable(PinyinInitials.x, PinyinFinals.i, PinyinTones.tone_neutral),
+                ],
+        ]        
+
+        expected_result = [solution_1, solution_2]
+
+        output = pinyin_jyutping.conversion.expand_all_pinyin_solutions(data, ['忘', '拿', '东西'])
+
+        pprint.pprint(output)
+        pprint.pprint(expected_result)
+        self.assertEqual(output,  expected_result)        
+
 
     # pickle / data storage tests
     # ===========================

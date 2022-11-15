@@ -36,6 +36,33 @@ def get_pinyin_solutions_for_word(data, word):
 def get_pinyin_solutions(data, word_list):
     return [get_pinyin_solutions_for_word(data, word) for word in word_list]
 
+
+def expand_solutions(data, word_list, current_solution, expanded_solution_list):
+    if len(word_list) == 0:
+        expanded_solution_list.append(current_solution)
+        return
+
+    current_word = word_list[0]
+    remaining_words = word_list[1:]
+
+    for alternative in current_word:
+        new_solution = copy.copy(current_solution)
+        new_solution.append(alternative)
+        expand_solutions(data, remaining_words, new_solution, expanded_solution_list)
+
+
+def expand_all_pinyin_solutions(data, word_list):
+    expanded_solution_list = []
+    solutions = get_pinyin_solutions(data, word_list)
+    expand_solutions(data, solutions, [], expanded_solution_list)
+    return expanded_solution_list
+
+
+def render_all_pinyin_solutions(data, word_list, tone_numbers, spaces):
+    expanded_solution_list = expand_all_pinyin_solutions(data, word_list)
+    
+
+
 # def render_all_pinyin_solutions(data, word_list):
 #     solution_array = 
 
