@@ -47,6 +47,11 @@ def clean_pinyin(text):
     text = text.replace('，', '')
     text = text.replace('·', '')
     text = text.replace('  ', ' ')
+    text = text.replace('？', ' ')
+    text = text.replace('。', ' ')
+    text = text.replace('/', ' ')
+    text = text.replace('...', ' ')
+    text = text.replace('…', ' ')
     return text
  
 def clean_chinese(text):
