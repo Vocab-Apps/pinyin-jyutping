@@ -2,6 +2,7 @@ import jieba
 import logging
 import copy
 from . import syllables
+from . import logic
 
 logger = logging.getLogger(__file__)
 
@@ -59,6 +60,10 @@ def expand_all_pinyin_solutions(data, word_list):
     expanded_solution_list = []
     solutions = get_pinyin_solutions(data, word_list)
     expand_solutions(data, solutions, [], expanded_solution_list)
+
+    # apply tone change logic
+    expanded_solution_list = [logic.apply_pinyin_tone_change(word_list, solution) for solution in expanded_solution_list]
+
     return expanded_solution_list
 
 

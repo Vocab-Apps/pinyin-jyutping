@@ -183,3 +183,31 @@ def valid_combination(initial, final):
             return False
 
     return True
+
+def solution_generator(word_list, solution):
+    word_index = 0
+    character_index = 0
+    for word, word_solution in zip(word_list, solution):
+        character_index = 0
+        for chinese_character, syllable in zip(word, word_solution):
+            yield {
+                'word_index': word_index,
+                'character_index': character_index,
+                'chinese_character': chinese_character,
+                'syllable': syllable
+            }
+            character_index += 1
+        word_index += 1
+
+
+def apply_pinyin_tone_change(word_list, solution):
+    prev_character = None
+    for character in solution_generator(word_list, solution):
+        if character['syllable'].tone == constants.PinyinTones.tone_4:
+            if prev_character != None:
+                if prev_character['chinese_character'] == '不':
+                    # need to alter tone
+                    solution[prev_character['word_index']][prev_character['character_index']].tone = constants.PinyinTones.tone_2
+        prev_character = character
+
+    return solution

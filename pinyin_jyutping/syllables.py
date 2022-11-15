@@ -43,6 +43,7 @@ class PinyinSyllable():
 class PassThroughSyllable():
     def __init__(self, character):
         self.character = character
+        self.tone = None
 
     def render_tone_mark(self):
         return self.character
