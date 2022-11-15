@@ -201,23 +201,29 @@ def solution_generator(word_list, solution):
             character_index += 1
         word_index += 1
 
+def solution_change_tone(solution, word_index, character_index, new_tone):
+    word_copy = copy.copy(solution[word_index])
+    syllable_copy = copy.copy(word_copy[character_index]) 
+    syllable_copy.tone = new_tone
+
+    word_copy[character_index] = syllable_copy
+    solution[word_index] = word_copy    
 
 def apply_pinyin_tone_change(word_list, solution):
     prev_character = None
     for character in solution_generator(word_list, solution):
-        if character['syllable'].tone == constants.PinyinTones.tone_4:
-            if prev_character != None:
-                if prev_character['chinese_character'] == '不':
+        if prev_character != None:
+            if prev_character['chinese_character'] == '不':
+                if character['syllable'].tone == constants.PinyinTones.tone_4:
+                    solution_change_tone(solution, prev_character['word_index'], prev_character['character_index'], constants.PinyinTones.tone_2)
+            elif prev_character['chinese_character'] == '一':
+                if character['syllable'].tone == constants.PinyinTones.tone_4:
+                    solution_change_tone(solution, prev_character['word_index'], prev_character['character_index'], constants.PinyinTones.tone_2)
+                else:
+                    # doesn't seem to be universally applied
+                    #solution_change_tone(solution, prev_character['word_index'], prev_character['character_index'], constants.PinyinTones.tone_4)
+                    pass
 
-                    # need to alter tone
-                    # copy both word and syllable
-                    logger.debug(f'{word_list} {solution} altering tone for {prev_character}')
-                    word_copy = copy.copy(solution[prev_character['word_index']])
-                    syllable_copy = copy.copy(word_copy[prev_character['character_index']]) 
-                    syllable_copy.tone = constants.PinyinTones.tone_2
-
-                    word_copy[prev_character['character_index']] = syllable_copy
-                    solution[prev_character['word_index']] = word_copy
 
         prev_character = character
 

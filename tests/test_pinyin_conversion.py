@@ -52,6 +52,9 @@ class PinyinConversion(unittest.TestCase):
         self.assertEqual(self.pinyin_jyutping.pinyin('穿不上')[0], 'chuān bú shàng')
         self.assertEqual(self.pinyin_jyutping.pinyin('不够亮')[0], 'búgòu liàng')
         self.assertEqual(self.pinyin_jyutping.pinyin('不成熟')[0], 'bù chéngshú')
+        # dosen't seem to be applied by azure
+        # self.assertEqual(self.pinyin_jyutping.pinyin('一起')[0], 'yìqǐ')
+        self.assertEqual(self.pinyin_jyutping.pinyin('一个')[0], 'yígè')
 
     def get_baserow_records(self):
         more_results = True
