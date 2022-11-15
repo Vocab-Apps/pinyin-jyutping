@@ -1,9 +1,42 @@
 import jieba
 import logging
+import copy
 
 logger = logging.getLogger(__file__)
 
-# def process_pinyin_word(data, solutions, solution_id)
+
+def fill_pinyin_solution_for_characters(data, characters, current_solution, all_solutions):
+    if len(characters) == 0:
+        all_solutions.append(current_solution)
+        return
+    current_character = characters[0]    
+    remaining_characters = characters[1:]
+    entry = data.pinyin_map.get(current_character, None)
+    if entry != None:
+        for result in entry:
+            new_solution = copy.copy(current_solution)
+            new_solution.append(result.syllables[0])
+            fill_pinyin_solution_for_characters(data, remaining_characters, new_solution, all_solutions)
+    else:
+        # implement pass through syllable here
+        raise Exception('pass through syllable not implemented yet')
+
+def get_pinyin_solutions_for_characters(data, word):
+    all_solutions = []
+    fill_pinyin_solution_for_characters(data, word, [], all_solutions)
+    return all_solutions
+
+def get_pinyin_solutions_for_word(data, word):
+    entry = data.pinyin_map.get(word, None)
+    if entry != None:
+        return [mapping.syllables for mapping in entry]
+    else:
+        return get_pinyin_solutions_for_characters(data, word)
+
+def get_pinyin_solutions(data, word_list):
+    return [get_pinyin_solutions_for_word(data, word) for word in word_list]
+
+
 
 def process_remaining_pinyin(data, character_list, word_list, solution_list, solution, tone_numbers, spaces):
     logger.debug(f'process_remaining_pinyin character_list: {character_list}, word_list: {word_list}')

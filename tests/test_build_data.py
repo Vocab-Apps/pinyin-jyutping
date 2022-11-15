@@ -92,6 +92,48 @@ class BuildTests(unittest.TestCase):
         data = self.build_data_from_input(input_data)    
         self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '忘拿一些东西了', True, False)[0], 'wang4 na2 yi1xie1 dong1xi5 le5')
 
+    def test_get_pinyin_solutions_for_word(self):
+        input_data = [
+            ('忘拿', 'wang4na2'),
+            ('忘拿', 'wang4na3'),
+        ]
+        data = self.build_data_from_input(input_data)    
+        expected_result = [
+            [
+                PinyinSyllable(PinyinInitials.empty, PinyinFinals.uang, PinyinTones.tone_4),
+                PinyinSyllable(PinyinInitials.n, PinyinFinals.a, PinyinTones.tone_2),
+            ],
+            [
+                PinyinSyllable(PinyinInitials.empty, PinyinFinals.uang, PinyinTones.tone_4),
+                PinyinSyllable(PinyinInitials.n, PinyinFinals.a, PinyinTones.tone_3),
+            ],            
+        ]
+        output = pinyin_jyutping.conversion.get_pinyin_solutions_for_word(data, '忘拿')
+        print(output)
+        print(type(output[0]))
+        self.assertEqual(output,  expected_result)
+
+    def test_get_pinyin_solutions_for_characters(self):
+        input_data = [
+            ('忘', 'wang4'),
+            ('拿', 'na2'),
+            ('拿', 'na3'),
+        ]
+        data = self.build_data_from_input(input_data)    
+        expected_result = [
+            [
+                PinyinSyllable(PinyinInitials.empty, PinyinFinals.uang, PinyinTones.tone_4),
+                PinyinSyllable(PinyinInitials.n, PinyinFinals.a, PinyinTones.tone_2),
+            ],
+            [
+                PinyinSyllable(PinyinInitials.empty, PinyinFinals.uang, PinyinTones.tone_4),
+                PinyinSyllable(PinyinInitials.n, PinyinFinals.a, PinyinTones.tone_3),
+            ],            
+        ]
+        output = pinyin_jyutping.conversion.get_pinyin_solutions_for_characters(data, '忘拿')
+        self.assertEqual(output,  expected_result)
+
+
 
     # pickle / data storage tests
     # ===========================
