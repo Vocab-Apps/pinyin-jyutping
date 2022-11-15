@@ -34,8 +34,10 @@ def get_pinyin_solutions_for_characters(data, word):
 def get_pinyin_solutions_for_word(data, word):
     entry = data.pinyin_map.get(word, None)
     if entry != None:
+        logger.debug(f'located {word} as word')
         return [mapping.syllables for mapping in entry]
     else:
+        logger.debug(f'breaking down {word} into characters')
         return get_pinyin_solutions_for_characters(data, word)
 
 def get_pinyin_solutions(data, word_list):
