@@ -51,6 +51,7 @@ class PinyinConversion(unittest.TestCase):
     def test_tone_changes(self):
         self.assertEqual(self.pinyin_jyutping.pinyin('穿不上')[0], 'chuān bú shàng')
         self.assertEqual(self.pinyin_jyutping.pinyin('不够亮')[0], 'búgòu liàng')
+        self.assertEqual(self.pinyin_jyutping.pinyin('不成熟')[0], 'bù chéngshú')
 
     def get_baserow_records(self):
         more_results = True

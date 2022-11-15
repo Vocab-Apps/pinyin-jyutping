@@ -1,7 +1,9 @@
 import functools
 import logging
+import copy
 
 from . import constants
+from . import syllables
 
 logger = logging.getLogger(__file__)
 
@@ -206,8 +208,17 @@ def apply_pinyin_tone_change(word_list, solution):
         if character['syllable'].tone == constants.PinyinTones.tone_4:
             if prev_character != None:
                 if prev_character['chinese_character'] == '不':
+
                     # need to alter tone
-                    solution[prev_character['word_index']][prev_character['character_index']].tone = constants.PinyinTones.tone_2
+                    # copy both word and syllable
+                    logger.debug(f'{word_list} {solution} altering tone for {prev_character}')
+                    word_copy = copy.copy(solution[prev_character['word_index']])
+                    syllable_copy = copy.copy(word_copy[prev_character['character_index']]) 
+                    syllable_copy.tone = constants.PinyinTones.tone_2
+
+                    word_copy[prev_character['character_index']] = syllable_copy
+                    solution[prev_character['word_index']] = word_copy
+
         prev_character = character
 
     return solution
