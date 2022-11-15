@@ -36,7 +36,8 @@ def get_pinyin_solutions_for_word(data, word):
 def get_pinyin_solutions(data, word_list):
     return [get_pinyin_solutions_for_word(data, word) for word in word_list]
 
-
+# def render_all_pinyin_solutions(data, word_list):
+#     solution_array = 
 
 def process_remaining_pinyin(data, character_list, word_list, solution_list, solution, tone_numbers, spaces):
     logger.debug(f'process_remaining_pinyin character_list: {character_list}, word_list: {word_list}')
