@@ -135,8 +135,7 @@ def process_remaining_pinyin(data, character_list, word_list, solution_list, sol
 def convert_pinyin(data, text, tone_numbers, spaces):
     solution_list = []
     word_list = tokenize(text)
-    process_remaining_pinyin(data, '', word_list, solution_list, '', tone_numbers, spaces)
-    return solution_list
+    return render_all_pinyin_solutions(data, word_list, tone_numbers, spaces)
 
 
 def tokenize(text):
