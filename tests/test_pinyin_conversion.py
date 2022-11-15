@@ -56,6 +56,10 @@ class PinyinConversion(unittest.TestCase):
         # self.assertEqual(self.pinyin_jyutping.pinyin('一起')[0], 'yìqǐ')
         self.assertEqual(self.pinyin_jyutping.pinyin('一个')[0], 'yígè')
 
+    @pytest.mark.skip(reason="ignore for now")
+    def test_alternatives(self):
+        self.assertEqual(self.pinyin_jyutping.pinyin('举起来'), ['jǔ qǐ lai'])
+
     def get_baserow_records(self):
         more_results = True
 

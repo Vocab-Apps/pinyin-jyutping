@@ -131,6 +131,12 @@ def process_word(chinese, syllables, map, add_full_text=True, add_tokenized_word
         #     if chinese == DEBUG_WORD:
         #         logger.warn(f'adding word mapping: {chinese} syllable: {syllables}')
 
+        # if we are adding a single syllable, make sure that it's lowercase
+        if len(syllables) == 1:
+            if syllables[0].capital == True:
+                syllables = [copy.copy(syllables[0])]
+                syllables[0].capital = False
+
         if len(chinese) != len(syllables):
             raise Exception(f'{chinese} and {syllables}: inconsistent lengths')
 
