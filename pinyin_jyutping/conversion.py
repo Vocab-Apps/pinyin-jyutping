@@ -58,9 +58,23 @@ def expand_all_pinyin_solutions(data, word_list):
     return expanded_solution_list
 
 
+def render_word(word, tone_numbers, spaces): 
+    join_syllables_character = ''
+    if spaces:
+        join_syllables_character = ' '        
+    if tone_numbers:
+        rendered_list = [syllable.render_tone_number() for syllable in word]
+    else:
+        rendered_list = [syllable.render_tone_mark() for syllable in word]
+    return join_syllables_character.join(rendered_list)
+
+def render_solution(solution, tone_numbers, spaces):
+    return ' '.join([render_word(word, tone_numbers, spaces) for word in solution])
+
 def render_all_pinyin_solutions(data, word_list, tone_numbers, spaces):
     expanded_solution_list = expand_all_pinyin_solutions(data, word_list)
-    
+    return [render_solution(solution, tone_numbers, spaces) for solution in expanded_solution_list]
+
 
 
 # def render_all_pinyin_solutions(data, word_list):

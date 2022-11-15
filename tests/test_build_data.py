@@ -212,6 +212,22 @@ class BuildTests(unittest.TestCase):
         pprint.pprint(expected_result)
         self.assertEqual(output,  expected_result)        
 
+    def test_render_all_pinyin_solutions(self):
+        input_data = [
+            ('忘', 'wang4'),
+            ('拿', 'na2'),
+            ('拿', 'na3'),
+            ('东西', 'dong1 xi5')
+        ]
+        data = self.build_data_from_input(input_data)    
+        word_list = ['忘', '拿', '东西']
+
+        expected_result = ['wàng ná dōngxi', 'wàng nǎ dōngxi']
+
+        output = pinyin_jyutping.conversion.render_all_pinyin_solutions(data, word_list, False, False)
+        self.assertEqual(output, expected_result)
+
+
 
     # pickle / data storage tests
     # ===========================
