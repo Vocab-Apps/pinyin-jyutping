@@ -101,6 +101,8 @@ def improve_tokenization(data, word_list):
     # if the word is not found in the pinyin dictionary gives a better chance to find a good match.
     # for example with 投资银行, breaking down as 投资, 银行 is better
 
+    iterations = 0
+
     final_word_list = []
     for word in word_list:
         if len(word) == 1 or word in data.pinyin_map:
@@ -110,17 +112,31 @@ def improve_tokenization(data, word_list):
             word_breakdown = []
             word_remaining_chars = word
             found_larger_matches = 0
-            while len(word_remaining_chars) > 2:
+            continue_iteration = True
+            while continue_iteration:
+                iterations += 1
+                assert iterations < 1000, f'infinite loop while running improve_tokenization for {word_list}'
+
                 logger.debug(f'word_remaining_chars: [{word_remaining_chars}]')
                 # try to identify sub-words which are present in the map
+                found_matches = False
                 for i in range(len(word_remaining_chars) - 1, 1, -1):
-                    sub_word = word[0:i]
-                    word_remaining_chars = word[i:]
+                    logger.debug(f'looking for word of length {i}')
+                    sub_word = word_remaining_chars[0:i]
                     if sub_word in data.pinyin_map:
-                        word_breakdown.append(sub_word)
+                        logger.debug(f'found match for {sub_word}')
+                        found_matches = True
+                        word_breakdown.append(sub_word) 
+                        word_remaining_chars = word_remaining_chars[i:]
                         found_larger_matches += 1
                         break
-            assert len(word_remaining_chars) <= 2
+                logger.debug(f'found_matches: {found_matches}')
+                if found_matches == False:
+                    continue_iteration = False
+                #continue_iteration = 
+                if len(word_remaining_chars) <= 2:
+                    continue_iteration = False
+
             if len(word_remaining_chars) > 0:
                 word_breakdown.append(word_remaining_chars)
             

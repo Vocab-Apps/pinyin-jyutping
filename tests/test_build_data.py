@@ -231,15 +231,21 @@ class BuildTests(unittest.TestCase):
         input_data = [
             ('投资', 'tou2 zi1'),
             ('银行', 'yin2 hang2'),
+
+            ('个人', 'ge4 ren2'),
+            ('所得税', 'suo3 de2 shui4')
         ]
         data = self.build_data_from_input(input_data)    
         
         word_list = ['投资银行']
-
         expected_result = ['投资', '银行']
-
         output = pinyin_jyutping.conversion.improve_tokenization(data, word_list)
         self.assertEqual(output, expected_result)
+
+        word_list = ['个人所得税']
+        expected_result = ['个人', '所得税']
+        output = pinyin_jyutping.conversion.improve_tokenization(data, word_list)
+        self.assertEqual(output, expected_result)        
 
 
     # pickle / data storage tests
