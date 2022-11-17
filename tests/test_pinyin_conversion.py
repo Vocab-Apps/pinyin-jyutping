@@ -47,6 +47,7 @@ class PinyinConversion(unittest.TestCase):
         self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了')[0], 'wàng ná yīxiē dōngxi le')
         self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了', tone_numbers=True)[0], 'wang4 na2 yi1xie1 dong1xi5 le5')
         self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了', tone_numbers=True, spaces=True)[0], 'wang4 na2 yi1 xie1 dong1 xi5 le5')
+        self.assertEqual(self.pinyin_jyutping.pinyin('投资银行', tone_numbers=False, spaces=True)[0], 'tóu zī yín háng')
 
     def test_tone_changes(self):
         self.assertEqual(self.pinyin_jyutping.pinyin('穿不上')[0], 'chuān bú shàng')

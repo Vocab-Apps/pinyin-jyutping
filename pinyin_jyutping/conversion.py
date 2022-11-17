@@ -87,10 +87,50 @@ def render_all_pinyin_solutions(data, word_list, tone_numbers, spaces):
 def convert_pinyin(data, text, tone_numbers, spaces):
     solution_list = []
     word_list = tokenize(text)
+    word_list = improve_tokenization(data, word_list)
     return render_all_pinyin_solutions(data, word_list, tone_numbers, spaces)
-
 
 def tokenize(text):
     seg_list = jieba.cut(text)
     word_list = list(seg_list)
     return word_list
+
+def improve_tokenization(data, word_list):
+    # sometimes jieba will not tokenize certain words like 投资银行, however the character-by-character
+    # pinyin conversion renders the last character as xing2. a second pass to try to further break down
+    # if the word is not found in the pinyin dictionary gives a better chance to find a good match.
+    # for example with 投资银行, breaking down as 投资, 银行 is better
+
+    final_word_list = []
+    for word in word_list:
+        if len(word) == 1 or word in data.pinyin_map:
+            final_word_list.append(word)
+        else:
+            logger.debug(f'attempting improved tokenization for {word}')
+            word_breakdown = []
+            word_remaining_chars = word
+            found_larger_matches = 0
+            while len(word_remaining_chars) > 2:
+                logger.debug(f'word_remaining_chars: [{word_remaining_chars}]')
+                # try to identify sub-words which are present in the map
+                for i in range(len(word_remaining_chars) - 1, 1, -1):
+                    sub_word = word[0:i]
+                    word_remaining_chars = word[i:]
+                    if sub_word in data.pinyin_map:
+                        word_breakdown.append(sub_word)
+                        found_larger_matches += 1
+                        break
+            assert len(word_remaining_chars) <= 2
+            if len(word_remaining_chars) > 0:
+                word_breakdown.append(word_remaining_chars)
+            
+            # did we find larger matches ?
+            if found_larger_matches > 0:
+                # then use the new breakdown
+                final_word_list.extend(word_breakdown)
+            else:
+                # use original word
+                final_word_list.append(word)
+                
+
+    return final_word_list
