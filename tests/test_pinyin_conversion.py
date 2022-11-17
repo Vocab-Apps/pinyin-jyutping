@@ -57,6 +57,25 @@ class PinyinConversion(unittest.TestCase):
         # self.assertEqual(self.pinyin_jyutping.pinyin('一起')[0], 'yìqǐ')
         self.assertEqual(self.pinyin_jyutping.pinyin('一个')[0], 'yígè')
 
+    def test_pinyin_conversion_data_1(self):
+        # large test 
+        json_file_path = os.path.join(os.path.dirname(__file__), '..', 'source_data', 'pinyin_conversion_test_data_1.json')
+        f = open(json_file_path, 'r')
+        test_data = json.load(f)
+        f.close()
+        for entry in test_data:
+            chinese = entry['chinese']
+            expected_pinyin = entry['expected_pinyin']
+
+            expected_pinyin = pinyin_jyutping.parser.clean_pinyin(expected_pinyin)
+            converted_pinyin = pinyin_jyutping.parser.clean_pinyin(self.pinyin_jyutping.pinyin(chinese, spaces=True)[0])
+
+            expected_pinyin_syllables = pinyin_jyutping.parser.parse_pinyin_word(expected_pinyin)
+            converted_pinyin_syllables = pinyin_jyutping.parser.parse_pinyin_word(converted_pinyin)
+
+            self.assertEqual(expected_pinyin_syllables, converted_pinyin_syllables, f'chinese: {chinese}')
+
+
     @pytest.mark.skip(reason="ignore for now")
     def test_alternatives(self):
         self.assertEqual(self.pinyin_jyutping.pinyin('举起来'), ['jǔ qǐ lai'])
