@@ -76,9 +76,11 @@ class PinyinConversion(unittest.TestCase):
             self.assertEqual(expected_pinyin_syllables, converted_pinyin_syllables, f'chinese: {chinese}')
 
 
-    @pytest.mark.skip(reason="ignore for now")
     def test_alternatives(self):
-        self.assertEqual(self.pinyin_jyutping.pinyin('举起来'), ['jǔ qǐ lai'])
+        # self.assertEqual(self.pinyin_jyutping.pinyin('举起来'), ['jǔ qǐ lai'])
+        # 往后面坐
+        self.assertEqual(self.pinyin_jyutping.pinyin('往后面坐'), ['wǎnghòu miàn zuò', 'wǎnghòu mian zuò'])
+
 
     def get_baserow_records(self):
         more_results = True
