@@ -48,6 +48,8 @@ class PinyinConversion(unittest.TestCase):
         self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了', tone_numbers=True)[0], 'wang4 na2 yi1xie1 dong1xi1 le5')
         self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了', tone_numbers=True, spaces=True)[0], 'wang4 na2 yi1 xie1 dong1 xi1 le5')
         self.assertEqual(self.pinyin_jyutping.pinyin('投资银行', tone_numbers=False, spaces=True)[0], 'tóu zī yín háng')
+        
+        self.assertIn('bùjǐn 。 。 。 ,   hái ...', self.pinyin_jyutping.pinyin('不仅。。。, 还...', tone_numbers=False, spaces=False))
 
     def test_tone_changes(self):
         self.assertEqual(self.pinyin_jyutping.pinyin('穿不上')[0], 'chuān bú shàng')
@@ -144,8 +146,14 @@ class PinyinConversion(unittest.TestCase):
         baserow_record_map = self.get_baserow_records_map()
         record_updates = []
 
+        debug_word = False
+
         for record in data:
             chinese = record['chinese']
+
+            if debug_word and chinese != '不仅。。。, 还...':
+                continue
+
             expected_pinyin = pinyin_jyutping.parser.clean_pinyin(record['pinyin'])
             all_results = self.pinyin_jyutping.pinyin(chinese, spaces=True)
             all_cleaned_pinyin_results = [pinyin_jyutping.parser.clean_pinyin(result) for result in all_results]
@@ -173,7 +181,7 @@ class PinyinConversion(unittest.TestCase):
                 })            
 
             except pinyin_jyutping.errors.PinyinParsingError as e:
-                logger.error(e)
+                logger.exception(e)
 
             if len(record_updates) >= 100:
                 logger.info('flushing baserow updates')

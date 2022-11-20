@@ -32,7 +32,7 @@ def parse_pinyin(text):
 
 def parse_pinyin_word(text):
     syllables = []
-    while len(text) > 0:
+    while len(clean_pinyin(text)) > 0:
         logger.debug(f'parsing pinyin word: {text}')
         # remove leading space
         text = clean_pinyin(text)
