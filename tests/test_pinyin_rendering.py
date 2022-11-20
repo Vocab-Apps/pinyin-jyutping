@@ -25,7 +25,7 @@ class PinyinRenderingTests(unittest.TestCase):
     def test_render_syllables_tone_number(self):
         #  pytest test_build_data.py -k test_render_syllables_tone_number
         entries = [
-            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.e, PinyinTones.tone_2, capital=True), 'pinyin': 'E2'},
+            { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.e, PinyinTones.tone_2), 'pinyin': 'e2'},
             { 'syllable': PinyinSyllable(PinyinInitials.q, PinyinFinals.ve, PinyinTones.tone_4), 'pinyin': 'que4'},
             # empty + u group tests
             { 'syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.u, PinyinTones.tone_4), 'pinyin': 'wu4'},
@@ -81,12 +81,10 @@ class PinyinRenderingTests(unittest.TestCase):
     def test_render_final_variant(self):
         self.assertEqual(pinyin_jyutping.logic.render_tone_number(PinyinInitials.empty, 
             PinyinFinals.er, 
-            PinyinTones.tone_neutral, 
-            False),
+            PinyinTones.tone_neutral),
             'er5')
         self.assertEqual(pinyin_jyutping.logic.render_tone_number(PinyinInitials.empty, 
             PinyinFinals.er, 
-            PinyinTones.tone_neutral, 
-            False,
+            PinyinTones.tone_neutral,
             'r'),
             'r5')                

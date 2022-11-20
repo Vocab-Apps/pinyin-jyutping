@@ -85,7 +85,7 @@ class PinyinParsingTests(unittest.TestCase):
             {'text': 'yue4', 'expected_syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.ve, PinyinTones.tone_4)},
             {'text': 'r5', 'expected_syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.er, PinyinTones.tone_neutral)},
             {'text': 'lu:4', 'expected_syllable': PinyinSyllable(PinyinInitials.l, PinyinFinals.v, PinyinTones.tone_4)},
-            {'text': 'E2', 'expected_syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.e, PinyinTones.tone_2, capital=True)},
+            {'text': 'e2', 'expected_syllable': PinyinSyllable(PinyinInitials.empty, PinyinFinals.e, PinyinTones.tone_2)},
             {'text': 'guan1', 'expected_syllable': PinyinSyllable(PinyinInitials.g, PinyinFinals.uan, PinyinTones.tone_1)},
             {'text': 'jiao1', 'expected_syllable': PinyinSyllable(PinyinInitials.j, PinyinFinals.iao, PinyinTones.tone_1)},
             {'text': 'que4', 'expected_syllable': PinyinSyllable(PinyinInitials.q, PinyinFinals.ve, PinyinTones.tone_4)},
@@ -116,7 +116,7 @@ class PinyinParsingTests(unittest.TestCase):
     def test_parse_pinyin_word_capitalized(self):
         text = 'Long2 feng4'
         expected_output = [
-            PinyinSyllable(PinyinInitials.l, PinyinFinals.ong, PinyinTones.tone_2, capital=True),
+            PinyinSyllable(PinyinInitials.l, PinyinFinals.ong, PinyinTones.tone_2),
             PinyinSyllable(PinyinInitials.f, PinyinFinals.eng, PinyinTones.tone_4),
         ]
         output = pinyin_jyutping.parser.parse_pinyin_word(text)

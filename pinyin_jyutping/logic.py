@@ -110,20 +110,16 @@ def get_final_str(initial, final):
 
     return result
 
-def render_tone_mark(initial, final, tone, capital):
+def render_tone_mark(initial, final, tone):
     # logger.warning(f'render_tone_mark {initial} {final}')
     result = f'{get_initial_str(initial)}{apply_tone_mark(initial, final, tone)}'
-    if capital:
-        result = result.capitalize()
     return result
 
-def render_tone_number(initial, final, tone, capital, final_variant=None):
+def render_tone_number(initial, final, tone, final_variant=None):
     final_str = get_final_str(initial, final)
     if final_variant != None:
         final_str = final_variant
     result = f'{get_initial_str(initial)}{final_str}{tone.tone_number}'
-    if capital:
-        result = result.capitalize()
     return result
 
 
