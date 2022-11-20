@@ -147,15 +147,21 @@ class PinyinConversion(unittest.TestCase):
         for record in data:
             chinese = record['chinese']
             expected_pinyin = pinyin_jyutping.parser.clean_pinyin(record['pinyin'])
-            converted_pinyin = pinyin_jyutping.parser.clean_pinyin(self.pinyin_jyutping.pinyin(chinese, spaces=True)[0])
+            all_results = self.pinyin_jyutping.pinyin(chinese, spaces=True)
+            all_cleaned_pinyin_results = [pinyin_jyutping.parser.clean_pinyin(result) for result in all_results]
+            converted_pinyin = all_cleaned_pinyin_results[0]
 
             try:
                 expected_pinyin_syllables = pinyin_jyutping.parser.parse_pinyin_word(expected_pinyin)
                 converted_pinyin_syllables = pinyin_jyutping.parser.parse_pinyin_word(converted_pinyin)
+                converted_pinyin_syllable_all_results = [pinyin_jyutping.parser.parse_pinyin_word(result) for result in all_cleaned_pinyin_results]
 
                 status = 313817 # failure
                 if expected_pinyin_syllables == converted_pinyin_syllables:
                     status = 313816 # success
+                elif expected_pinyin_syllables in converted_pinyin_syllable_all_results:
+                    # is the result present in one of these alternatives ?                    
+                    status = 317360 # alternative
 
                 record_updates.append({
                     'id': baserow_record_map[chinese]['id'],
