@@ -46,13 +46,17 @@ def clean_pinyin(text):
     text = text.lstrip()
     text = text.replace(',', '')
     text = text.replace('，', '')
+    text = text.replace('、', '')
     text = text.replace('·', '')
     text = text.replace('？', ' ')
+    text = text.replace('！', ' ')
     text = text.replace('。', ' ')
     text = text.replace('/', ' ')
     text = text.replace('...', ' ')
     text = text.replace('…', ' ')
     text = text.replace('.', '')
+    text = text.replace('“', '')
+    text = text.replace('”', '')
     text = text.replace('  ', ' ')    
     return text
  

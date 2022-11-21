@@ -188,11 +188,19 @@ class PinyinConversion(unittest.TestCase):
                 })            
 
             except pinyin_jyutping.errors.PinyinParsingError as e:
-                logger.exception(e)
-                record_updates.append({
-                    'id': baserow_record_map[chinese]['id'],
-                    'status': 317659 # exception
-                })                            
+                # despite the parsing error, is the converted pinyin same as the expected ?
+                if expected_pinyin == converted_pinyin:
+                    record_updates.append({
+                        'id': baserow_record_map[chinese]['id'],
+                        'status': 313816, # success
+                        'converted_pinyin': converted_pinyin,
+                    })
+                else:
+                    logger.exception(e)
+                    record_updates.append({
+                        'id': baserow_record_map[chinese]['id'],
+                        'status': 317659 # exception
+                    })                            
 
             if len(record_updates) >= 100:
                 logger.info('flushing baserow updates')
