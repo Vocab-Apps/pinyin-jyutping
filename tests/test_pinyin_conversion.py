@@ -136,8 +136,8 @@ class PinyinConversion(unittest.TestCase):
 
     @pytest.mark.skipif('COMPARE_ANKI_DECKS' not in os.environ, reason="set COMPARE_ANKI_DECKS=yes")
     def test_compare_anki_decks(self):
-        # COMPARE_ANKI_DECKS=yes BASEROW_API_TOKEN=<api token> 
-        # pytest tests/test_pinyin_conversion.py -k test_compare_anki_decks -s -rPP  --log-cli-level=INFO
+        # COMPARE_ANKI_DECKS=yes BASEROW_API_TOKEN=<api token> pytest tests/test_pinyin_conversion.py -k test_compare_anki_decks -s -rPP  --log-cli-level=INFO
+        # optionally set DEBUG_WORD="最主要的理由是..."
         filename = 'source_data/anki_deck_1.json'
         f = open(filename)
         data = json.load(f)
@@ -147,12 +147,15 @@ class PinyinConversion(unittest.TestCase):
         record_updates = []
 
         debug_word = False
+        if 'DEBUG_WORD' in os.environ:
+            debug_word = os.environ['DEBUG_WORD']
 
         for record in data:
             chinese = record['chinese']
 
-            if debug_word and chinese != '核酸检测':
-                continue
+            if debug_word != False:
+                if chinese != debug_word:
+                    continue
 
             logger.debug(f'processing chinese: {chinese}')
 
