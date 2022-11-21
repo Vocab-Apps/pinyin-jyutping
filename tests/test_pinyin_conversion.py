@@ -146,6 +146,15 @@ class PinyinConversion(unittest.TestCase):
         baserow_record_map = self.get_baserow_records_map()
         record_updates = []
 
+        def syllable_match_except_tones(syllable_a, syllable_b):
+            return syllable_a.initial == syllable_b.initial and \
+               syllable_a.final == syllable_b.final
+
+        def syllable_list_match_except_tones(syllables_a, syllables_b):
+            matches = [syllable_match_except_tones(syl_a, syl_b) for syl_a, syl_b in zip(syllables_a, syllables_b)]
+            return all(matches)
+
+
         debug_word = False
         if 'DEBUG_WORD' in os.environ:
             debug_word = os.environ['DEBUG_WORD']
@@ -177,6 +186,9 @@ class PinyinConversion(unittest.TestCase):
                 elif expected_pinyin_syllables in converted_pinyin_syllable_all_results:
                     # is the result present in one of these alternatives ?                    
                     status = 317360 # alternative
+                elif syllable_list_match_except_tones(expected_pinyin_syllables, converted_pinyin_syllables):
+                    # tone mismatch only
+                    status = 317826
 
                 record_updates.append({
                     'id': baserow_record_map[chinese]['id'],
