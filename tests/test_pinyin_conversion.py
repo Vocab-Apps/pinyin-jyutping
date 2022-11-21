@@ -151,13 +151,17 @@ class PinyinConversion(unittest.TestCase):
         for record in data:
             chinese = record['chinese']
 
-            if debug_word and chinese != '不仅。。。, 还...':
+            if debug_word and chinese != '核酸检测':
                 continue
+
+            logger.debug(f'processing chinese: {chinese}')
 
             expected_pinyin = pinyin_jyutping.parser.clean_pinyin(record['pinyin'])
             all_results = self.pinyin_jyutping.pinyin(chinese, spaces=True)
             all_cleaned_pinyin_results = [pinyin_jyutping.parser.clean_pinyin(result) for result in all_results]
             converted_pinyin = all_cleaned_pinyin_results[0]
+
+            logger.debug(f'result: {converted_pinyin}')
 
             try:
                 expected_pinyin_syllables = pinyin_jyutping.parser.parse_pinyin_word(expected_pinyin)
@@ -182,6 +186,10 @@ class PinyinConversion(unittest.TestCase):
 
             except pinyin_jyutping.errors.PinyinParsingError as e:
                 logger.exception(e)
+                record_updates.append({
+                    'id': baserow_record_map[chinese]['id'],
+                    'status': 317659 # exception
+                })                            
 
             if len(record_updates) >= 100:
                 logger.info('flushing baserow updates')
@@ -189,3 +197,7 @@ class PinyinConversion(unittest.TestCase):
                 self.update_baserow_records(record_updates)
                 record_updates = []
                 
+        logger.info('flushing remaining baserow updates')
+        # flush to baserow
+        self.update_baserow_records(record_updates)
+        record_updates = []        
