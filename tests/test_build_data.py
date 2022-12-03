@@ -384,7 +384,10 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(character_mapping_2.occurences, 6)
 
 
-    def test_user_corrections(self):
+    def test_user_corrections_existing(self):
+        # variant 1: the correction is an existing variant, just push it up higher
+        # ------------------------------------------------------------------------
+
         # first, build data using cedict
         data = pinyin_jyutping.data.Data()
         lines = [
@@ -411,7 +414,28 @@ class BuildTests(unittest.TestCase):
             [PinyinSyllable(PinyinInitials.sh, PinyinFinals.ui, PinyinTones.tone_2)],)
         self.assertEqual(character_mapping_first.occurences, pinyin_jyutping.constants.OCCURENCES_MAX)
 
+    def test_user_corrections_new(self):
+        # variant 2: the correction is a new variant
+        # ------------------------------------------
 
+        # first, build data using cedict
+        data = pinyin_jyutping.data.Data()
+        lines = [
+            '誰 谁 [shei2] /who/also pr. [shui2]/',
+            '誰 谁 [shei2] /test 1/',
+            '誰 谁 [shui2] /test 2/',
+        ]
+        pinyin_jyutping.parser.parse_cedict_entries(lines, data)
+
+        # now, specify a correction
+        pinyin_jyutping.parser.process_word('谁', 
+            [PinyinSyllable(PinyinInitials.sh, PinyinFinals.ei, PinyinTones.tone_4)], data.pinyin_map, add_full_text=True, priority=True)
+
+        # the top result should now be shui2
+        character_mapping_first = data.pinyin_map['谁'][0]
+        self.assertEqual(character_mapping_first.syllables, 
+            [PinyinSyllable(PinyinInitials.sh, PinyinFinals.ei, PinyinTones.tone_4)],)
+        self.assertEqual(character_mapping_first.occurences, pinyin_jyutping.constants.OCCURENCES_MAX)
 
 
     @pytest.mark.skip(reason="a bit slow")
