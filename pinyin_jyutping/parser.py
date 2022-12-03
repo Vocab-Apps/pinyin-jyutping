@@ -127,12 +127,12 @@ def cedict_ignore(traditional_chinese, simplified_chinese, pinyin):
         return True                
     return False
 
-def process_word(chinese, syllables, map, add_full_text=True, add_tokenized_words=True, add_characters=True):
+def process_word(chinese, syllables, map, add_full_text=True, add_tokenized_words=True, add_characters=True, priority=False):
     # this is the sorting key
     def get_occurences(x):
         return x.occurences
 
-    def add_word_mapping(chinese, word_map, syllables):
+    def add_word_mapping(chinese, word_map, syllables, priority):
         # if DEBUG_WORD != None:
         #     if chinese == DEBUG_WORD:
         #         logger.warn(f'adding word mapping: {chinese} syllable: {syllables}')
@@ -142,16 +142,23 @@ def process_word(chinese, syllables, map, add_full_text=True, add_tokenized_word
 
         # insert into word map
         if chinese not in word_map:
+            # will be initialized with occurences = 1
+            # in priority mode, this is fine, it will be the only choice
             word_map[chinese] = [data.Mapping(syllables)]
         else:
             # does this pinyin exist already ?
             matching_entries = [x for x in word_map[chinese] if x.syllables == syllables]
             if len(matching_entries) == 1:
                 # we already have this pinyin
-                matching_entries[0].occurences += 1 
+                if priority:
+                    matching_entries[0].occurences = constants.OCCURENCES_MAX
+                else:
+                    matching_entries[0].occurences += 1 
             elif len(matching_entries) == 0:
                 # need to insert
                 word_map[chinese].append(data.Mapping(syllables))
+                if priority:
+                    word_map[chinese][-1].occurences = constants.OCCURENCES_MAX
             else:
                 pprint.pprint(word_map[chinese])
                 raise Exception(f'found {len(matching_entries)} entries for [{chinese}], while processing {syllables}')
@@ -160,7 +167,7 @@ def process_word(chinese, syllables, map, add_full_text=True, add_tokenized_word
 
     if add_full_text:
         # insert into word mapping
-        add_word_mapping(chinese, map, syllables)
+        add_word_mapping(chinese, map, syllables, priority)
     if add_tokenized_words:
         # add each word after jieba segmentation
         word_list = conversion.tokenize(chinese)
@@ -170,13 +177,13 @@ def process_word(chinese, syllables, map, add_full_text=True, add_tokenized_word
             word_list = word_list[1:]
             syllables_for_word = remaining_syllables[0:len(chinese_word)]
             remaining_syllables = remaining_syllables[len(chinese_word):]
-            add_word_mapping(chinese_word, map, syllables_for_word)
+            add_word_mapping(chinese_word, map, syllables_for_word, priority)
     if add_characters:
         # add each character
         if len(chinese) != len(syllables):
             raise Exception(f'found inconsistent lengths: {chinese}, {syllables}')
         for chinese_char, syllable in zip(chinese, syllables):
-            add_word_mapping(chinese_char, map, [syllable])
+            add_word_mapping(chinese_char, map, [syllable], priority)
 
 
         

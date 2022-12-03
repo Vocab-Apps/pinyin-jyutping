@@ -146,3 +146,6 @@ VowelToneMap = {
 
 
 ALL_VOWELS = list(VowelToneMap.keys()) + ['y']
+
+# when supplying user corrections, use this occurences value so that the result goes to the top
+OCCURENCES_MAX = 10000

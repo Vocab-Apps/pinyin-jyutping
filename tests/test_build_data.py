@@ -7,6 +7,7 @@ import logging
 import re
 import sys
 import os
+import pdb
 
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -381,6 +382,36 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(character_mapping_2.syllables, 
             [PinyinSyllable(PinyinInitials.sh, PinyinFinals.ei, PinyinTones.tone_2)],)
         self.assertEqual(character_mapping_2.occurences, 6)
+
+
+    def test_user_corrections(self):
+        # first, build data using cedict
+        data = pinyin_jyutping.data.Data()
+        lines = [
+            '誰 谁 [shei2] /who/also pr. [shui2]/',
+            '誰 谁 [shei2] /test 1/',
+            '誰 谁 [shui2] /test 2/',
+        ]
+        pinyin_jyutping.parser.parse_cedict_entries(lines, data)
+
+        # the top result should be shei2
+        character_mapping_1 = data.pinyin_map['谁'][0]
+        self.assertEqual(character_mapping_1.syllables, 
+            [PinyinSyllable(PinyinInitials.sh, PinyinFinals.ei, PinyinTones.tone_2)],)
+        print(data.pinyin_map)
+
+        # now, specify a correction
+        # pdb.set_trace()
+        pinyin_jyutping.parser.process_word('谁', 
+            [PinyinSyllable(PinyinInitials.sh, PinyinFinals.ui, PinyinTones.tone_2)], data.pinyin_map, add_full_text=True, priority=True)
+
+        # the top result should now be shui2
+        character_mapping_first = data.pinyin_map['谁'][0]
+        self.assertEqual(character_mapping_1.syllables, 
+            [PinyinSyllable(PinyinInitials.sh, PinyinFinals.ui, PinyinTones.tone_2)],)
+        self.assertEqual(character_mapping_1.occurences, pinyin_jyutping.constants.OCCURENCES_MAX)
+
+
 
 
     @pytest.mark.skip(reason="a bit slow")
