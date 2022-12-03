@@ -32,7 +32,7 @@ def parse_pinyin(text):
 
 def parse_pinyin_word(text):
     syllables = []
-    while len(text) > 0:
+    while len(clean_pinyin(text)) > 0:
         logger.debug(f'parsing pinyin word: {text}')
         # remove leading space
         text = clean_pinyin(text)
@@ -42,16 +42,22 @@ def parse_pinyin_word(text):
     return syllables
 
 def clean_pinyin(text):
+    text = text.lower()
     text = text.lstrip()
     text = text.replace(',', '')
     text = text.replace('，', '')
+    text = text.replace('、', '')
     text = text.replace('·', '')
-    text = text.replace('  ', ' ')
     text = text.replace('？', ' ')
+    text = text.replace('！', ' ')
     text = text.replace('。', ' ')
     text = text.replace('/', ' ')
     text = text.replace('...', ' ')
     text = text.replace('…', ' ')
+    text = text.replace('.', '')
+    text = text.replace('“', '')
+    text = text.replace('”', '')
+    text = text.replace('  ', ' ')    
     return text
  
 def clean_chinese(text):
@@ -130,12 +136,6 @@ def process_word(chinese, syllables, map, add_full_text=True, add_tokenized_word
         # if DEBUG_WORD != None:
         #     if chinese == DEBUG_WORD:
         #         logger.warn(f'adding word mapping: {chinese} syllable: {syllables}')
-
-        # if we are adding a single syllable, make sure that it's lowercase
-        if len(syllables) == 1:
-            if syllables[0].capital == True:
-                syllables = [copy.copy(syllables[0])]
-                syllables[0].capital = False
 
         if len(chinese) != len(syllables):
             raise Exception(f'{chinese} and {syllables}: inconsistent lengths')
