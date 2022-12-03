@@ -407,9 +407,9 @@ class BuildTests(unittest.TestCase):
 
         # the top result should now be shui2
         character_mapping_first = data.pinyin_map['谁'][0]
-        self.assertEqual(character_mapping_1.syllables, 
+        self.assertEqual(character_mapping_first.syllables, 
             [PinyinSyllable(PinyinInitials.sh, PinyinFinals.ui, PinyinTones.tone_2)],)
-        self.assertEqual(character_mapping_1.occurences, pinyin_jyutping.constants.OCCURENCES_MAX)
+        self.assertEqual(character_mapping_first.occurences, pinyin_jyutping.constants.OCCURENCES_MAX)
 
 
 
