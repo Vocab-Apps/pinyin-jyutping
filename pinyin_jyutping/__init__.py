@@ -1,9 +1,12 @@
 import os
 import pickle
 import jieba
+import logging
 from . import constants
 from . import conversion
 from . import parser
+
+logger = logging.getLogger(__file__)
 
 class PinyinJyutping():
     def __init__(self):
@@ -24,9 +27,12 @@ class PinyinJyutping():
 
     def load_corrections(self, corrections):
         for correction in corrections:
-            chinese = correction['chinese']
-            pinyin = correction['pinyin']
-            parser.parse_correction(chinese, pinyin, self.data)
+            try:
+                chinese = correction['chinese']
+                pinyin = correction['pinyin']
+                parser.parse_correction(chinese, pinyin, self.data)
+            except Exception as e:
+                logger.exception(e)
 
     def pinyin(self, text, tone_numbers=False, spaces=False):
         return conversion.convert_pinyin(self.data, text, tone_numbers, spaces)
