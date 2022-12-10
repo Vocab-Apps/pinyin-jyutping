@@ -17,7 +17,7 @@ setup(name='pinyin_jyutping',
         'Topic :: Text Processing :: Linguistic',
       ],      
       license='GPL',
-      packages=['pinyin_jyutping_sentence'],
+      packages=['pinyin_jyutping'],
       install_requires=[
           'jieba',
       ],      

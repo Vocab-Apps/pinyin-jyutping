@@ -5,7 +5,6 @@ htmlcov/
 .coverage
 
 # cached file
-pinyin_jyutping_sentence/mandarin_cantonese_data.pkl
 *.pkl
 
 # Compiled python modules.
