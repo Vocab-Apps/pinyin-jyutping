@@ -93,6 +93,10 @@ def parse_cedict_entries(generator, data):
         except errors.PinyinParsingError as e:
             logger.warning(e)
 
+def parse_correction(chinese, pinyin, data):
+    chinese = clean_chinese(chinese)
+    syllables = parse_pinyin_word(pinyin)
+    process_word(chinese, syllables, data.pinyin_map, priority=True)
 
 # returns raw pinyin text
 def parse_cedict_line(line):

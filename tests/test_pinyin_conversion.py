@@ -84,6 +84,20 @@ class PinyinConversion(unittest.TestCase):
         self.assertEqual(self.pinyin_jyutping.pinyin('往后面坐'), ['wǎnghòu miàn zuò', 'wǎnghòu mian zuò'])
 
 
+    def test_user_corrections(self):
+        # apply corrections
+        pinyin_jyutping_instance_1 = pinyin_jyutping.PinyinJyutping()
+        pinyin_jyutping_instance_1.load_corrections(
+            [
+                {
+                    'chinese': '东西',
+                    'pinyin': 'dong1xi5' # make tone 5 / neutral the default
+                }
+            ]
+        )
+        self.assertEqual(pinyin_jyutping_instance_1.pinyin('忘拿一些东西了')[0], 'wàng ná yīxiē dōngxi le')
+
+
     def get_baserow_records(self):
         more_results = True
 
