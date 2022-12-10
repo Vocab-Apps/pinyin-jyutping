@@ -4,15 +4,16 @@ from setuptools import setup
 #  python3 setup.py sdist
 # twine upload dist/*
 
-setup(name='pinyin_jyutping_sentence',
-      version='1.3',
+setup(name='pinyin_jyutping',
+      version='0.1',
       description='Convert a Chinese sentence to Pinyin or Jyutping',
       long_description=open('README.rst', encoding='utf-8').read(),
-      url='https://github.com/lucwastiaux/python-pinyin-jyutping-sentence',
-      author='Luc Wastiaux',
-      author_email='lucw@airpost.net',
+      url='https://github.com/Language-Tools/pinyin-jyutping',
+      author='LucW',
+      author_email='languagetools@mailc.net',
       classifiers=[
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Topic :: Text Processing :: Linguistic',
       ],      
       license='GPL',

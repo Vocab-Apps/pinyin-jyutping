@@ -2,3 +2,4 @@ requests
 pytest
 pandas
 coverage
+twine
