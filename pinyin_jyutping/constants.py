@@ -147,5 +147,71 @@ VowelToneMap = {
 
 ALL_VOWELS = list(VowelToneMap.keys()) + ['y']
 
+# https://en.wikipedia.org/wiki/Jyutping
+# https://cantolounge.com/jyutping-chart/
+class JyutpingInitials(enum.Enum):
+    b  =  1
+    p  =  2
+    m  =  3
+    f  =  4
+
+    d  =  5
+    t  =  6
+    n  =  7
+    l  =  8
+
+    g  =  9
+    k  = 10
+    ng = 11
+    h  = 12
+
+    gw = 13
+    kw = 14
+    w  = 15
+
+    z = 16
+    c = 17
+    s = 18
+    j = 19
+
+
+class JyutpingFinals(enum.Enum):
+    aa   = 1
+    aai  = 2
+    aau  = 3
+    aam  = 4
+    aan  = 6
+    aap  = 7
+    aat  = 8
+    aak  = 9
+    a    = 10
+    ai   = 10
+    au   = 10
+    am   = 11
+    an   = 12
+    ang  = 13
+    ap   = 13
+    at   = 13
+    ak   = 13
+    e    = 13
+    ei   = 13
+    eu   = 13
+    em   = 13
+    eng  = 13
+    ep   = 13
+    ek   = 13
+    i    = 13
+    iu   = 13
+    im   = 13
+    in_  = 13
+    ing  = 13
+    ip   = 13
+    it   = 13
+    ik   = 13
+    o    = 13
+    
+
+
+
 # when supplying user corrections, use this occurences value so that the result goes to the top
 OCCURENCES_MAX = 10000
