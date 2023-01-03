@@ -181,6 +181,7 @@ class JyutpingFinals(enum.Enum):
     aau  = 3
     aam  = 4
     aan  = 6
+    aang = 6
     aap  = 7
     aat  = 8
     aak  = 9
@@ -209,6 +210,30 @@ class JyutpingFinals(enum.Enum):
     it   = 13
     ik   = 13
     o    = 13
+    oi   = 13
+    ou   = 13
+    on   = 13
+    ong  = 13
+    ot   = 13
+    ok   = 13
+    u    = 13
+    ui   = 13
+    un   = 13
+    ung  = 13
+    ut   = 13
+    uk   = 13
+    eoi  = 13
+    eon  = 13
+    eot  = 13
+    oe   = 13
+    oeng = 13
+    oet  = 13
+    oek  = 13
+    yu   = 13
+    yun  = 13
+    yut  = 13
+    m    = 13
+    ng   = 13
     
 
 
