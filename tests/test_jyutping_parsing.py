@@ -16,12 +16,23 @@ import pinyin_jyutping.logic
 import pinyin_jyutping.constants
 import pinyin_jyutping.cache
 
-from pinyin_jyutping.syllables import PinyinSyllable
+from pinyin_jyutping.syllables import PinyinSyllable, JyutpingSyllable
 from pinyin_jyutping.constants import PinyinInitials, PinyinFinals, PinyinTones
+from pinyin_jyutping.constants import JyutpingInitials, JyutpingFinals, JyutpingTones
 
 class JyutpingParsingTests(unittest.TestCase):
+    def test_parse_syllables(self):
+        syllables = pinyin_jyutping.parser.parse_jyutping('nin4')
+        expected_syllable = pinyin_jyutping.syllables.build_jyutping_syllable(JyutpingInitials.n, JyutpingFinals.in_, JyutpingTones.tone_4)
+        self.assertEqual(len(syllables), 1)
+        self.assertEqual(syllables[0], expected_syllable)
+
     def test_parse_jyutping_cc_canto(self):
         filename = 'source_data/cccanto-webdist-160115.txt'
         for entry in pinyin_jyutping.parser.parse_cccanto_definition_generator(filename):
             jyutping = entry['jyutping']
-            syllables = pinyin_jyutping.parser.parse_jyutping(jyutping)
+            try:
+                syllables = pinyin_jyutping.parser.parse_jyutping(jyutping)
+            except pinyin_jyutping.errors.PinyinSyllableNotFound as e:
+                logger.error(f'could not find syllable for {entry}, {e}')
+                self.assertTrue(False)
