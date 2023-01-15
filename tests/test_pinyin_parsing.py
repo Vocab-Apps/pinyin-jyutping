@@ -65,7 +65,7 @@ class PinyinParsingTests(unittest.TestCase):
             PinyinSyllable(PinyinInitials.g, PinyinFinals.e, PinyinTones.tone_neutral),
             PinyinSyllable(PinyinInitials.b, PinyinFinals.an, PinyinTones.tone_4),
         ]
-        output = pinyin_jyutping.parser.parse_romanized_word(text)
+        output = pinyin_jyutping.parser.parse_pinyin(text)
         self.assertEqual(output, expected_output)
 
     def test_parse_pinyin_word_list(self):
@@ -93,7 +93,7 @@ class PinyinParsingTests(unittest.TestCase):
             }
         ]
         for entry in entries:
-            output = pinyin_jyutping.parser.parse_romanized_word(entry['text'])
+            output = pinyin_jyutping.parser.parse_pinyin(entry['text'])
             self.assertEqual(output, entry['expected_output'])
 
 
@@ -123,5 +123,5 @@ class PinyinParsingTests(unittest.TestCase):
             PinyinSyllable(PinyinInitials.l, PinyinFinals.ong, PinyinTones.tone_2),
             PinyinSyllable(PinyinInitials.f, PinyinFinals.eng, PinyinTones.tone_4),
         ]
-        output = pinyin_jyutping.parser.parse_romanized_word(text)
+        output = pinyin_jyutping.parser.parse_pinyin(text)
         self.assertEqual(output, expected_output)    

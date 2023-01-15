@@ -72,8 +72,8 @@ class PinyinConversion(unittest.TestCase):
             expected_pinyin = pinyin_jyutping.parser.clean_romanization(expected_pinyin)
             converted_pinyin = pinyin_jyutping.parser.clean_romanization(self.pinyin_jyutping.pinyin(chinese, spaces=True)[0])
 
-            expected_pinyin_syllables = pinyin_jyutping.parser.parse_romanized_word(expected_pinyin)
-            converted_pinyin_syllables = pinyin_jyutping.parser.parse_romanized_word(converted_pinyin)
+            expected_pinyin_syllables = pinyin_jyutping.parser.parse_pinyin(expected_pinyin)
+            converted_pinyin_syllables = pinyin_jyutping.parser.parse_pinyin(converted_pinyin)
 
             self.assertEqual(expected_pinyin_syllables, converted_pinyin_syllables, f'chinese: {chinese}')
 
@@ -190,9 +190,9 @@ class PinyinConversion(unittest.TestCase):
             logger.debug(f'result: {converted_pinyin}')
 
             try:
-                expected_pinyin_syllables = pinyin_jyutping.parser.parse_romanized_word(expected_pinyin)
-                converted_pinyin_syllables = pinyin_jyutping.parser.parse_romanized_word(converted_pinyin)
-                converted_pinyin_syllable_all_results = [pinyin_jyutping.parser.parse_romanized_word(result) for result in all_cleaned_pinyin_results]
+                expected_pinyin_syllables = pinyin_jyutping.parser.parse_pinyin(expected_pinyin)
+                converted_pinyin_syllables = pinyin_jyutping.parser.parse_pinyin(converted_pinyin)
+                converted_pinyin_syllable_all_results = [pinyin_jyutping.parser.parse_pinyin(result) for result in all_cleaned_pinyin_results]
 
                 status = 313817 # failure
                 if expected_pinyin_syllables == converted_pinyin_syllables:
