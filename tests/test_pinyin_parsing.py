@@ -14,6 +14,7 @@ import pinyin_jyutping.parser
 import pinyin_jyutping.data
 import pinyin_jyutping.logic
 import pinyin_jyutping.constants
+import pinyin_jyutping.cache
 
 from pinyin_jyutping.syllables import PinyinSyllable
 from pinyin_jyutping.constants import PinyinInitials, PinyinFinals, PinyinTones
@@ -23,7 +24,7 @@ class PinyinParsingTests(unittest.TestCase):
     # ======================
 
     def verify_parsing(self, text, initial, final, tone, tone_mark_render, tone_number_render):
-        syllable, remaining_text = pinyin_jyutping.parser.parse_romanization(text)
+        syllable, remaining_text = pinyin_jyutping.parser.parse_romanization(text, pinyin_jyutping.cache.PinyinSyllablesMap)
         expected_syllable = PinyinSyllable(initial, final, tone)
         self.assertEqual(syllable, expected_syllable)
         self.assertEqual(syllable.render_tone_mark(), tone_mark_render)
@@ -31,7 +32,7 @@ class PinyinParsingTests(unittest.TestCase):
 
     def test_parse_pinyin(self):
         text = 'mǎ'
-        syllable, remaining_text = pinyin_jyutping.parser.parse_romanization(text)
+        syllable, remaining_text = pinyin_jyutping.parser.parse_romanization(text, pinyin_jyutping.cache.PinyinSyllablesMap)
         expected_syllable = PinyinSyllable(
             PinyinInitials.m, 
             PinyinFinals.a, 
@@ -41,14 +42,14 @@ class PinyinParsingTests(unittest.TestCase):
         self.assertEqual(syllable.render_tone_number(), 'ma3')
 
         text = 'xiē'
-        syllable, remaining_text = pinyin_jyutping.parser.parse_romanization(text)
+        syllable, remaining_text = pinyin_jyutping.parser.parse_romanization(text, pinyin_jyutping.cache.PinyinSyllablesMap)
         expected_syllable = PinyinSyllable(PinyinInitials.x, PinyinFinals.ie, PinyinTones.tone_1)
         self.assertEqual(syllable, expected_syllable)
         self.assertEqual(syllable.render_tone_mark(), 'xiē')
         self.assertEqual(syllable.render_tone_number(), 'xie1')
 
         text = 'xie1'
-        syllable, remaining_text = pinyin_jyutping.parser.parse_romanization(text)
+        syllable, remaining_text = pinyin_jyutping.parser.parse_romanization(text, pinyin_jyutping.cache.PinyinSyllablesMap)
         self.assertEqual(syllable, expected_syllable)
 
         self.verify_parsing('nǚ', PinyinInitials.n, PinyinFinals.v, PinyinTones.tone_3, 'nǚ', 'nü3')
@@ -112,7 +113,7 @@ class PinyinParsingTests(unittest.TestCase):
         for entry in entries:
             text = entry['text']
             expected_syllable = entry['expected_syllable']
-            syllable, remaining_text = pinyin_jyutping.parser.parse_romanization(text)
+            syllable, remaining_text = pinyin_jyutping.parser.parse_romanization(text, pinyin_jyutping.cache.PinyinSyllablesMap)
             self.assertEqual(syllable, expected_syllable)
 
 

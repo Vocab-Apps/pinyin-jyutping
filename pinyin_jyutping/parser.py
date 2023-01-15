@@ -14,7 +14,7 @@ logger = logging.getLogger(__file__)
 
 DEBUG_WORD = None
 
-def parse_romanization(text):
+def parse_romanization(text, syllables_map):
     # look for initial
     original_text = text
 
@@ -24,7 +24,7 @@ def parse_romanization(text):
         candidate = text[0:candidate_length]
         remaining_text = text[candidate_length:]
         # logger.debug(f'scanning for {candidate}, map size: {len(cache.PinyinFinalsMap)}')
-        cache_hit = cache.PinyinSyllablesMap.get(candidate, None)
+        cache_hit = syllables_map.get(candidate, None)
         if cache_hit != None:
             return cache_hit, remaining_text
     raise errors.PinyinSyllableNotFound(f"couldn't find pinyin syllable: {text} [{original_text}]")
@@ -36,7 +36,7 @@ def parse_romanized_word(text):
         logger.debug(f'parsing pinyin word: {text}')
         # remove leading space
         text = clean_romanization(text)
-        syllable, text = parse_romanization(text)
+        syllable, text = parse_romanization(text, cache.PinyinSyllablesMap)
         logger.debug(f'parsed {syllable}, remaining text: {text}')
         syllables.append(syllable)
     return syllables
