@@ -22,10 +22,17 @@ from pinyin_jyutping.constants import JyutpingInitials, JyutpingFinals, Jyutping
 
 class JyutpingParsingTests(unittest.TestCase):
     def test_parse_syllables(self):
-        syllables = pinyin_jyutping.parser.parse_jyutping('nin4')
-        expected_syllable = pinyin_jyutping.syllables.build_jyutping_syllable(JyutpingInitials.n, JyutpingFinals.in_, JyutpingTones.tone_4)
-        self.assertEqual(len(syllables), 1)
-        self.assertEqual(syllables[0], expected_syllable)
+        test_list = [
+            {'input': 'nin4', 'expected_syllable': JyutpingSyllable(JyutpingInitials.n, JyutpingFinals.in_, JyutpingTones.tone_4)}
+        ]
+
+        for test in test_list:
+            input = test['input']
+            expected_syllable = test['expected_syllable']
+            syllables = pinyin_jyutping.parser.parse_jyutping(input)
+            self.assertEqual(len(syllables), 1)
+            self.assertEqual(syllables[0], expected_syllable)            
+
 
     def test_parse_jyutping_cc_canto(self):
         filename = 'source_data/cccanto-webdist-160115.txt'
