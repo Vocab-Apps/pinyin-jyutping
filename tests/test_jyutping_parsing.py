@@ -24,12 +24,15 @@ class JyutpingParsingTests(unittest.TestCase):
     def test_parse_syllables(self):
         test_list = [
             {'input': 'nin4', 'expected_syllable': JyutpingSyllable(JyutpingInitials.n, JyutpingFinals.in_, JyutpingTones.tone_4)},
-            {'input': 'm4', 'expected_syllable': JyutpingSyllable(JyutpingInitials.empty, JyutpingFinals.m, JyutpingTones.tone_4)}
+            {'input': 'm4', 'expected_syllable': JyutpingSyllable(JyutpingInitials.empty, JyutpingFinals.m, JyutpingTones.tone_4)},
+            {'input': 'laang5', 'expected_syllable': JyutpingSyllable(JyutpingInitials.l, JyutpingFinals.aang, JyutpingTones.tone_5)}
         ]
 
         for test in test_list:
             input = test['input']
             expected_syllable = test['expected_syllable']
+            rendered_tone_numbers = expected_syllable.render_tone_number()
+            print(rendered_tone_numbers)
             syllables = pinyin_jyutping.parser.parse_jyutping(input)
             self.assertEqual(len(syllables), 1)
             self.assertEqual(syllables[0], expected_syllable)            
