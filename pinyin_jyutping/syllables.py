@@ -61,7 +61,7 @@ class JyutpingSyllable():
     # def render_tone_mark(self):
     #     return logic.render_tone_mark(self.initial, self.final, self.tone)
 
-    def render_tone_number(self, final_variant=None):
+    def render_tone_number(self):
         return logic.jyutping_render_tone_number(self.initial, self.final, self.tone)
 
     def __repr__(self):

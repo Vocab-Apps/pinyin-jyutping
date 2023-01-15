@@ -41,6 +41,11 @@ class JyutpingParsingTests(unittest.TestCase):
             jyutping = entry['jyutping']
             try:
                 syllables = pinyin_jyutping.parser.parse_jyutping(jyutping)
+                jyutping_tone_numbers = ' '.join([syllable.render_tone_number() for syllable in syllables])
+                # now parse again based on what we rendered
+                parsed_syllables = pinyin_jyutping.parser.parse_jyutping(jyutping_tone_numbers)
+                self.assertEqual(len(syllables), len(parsed_syllables))
+                self.assertEqual(syllables, parsed_syllables)
             except pinyin_jyutping.errors.PinyinSyllableNotFound as e:
                 logger.error(f'could not find syllable for {entry}, {e}')
                 self.assertTrue(False)

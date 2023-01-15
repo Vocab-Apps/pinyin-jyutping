@@ -236,6 +236,7 @@ class JyutpingFinals(enum.Enum):
     yut  = 56
     m    = 57
     ng   = 58
+    et   = 59 # http://www.cantonese.sheik.co.uk/dictionary/characters/7763/
     
 class JyutpingTones(enum.Enum):
     tone_1 = (1)
