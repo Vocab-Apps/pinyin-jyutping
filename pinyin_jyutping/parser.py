@@ -74,6 +74,9 @@ def clean_chinese(text):
     text = text.replace('，', '')
     return text    
 
+# CEDICT parsing logic
+# ====================
+
 def parse_cedict(filepath, data):
     generator = parse_cedict_file_generator(filepath)
     parse_cedict_entries(generator, data)
@@ -136,6 +139,42 @@ def cedict_ignore(traditional_chinese, simplified_chinese, pinyin):
     if 'm4' in pinyin:
         return True                
     return False
+
+# CC-Canto parsing logic
+# ======================
+
+# this is a generator
+def parse_cccanto_line_generator(filepath):
+    with open(filepath, 'r', encoding="utf8") as filehandle:
+        for line in filehandle:
+            first_char = line[:1]
+            if first_char != '#' and line != "and add boilerplate:\n":
+                yield line
+
+def parse_cccanto_definition_generator(filepath):
+    for line in parse_cccanto_line_generator(filepath):
+        logger.debug(f'parsing cedict line: {line}')
+        m = re.match('(.+)\s\[([^\]]*)\]\s\{([^\]]*)\}\s\/([^\/]+)\/.*', line)
+        if m == None:
+            logger.info(line)
+        traditional_simplified_chinese = m.group(1)
+        pinyin = m.group(2)
+        jyutping = m.group(3)
+        definition = m.group(4)
+        traditional_simplified_chinese = traditional_simplified_chinese.strip()
+        # uneven length, because of the central space
+        assert len(traditional_simplified_chinese) % 2 == 1, f'length: {len(traditional_simplified_chinese)}, [{traditional_simplified_chinese}]'
+        half_length = int(len(traditional_simplified_chinese) / 2)
+        traditional_chinese = clean_chinese(traditional_simplified_chinese[0:half_length])
+        simplified_chinese = clean_chinese(traditional_simplified_chinese[half_length + 1:])
+        yield {
+            'simplified_chinese': simplified_chinese, 
+            'traditional_chinese': traditional_chinese, 
+            'pinyin':pinyin,
+            'jyutping': jyutping
+        }
+        
+
 
 def process_word(chinese, syllables, map, add_full_text=True, add_tokenized_words=True, add_characters=True, priority=False):
     # this is the sorting key

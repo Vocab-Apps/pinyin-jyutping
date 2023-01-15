@@ -124,4 +124,6 @@ class PinyinParsingTests(unittest.TestCase):
             PinyinSyllable(PinyinInitials.f, PinyinFinals.eng, PinyinTones.tone_4),
         ]
         output = pinyin_jyutping.parser.parse_pinyin(text)
-        self.assertEqual(output, expected_output)    
+        self.assertEqual(output, expected_output)
+
+
