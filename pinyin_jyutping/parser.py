@@ -175,7 +175,28 @@ def parse_cccanto_definition_generator(filepath):
             'jyutping': jyutping
         }
         
-
+def parse_cccedit_canto_readings_generator(filepath):
+    for line in parse_cccanto_line_generator(filepath):
+        m = re.match('(.+)\s\[([^\]]*)\]\s\{([^\]]*)\}.*', line)
+        if m == None:
+            logger.error(f'could not parse line: {line}')
+            continue
+        traditional_simplified_chinese = m.group(1)
+        pinyin = m.group(2)
+        jyutping = m.group(3)
+        traditional_simplified_chinese = traditional_simplified_chinese.strip()
+        # uneven length, because of the central space
+        assert len(traditional_simplified_chinese) % 2 == 1, f'length: {len(traditional_simplified_chinese)}, [{traditional_simplified_chinese}]'
+        half_length = int(len(traditional_simplified_chinese) / 2)
+        traditional_chinese = clean_chinese(traditional_simplified_chinese[0:half_length])
+        simplified_chinese = clean_chinese(traditional_simplified_chinese[half_length + 1:])
+        yield {
+            'simplified_chinese': simplified_chinese, 
+            'traditional_chinese': traditional_chinese, 
+            'pinyin':pinyin,
+            'jyutping': jyutping
+        }
+    
 
 def process_word(chinese, syllables, map, add_full_text=True, add_tokenized_words=True, add_characters=True, priority=False):
     # this is the sorting key
