@@ -156,7 +156,8 @@ def parse_cccanto_definition_generator(filepath):
         logger.debug(f'parsing cedict line: {line}')
         m = re.match('(.+)\s\[([^\]]*)\]\s\{([^\]]*)\}\s\/([^\/]+)\/.*', line)
         if m == None:
-            logger.info(line)
+            logger.error(f'could not parse line: {line}')
+            return
         traditional_simplified_chinese = m.group(1)
         pinyin = m.group(2)
         jyutping = m.group(3)
