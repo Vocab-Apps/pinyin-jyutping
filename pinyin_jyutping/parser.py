@@ -14,13 +14,13 @@ logger = logging.getLogger(__file__)
 
 DEBUG_WORD = None
 
-def parse_romanization(text, syllables_map):
+def parse_romanization(text, syllables_map, max_length):
     # look for initial
     original_text = text
 
     logger.debug(f'looking for pinyin syllable in {text}')
     # pprint.pprint(cache.PinyinFinalsMap)    
-    for candidate_length in reversed(range(cache.PINYIN_SYLLABLE_MAX_LENGTH + 1)):
+    for candidate_length in reversed(range(max_length + 1)):
         candidate = text[0:candidate_length]
         remaining_text = text[candidate_length:]
         # logger.debug(f'scanning for {candidate}, map size: {len(cache.PinyinFinalsMap)}')
@@ -30,19 +30,22 @@ def parse_romanization(text, syllables_map):
     raise errors.PinyinSyllableNotFound(f"couldn't find pinyin syllable: {text} [{original_text}]")
 
 
-def parse_romanized_word(text, syllables_map):
+def parse_romanized_word(text, syllables_map, max_length):
     syllables = []
     while len(clean_romanization(text)) > 0:
         logger.debug(f'parsing pinyin word: {text}')
         # remove leading space
         text = clean_romanization(text)
-        syllable, text = parse_romanization(text, syllables_map)
+        syllable, text = parse_romanization(text, syllables_map, max_length)
         logger.debug(f'parsed {syllable}, remaining text: {text}')
         syllables.append(syllable)
     return syllables
 
 def parse_pinyin(text):
-    return parse_romanized_word(text, cache.PinyinSyllablesMap)
+    return parse_romanized_word(text, cache.PinyinSyllablesMap, cache.PINYIN_SYLLABLE_MAX_LENGTH)
+
+def parse_jyutping(text):
+    return parse_romanized_word(text, cache.JyutpingSyllablesMap, cache.JYUTPING_SYLLABLE_MAX_LENGTH)
 
 def clean_romanization(text):
     text = text.lower()
