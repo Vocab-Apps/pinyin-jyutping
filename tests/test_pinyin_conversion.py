@@ -69,8 +69,8 @@ class PinyinConversion(unittest.TestCase):
             chinese = entry['chinese']
             expected_pinyin = entry['expected_pinyin']
 
-            expected_pinyin = pinyin_jyutping.parser.clean_pinyin(expected_pinyin)
-            converted_pinyin = pinyin_jyutping.parser.clean_pinyin(self.pinyin_jyutping.pinyin(chinese, spaces=True)[0])
+            expected_pinyin = pinyin_jyutping.parser.clean_romanization(expected_pinyin)
+            converted_pinyin = pinyin_jyutping.parser.clean_romanization(self.pinyin_jyutping.pinyin(chinese, spaces=True)[0])
 
             expected_pinyin_syllables = pinyin_jyutping.parser.parse_pinyin_word(expected_pinyin)
             converted_pinyin_syllables = pinyin_jyutping.parser.parse_pinyin_word(converted_pinyin)
@@ -182,9 +182,9 @@ class PinyinConversion(unittest.TestCase):
 
             logger.debug(f'processing chinese: {chinese}')
 
-            expected_pinyin = pinyin_jyutping.parser.clean_pinyin(record['pinyin'])
+            expected_pinyin = pinyin_jyutping.parser.clean_romanization(record['pinyin'])
             all_results = self.pinyin_jyutping.pinyin(chinese, spaces=True)
-            all_cleaned_pinyin_results = [pinyin_jyutping.parser.clean_pinyin(result) for result in all_results]
+            all_cleaned_pinyin_results = [pinyin_jyutping.parser.clean_romanization(result) for result in all_results]
             converted_pinyin = all_cleaned_pinyin_results[0]
 
             logger.debug(f'result: {converted_pinyin}')

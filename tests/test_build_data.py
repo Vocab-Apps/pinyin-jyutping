@@ -484,7 +484,7 @@ class BuildTests(unittest.TestCase):
                 try:
                     syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
                     pinyin_tone_numbers = ' '.join([self.render_syllable_for_cedict(x) for x in syllables])
-                    clean_pinyin = pinyin_jyutping.parser.clean_pinyin(pinyin)
+                    clean_pinyin = pinyin_jyutping.parser.clean_romanization(pinyin)
                     clean_pinyin = self.transform_pinyin_from_cedict(clean_pinyin)
                     self.assertEqual(clean_pinyin, pinyin_tone_numbers, f'while parsing pinyin: {pinyin}')
                     processed_entries += 1
