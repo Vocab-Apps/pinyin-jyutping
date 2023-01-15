@@ -235,7 +235,16 @@ class JyutpingFinals(enum.Enum):
     m    = 57
     ng   = 58
     
+class JyutpingTones(enum.Enum):
+    tone_1 = (1)
+    tone_2 = (2)
+    tone_3 = (3)
+    tone_4 = (4)
+    tone_5 = (5)
+    tone_6 = (6)
 
+    def __init__(self, tone_number):
+        self.tone_number = tone_number
 
 
 # when supplying user corrections, use this occurences value so that the result goes to the top
