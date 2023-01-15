@@ -14,7 +14,7 @@ logger = logging.getLogger(__file__)
 
 DEBUG_WORD = None
 
-def parse_pinyin(text):
+def parse_romanization(text):
     # look for initial
     original_text = text
 
@@ -30,13 +30,13 @@ def parse_pinyin(text):
     raise errors.PinyinSyllableNotFound(f"couldn't find pinyin syllable: {text} [{original_text}]")
 
 
-def parse_pinyin_word(text):
+def parse_romanized_word(text):
     syllables = []
     while len(clean_romanization(text)) > 0:
         logger.debug(f'parsing pinyin word: {text}')
         # remove leading space
         text = clean_romanization(text)
-        syllable, text = parse_pinyin(text)
+        syllable, text = parse_romanization(text)
         logger.debug(f'parsed {syllable}, remaining text: {text}')
         syllables.append(syllable)
     return syllables
@@ -95,7 +95,7 @@ def parse_cedict_entries(generator, data):
 
 def parse_correction(chinese, pinyin, data):
     chinese = clean_chinese(chinese)
-    syllables = parse_pinyin_word(pinyin)
+    syllables = parse_romanized_word(pinyin)
     process_word(chinese, syllables, data.pinyin_map, priority=True)
 
 # returns raw pinyin text
@@ -118,7 +118,7 @@ def parse_cedict_line(line):
 # returns parsed pinyin
 def parse_cedict_line_decode_pinyin(line):
     simplified_chinese, traditional_chinese, pinyin = parse_cedict_line(line)
-    return simplified_chinese, traditional_chinese, parse_pinyin_word(pinyin)
+    return simplified_chinese, traditional_chinese, parse_romanized_word(pinyin)
 
 def cedict_ignore(traditional_chinese, simplified_chinese, pinyin):
     if re.match('.*[A-Za-z].*', simplified_chinese) != None:

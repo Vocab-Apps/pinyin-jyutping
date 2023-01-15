@@ -34,7 +34,7 @@ class BuildTests(unittest.TestCase):
         data = pinyin_jyutping.data.Data()
         for entry in input_data:
             chinese, pinyin = entry
-            syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
+            syllables = pinyin_jyutping.parser.parse_romanized_word(pinyin)
             pinyin_jyutping.parser.process_word(chinese, syllables, data.pinyin_map)
         return data
 
@@ -482,7 +482,7 @@ class BuildTests(unittest.TestCase):
             skip = pinyin_jyutping.parser.cedict_ignore(traditional_chinese, simplified_chinese, pinyin)
             if not skip:
                 try:
-                    syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
+                    syllables = pinyin_jyutping.parser.parse_romanized_word(pinyin)
                     pinyin_tone_numbers = ' '.join([self.render_syllable_for_cedict(x) for x in syllables])
                     clean_pinyin = pinyin_jyutping.parser.clean_romanization(pinyin)
                     clean_pinyin = self.transform_pinyin_from_cedict(clean_pinyin)
@@ -514,7 +514,7 @@ class BuildTests(unittest.TestCase):
             if character_check not in simplified_chinese:
                 skip = True
             if not skip:
-                syllables = pinyin_jyutping.parser.parse_pinyin_word(pinyin)
+                syllables = pinyin_jyutping.parser.parse_romanized_word(pinyin)
                 logger.warn(f'{simplified_chinese}: syllables: {syllables} pinyin: [{pinyin}]')
                 pinyin_jyutping.parser.process_word(simplified_chinese, syllables, data.pinyin_map)
 
