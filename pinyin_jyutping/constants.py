@@ -149,6 +149,7 @@ ALL_VOWELS = list(VowelToneMap.keys()) + ['y']
 
 # https://en.wikipedia.org/wiki/Jyutping
 # https://cantolounge.com/jyutping-chart/
+# https://sla.talkbank.org/Jyutping/charts.html
 class JyutpingInitials(enum.Enum):
     b  =  1
     p  =  2
@@ -238,6 +239,34 @@ class JyutpingFinals(enum.Enum):
     ng   = 59
     et   = 60 # http://www.cantonese.sheik.co.uk/dictionary/characters/7763/
     
+JYUTPING_SINGLE_FINALS = [
+    JyutpingFinals.aa,
+    JyutpingFinals.ai,
+    JyutpingFinals.aai,
+    JyutpingFinals.au,
+    JyutpingFinals.aau,
+    JyutpingFinals.o,
+    JyutpingFinals.oi,
+    JyutpingFinals.ou,
+    JyutpingFinals.am,
+    JyutpingFinals.aam,
+    JyutpingFinals.aan,
+    JyutpingFinals.ang,
+    JyutpingFinals.aang,
+    JyutpingFinals.on,
+    JyutpingFinals.ong,
+    JyutpingFinals.ung,
+    JyutpingFinals.m,
+    JyutpingFinals.ng,
+    JyutpingFinals.ap,
+    JyutpingFinals.aap,
+    JyutpingFinals.aat,
+    JyutpingFinals.ak,
+    JyutpingFinals.aak,
+    JyutpingFinals.ok,
+    JyutpingFinals.uk,
+]
+
 class JyutpingTones(enum.Enum):
     tone_1 = (1)
     tone_2 = (2)

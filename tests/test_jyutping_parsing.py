@@ -55,4 +55,4 @@ class JyutpingParsingTests(unittest.TestCase):
                 logger.error(f'could not find syllable for {entry}, {e}')
                 # self.assertTrue(False)
 
-        self.assertGreater(matched_entries, 8872)
+        self.assertGreater(matched_entries, 9164)

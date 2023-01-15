@@ -184,7 +184,7 @@ def valid_combination(initial, final):
 
 def jyutping_valid_combination(initial, final):
     if initial == constants.JyutpingInitials.empty:
-        if final in [constants.JyutpingFinals.m, constants.JyutpingFinals.ng]:
+        if final in constants.JYUTPING_SINGLE_FINALS:
             return True
         else:
             return False
