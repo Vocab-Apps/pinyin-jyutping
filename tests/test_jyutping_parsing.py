@@ -23,7 +23,8 @@ from pinyin_jyutping.constants import JyutpingInitials, JyutpingFinals, Jyutping
 class JyutpingParsingTests(unittest.TestCase):
     def test_parse_syllables(self):
         test_list = [
-            {'input': 'nin4', 'expected_syllable': JyutpingSyllable(JyutpingInitials.n, JyutpingFinals.in_, JyutpingTones.tone_4)}
+            {'input': 'nin4', 'expected_syllable': JyutpingSyllable(JyutpingInitials.n, JyutpingFinals.in_, JyutpingTones.tone_4)},
+            {'input': 'm4', 'expected_syllable': JyutpingSyllable(JyutpingInitials.empty, JyutpingFinals.m, JyutpingTones.tone_4)}
         ]
 
         for test in test_list:

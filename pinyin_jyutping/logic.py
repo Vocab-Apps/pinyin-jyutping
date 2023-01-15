@@ -183,13 +183,21 @@ def valid_combination(initial, final):
     return True
 
 def jyutping_valid_combination(initial, final):
+    if initial == constants.JyutpingInitials.empty:
+        if final in [constants.JyutpingFinals.m, constants.JyutpingFinals.ng]:
+            return True
+        else:
+            return False
     return True
 
 def jyutping_render_tone_number(initial, final, tone):
+    initial_str = initial.name
+    if initial == constants.JyutpingInitials.empty:
+        initial_str = ''
     final_str = final.name
     if final == constants.JyutpingFinals.in_:
         final_str = 'in'
-    result = f'{initial.name}{final_str}{tone.tone_number}'
+    result = f'{initial_str}{final_str}{tone.tone_number}'
     return result
 
 def solution_generator(word_list, solution):

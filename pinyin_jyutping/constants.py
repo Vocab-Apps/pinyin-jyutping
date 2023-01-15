@@ -174,6 +174,8 @@ class JyutpingInitials(enum.Enum):
     s = 18
     j = 19
 
+    empty = 20
+
 
 class JyutpingFinals(enum.Enum):
     aa   = 1
