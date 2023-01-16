@@ -23,8 +23,17 @@ class JyutpingConversion(unittest.TestCase):
         cls.pinyin_jyutping = pinyin_jyutping.PinyinJyutping()
 
 
-    def test_simple_pinyin(self):
+    def test_simple_jyutping(self):
         self.assertEqual(self.pinyin_jyutping.jyutping('全身按摩'), ['cyùnsān ônmō'])
-        # self.assertEqual(self.pinyin_jyutping.pinyin('忘拿'), ['wàng ná'])
 
+    def test_multiple_jyutping(self):
+        data = [
+            {'chinese': '全身按摩', 'expected_jyutping': 'cyùnsān ônmō'},
+            {'chinese': '我出去攞野食', 'expected_jyutping': 'ngǒ cēothêoi ló jěsik'},
+        ]
+
+        for entry in data:
+            chinese = entry['chinese']
+            expected_jyutping = entry['expected_jyutping']
+            self.assertEqual(self.pinyin_jyutping.jyutping(chinese)[0], expected_jyutping)
     
