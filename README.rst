@@ -36,3 +36,9 @@ Usage
 'ngo5 ceot1heoi3 lo2 je5sik6'
 >>> j.jyutping('我出去攞野食', tone_numbers=True, spaces=True)[0]
 'ngo5 ceot1 heoi3 lo2 je5 sik6'    
+
+How it works
+------------
+
+Uses the Jieba library (https://github.com/fxsjy/jieba) to tokenize the sentence. Then words are converted to Pinyin/Jyutping either as a whole, or character by character, using the CC-Canto dictionary (http://cantonese.org/about.html). The Jyutping diacritic conversion is not standard but originally described here: http://www.cantonese.sheik.co.uk/phorum/read.php?1,127274,129006
+
