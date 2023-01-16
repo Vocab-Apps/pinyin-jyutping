@@ -25,12 +25,12 @@ class PinyinJyutping():
         jieba_big_dictionary_filename = os.path.join(module_dir, "dict.txt.big")
         jieba.set_dictionary(jieba_big_dictionary_filename)        
 
-    def load_corrections(self, corrections):
+    def load_pinyin_corrections(self, corrections):
         for correction in corrections:
             try:
                 chinese = correction['chinese']
                 pinyin = correction['pinyin']
-                parser.parse_correction(chinese, pinyin, self.data)
+                parser.parse_pinyin_correction(chinese, pinyin, self.data)
             except Exception as e:
                 logger.exception(e)
 

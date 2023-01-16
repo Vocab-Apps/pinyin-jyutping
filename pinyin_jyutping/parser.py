@@ -102,7 +102,7 @@ def parse_cedict_entries(generator, data):
         except errors.PinyinParsingError as e:
             logger.warning(e)
 
-def parse_correction(chinese, pinyin, data):
+def parse_pinyin_correction(chinese, pinyin, data):
     chinese = clean_chinese(chinese)
     syllables = parse_pinyin(pinyin)
     process_word(chinese, syllables, data.pinyin_map, priority=True)

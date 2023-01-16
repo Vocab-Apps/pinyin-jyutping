@@ -87,7 +87,7 @@ class PinyinConversion(unittest.TestCase):
     def test_user_corrections(self):
         # apply corrections
         pinyin_jyutping_instance_1 = pinyin_jyutping.PinyinJyutping()
-        pinyin_jyutping_instance_1.load_corrections(
+        pinyin_jyutping_instance_1.load_pinyin_corrections(
             [
                 {
                     'chinese': '东西',
