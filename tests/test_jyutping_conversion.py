@@ -53,3 +53,25 @@ class JyutpingConversion(unittest.TestCase):
             ]
         )
         self.assertEqual(pinyin_jyutping_instance_1.jyutping('全身按摩')[0], 'cyùnsān ōnmō')
+
+
+    def test_load_anki_deck(self):
+        json_file_path = os.path.join(os.path.dirname(__file__), '..', 'source_data', 'cantonese_jyutping_anki_deck.json')
+        f = open(json_file_path, 'r')
+        test_data = json.load(f)
+        f.close()
+        matching_entries_tone_numbers = 0
+        for entry in test_data:
+            chinese = entry['Chinese']
+            expected_jyutping_tone_numbers = entry['Jyutping_ToneNumbers']
+            expected_jyutping_tone_marks = entry['Jyutping_ToneMarks']
+            try:
+                expected_syllables = pinyin_jyutping.parser.parse_jyutping(expected_jyutping_tone_numbers)
+                actual_syllables = pinyin_jyutping.parser.parse_jyutping(self.pinyin_jyutping.jyutping(chinese, tone_numbers=True)[0])
+
+                if expected_syllables == actual_syllables:
+                    matching_entries_tone_numbers += 1
+            except  pinyin_jyutping.errors.PinyinSyllableNotFound as e:
+                logger.warning(e)
+
+        self.assertGreater(matching_entries_tone_numbers, 3758)
