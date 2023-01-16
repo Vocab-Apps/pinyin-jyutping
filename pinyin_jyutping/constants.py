@@ -290,7 +290,7 @@ JyutpingVowelToneMap = {
                 JyutpingTones.tone_3: 'â',
                 JyutpingTones.tone_4: 'à',
                 JyutpingTones.tone_5: 'ǎ',
-                JyutpingTones.tone_5: 'a'},
+                JyutpingTones.tone_6: 'a'},
     'i':     {JyutpingTones.tone_1: 'ī',
                 JyutpingTones.tone_2: 'í',
                 JyutpingTones.tone_3: 'î',

@@ -218,13 +218,17 @@ def jyutping_apply_tone_mark(final, tone):
     if final == constants.JyutpingFinals.in_:
         final_str = 'in'
     location = jyutping_vowel_location(final_str)
+    if location == None:
+        # no vowels, return as-is (could be m or ng)
+        return final_str
+    logger.debug(f'final_str: {final_str} location: {location}')
     vowel = final_str[location]
     tone_mark_vowel = constants.JyutpingVowelToneMap[vowel][tone]
     with_tone = final_str.replace(vowel, tone_mark_vowel)
     return with_tone
 
 def jyutping_render_tone_mark(initial, final, tone):
-    # logger.warning(f'render_tone_mark {initial} {final}')
+    # logger.warninjg(f'render_tone_mark {initial} {final}')
     result = f'{jyutping_get_initial_str(initial)}{jyutping_apply_tone_mark(final, tone)}'
     return result
 

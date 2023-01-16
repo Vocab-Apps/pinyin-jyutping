@@ -27,9 +27,11 @@ class JyutpingConversion(unittest.TestCase):
         self.assertEqual(self.pinyin_jyutping.jyutping('全身按摩'), ['cyùnsān ônmō'])
 
     def test_multiple_jyutping(self):
+        # pytest tests/test_jyutping_conversion.py -s -rPP  --log-cli-level=INFO
         data = [
             {'chinese': '全身按摩', 'expected_jyutping': 'cyùnsān ônmō'},
             {'chinese': '我出去攞野食', 'expected_jyutping': 'ngǒ cēothêoi ló jěsik'},
+            {'chinese': '賣野食又唔係賺大錢', 'expected_jyutping': 'maai jěsik jau m hai zaandaaicín'},
         ]
 
         for entry in data:
