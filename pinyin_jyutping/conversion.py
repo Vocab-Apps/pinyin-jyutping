@@ -95,6 +95,9 @@ def convert_to_romanization(word_map, text, tone_numbers, spaces):
 def convert_pinyin(data, text, tone_numbers, spaces):
     return convert_to_romanization(data.pinyin_map, text, tone_numbers, spaces)
 
+def convert_jyutping(data, text, tone_numbers, spaces):
+    return convert_to_romanization(data.jyutping_map, text, tone_numbers, spaces)
+
 def tokenize(text):
     seg_list = jieba.cut(text)
     word_list = list(seg_list)

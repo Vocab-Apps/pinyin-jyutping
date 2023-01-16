@@ -26,6 +26,15 @@ def vowel_location(input):
     return None
 
 
+@functools.lru_cache(maxsize=None)
+def jyutping_vowel_location(input):
+    i = 0
+    for char in input:
+        if char in constants.JYUTPING_ALL_VOWELS:
+            return i
+        i += 1    
+
+
 
 def apply_tone_mark_on_vowel(pinyin_final_final_form, vowel, tone):
     tone_mark_vowel = constants.VowelToneMap[vowel][tone]
@@ -208,7 +217,7 @@ def jyutping_apply_tone_mark(final, tone):
     final_str = final.name
     if final == constants.JyutpingFinals.in_:
         final_str = 'in'
-    location = vowel_location(final_str)
+    location = jyutping_vowel_location(final_str)
     vowel = final_str[location]
     tone_mark_vowel = constants.JyutpingVowelToneMap[vowel][tone]
     with_tone = final_str.replace(vowel, tone_mark_vowel)

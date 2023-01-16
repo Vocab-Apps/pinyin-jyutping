@@ -38,4 +38,4 @@ class PinyinJyutping():
         return conversion.convert_pinyin(self.data, text, tone_numbers, spaces)
 
     def jyutping(self, text, tone_numbers=False, spaces=False):
-        pass
+        return conversion.convert_jyutping(self.data, text, tone_numbers, spaces)
