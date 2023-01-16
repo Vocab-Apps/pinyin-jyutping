@@ -32,6 +32,7 @@ class JyutpingConversion(unittest.TestCase):
             {'chinese': '全身按摩', 'expected_jyutping': 'cyùnsān ônmō'},
             {'chinese': '我出去攞野食', 'expected_jyutping': 'ngǒ cēothêoi ló jěsik'},
             {'chinese': '賣野食又唔係賺大錢', 'expected_jyutping': 'maai jěsik jau m hai zaandaaicín'},
+            {'chinese': '你想做，就照做', 'expected_jyutping': 'něi sóeng zou ， zauzîu zou'},
         ]
 
         for entry in data:
