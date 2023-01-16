@@ -109,7 +109,7 @@ class BuildTests(unittest.TestCase):
                 PinyinSyllable(PinyinInitials.n, PinyinFinals.a, PinyinTones.tone_3),
             ],            
         ]
-        output = pinyin_jyutping.conversion.get_romanization_solutions_for_word(data, '忘拿')
+        output = pinyin_jyutping.conversion.get_romanization_solutions_for_word(data.pinyin_map, '忘拿')
         print(output)
         print(type(output[0]))
         self.assertEqual(output,  expected_result)
@@ -131,7 +131,7 @@ class BuildTests(unittest.TestCase):
                 PinyinSyllable(PinyinInitials.n, PinyinFinals.a, PinyinTones.tone_3),
             ],            
         ]
-        output = pinyin_jyutping.conversion.get_romanization_solutions_for_characters(data, '忘拿')
+        output = pinyin_jyutping.conversion.get_romanization_solutions_for_characters(data.pinyin_map, '忘拿')
         self.assertEqual(output,  expected_result)
 
     def test_get_pinyin_solutions(self):
@@ -168,7 +168,7 @@ class BuildTests(unittest.TestCase):
             ],
         ]
 
-        output = pinyin_jyutping.conversion.get_romanization_solutions(data, ['忘', '拿', '东西'])
+        output = pinyin_jyutping.conversion.get_romanization_solutions(data.pinyin_map, ['忘', '拿', '东西'])
         self.assertEqual(output,  expected_result)        
 
     def test_expand_all_pinyin_solutions(self):
@@ -207,7 +207,7 @@ class BuildTests(unittest.TestCase):
 
         expected_result = [solution_1, solution_2]
 
-        output = pinyin_jyutping.conversion.expand_all_romanization_solutions(data, ['忘', '拿', '东西'])
+        output = pinyin_jyutping.conversion.expand_all_romanization_solutions(data.pinyin_map, ['忘', '拿', '东西'])
 
         pprint.pprint(output)
         pprint.pprint(expected_result)
@@ -225,7 +225,7 @@ class BuildTests(unittest.TestCase):
 
         expected_result = ['wàng ná dōngxi', 'wàng nǎ dōngxi']
 
-        output = pinyin_jyutping.conversion.render_all_romanization_solutions(data, word_list, False, False)
+        output = pinyin_jyutping.conversion.render_all_romanization_solutions(data.pinyin_map, word_list, False, False)
         self.assertEqual(output, expected_result)
 
     def test_improve_tokenization(self):
@@ -240,12 +240,12 @@ class BuildTests(unittest.TestCase):
         
         word_list = ['投资银行']
         expected_result = ['投资', '银行']
-        output = pinyin_jyutping.conversion.improve_tokenization(data, word_list)
+        output = pinyin_jyutping.conversion.improve_tokenization(data.pinyin_map, word_list)
         self.assertEqual(output, expected_result)
 
         word_list = ['个人所得税']
         expected_result = ['个人', '所得税']
-        output = pinyin_jyutping.conversion.improve_tokenization(data, word_list)
+        output = pinyin_jyutping.conversion.improve_tokenization(data.pinyin_map, word_list)
         self.assertEqual(output, expected_result)        
 
 
