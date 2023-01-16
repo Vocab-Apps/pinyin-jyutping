@@ -34,6 +34,15 @@ class PinyinJyutping():
             except Exception as e:
                 logger.exception(e)
 
+    def load_jyutping_corrections(self, corrections):
+        for correction in corrections:
+            try:
+                chinese = correction['chinese']
+                jyutping = correction['jyutping']
+                parser.parse_jyutping_correction(chinese, jyutping, self.data)
+            except Exception as e:
+                logger.exception(e)                
+
     def pinyin(self, text, tone_numbers=False, spaces=False):
         return conversion.convert_pinyin(self.data, text, tone_numbers, spaces)
 

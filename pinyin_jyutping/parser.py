@@ -107,6 +107,11 @@ def parse_pinyin_correction(chinese, pinyin, data):
     syllables = parse_pinyin(pinyin)
     process_word(chinese, syllables, data.pinyin_map, priority=True)
 
+def parse_jyutping_correction(chinese, jyutping, data):
+    chinese = clean_chinese(chinese)
+    syllables = parse_jyutping(jyutping)
+    process_word(chinese, syllables, data.jyutping_map, priority=True)
+
 # returns raw pinyin text
 def parse_cedict_line(line):
     logger.debug(f'parsing cedict line: {line}')

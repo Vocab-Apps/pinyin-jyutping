@@ -40,3 +40,16 @@ class JyutpingConversion(unittest.TestCase):
             expected_jyutping = entry['expected_jyutping']
             self.assertEqual(self.pinyin_jyutping.jyutping(chinese)[0], expected_jyutping)
     
+
+    def test_user_corrections(self):
+        # apply corrections
+        pinyin_jyutping_instance_1 = pinyin_jyutping.PinyinJyutping()
+        pinyin_jyutping_instance_1.load_jyutping_corrections(
+            [
+                {
+                    'chinese': '按摩',
+                    'jyutping': 'on1mo1'
+                }
+            ]
+        )
+        self.assertEqual(pinyin_jyutping_instance_1.jyutping('全身按摩')[0], 'cyùnsān ōnmō')
