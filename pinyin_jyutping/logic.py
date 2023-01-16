@@ -224,7 +224,7 @@ def jyutping_apply_tone_mark(final, tone):
     logger.debug(f'final_str: {final_str} location: {location}')
     vowel = final_str[location]
     tone_mark_vowel = constants.JyutpingVowelToneMap[vowel][tone]
-    with_tone = final_str.replace(vowel, tone_mark_vowel)
+    with_tone = final_str.replace(vowel, tone_mark_vowel, 1) # only replace the first one
     return with_tone
 
 def jyutping_render_tone_mark(initial, final, tone):
