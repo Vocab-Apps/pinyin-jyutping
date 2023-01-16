@@ -197,6 +197,26 @@ def parse_cccedit_canto_readings_generator(filepath):
             'jyutping': jyutping
         }
     
+def parse_jyutping_cccanto_definition_process_words(filepath, data):
+    return parse_jyutping_process_words(parse_cccanto_definition_generator, filepath, data)    
+
+def parse_jyutping_ccedit_canto_readings_process_words(filepath, data):
+    return parse_jyutping_process_words(parse_cccedit_canto_readings_generator, filepath, data)
+
+def parse_jyutping_process_words(generator, filepath, data):
+    for entry in generator(filepath):
+        jyutping = entry['jyutping']
+        simplified = entry['simplified_chinese']
+        traditional = entry['traditional_chinese']
+        try:
+            syllables = parse_jyutping(jyutping)
+            # do some sanity checks on the length of syllables
+            if (len(simplified) != len(syllables)) or (len(traditional) != len(syllables)):
+                raise errors.PinyinParsingError(f'inconsistent lengths for jyutping {jyutping} simplified {simplified} traditional {traditional}')
+            process_word(simplified, syllables, data.jyutping_map)
+            process_word(traditional, syllables, data.jyutping_map)
+        except errors.PinyinParsingError as e:
+            logger.warning(e)            
 
 def process_word(chinese, syllables, map, add_full_text=True, add_tokenized_words=True, add_characters=True, priority=False):
     # this is the sorting key
