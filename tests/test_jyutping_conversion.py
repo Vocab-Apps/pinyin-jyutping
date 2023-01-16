@@ -61,17 +61,26 @@ class JyutpingConversion(unittest.TestCase):
         test_data = json.load(f)
         f.close()
         matching_entries_tone_numbers = 0
+        matching_entries_tone_marks = 0
         for entry in test_data:
             chinese = entry['Chinese']
             expected_jyutping_tone_numbers = entry['Jyutping_ToneNumbers']
             expected_jyutping_tone_marks = entry['Jyutping_ToneMarks']
             try:
+                # try tone number conversion
                 expected_syllables = pinyin_jyutping.parser.parse_jyutping(expected_jyutping_tone_numbers)
                 actual_syllables = pinyin_jyutping.parser.parse_jyutping(self.pinyin_jyutping.jyutping(chinese, tone_numbers=True)[0])
 
                 if expected_syllables == actual_syllables:
                     matching_entries_tone_numbers += 1
+
+                # try tone mark conversion
+                actual_jyutping_tone_marks = self.pinyin_jyutping.jyutping(chinese)[0]
+                if expected_jyutping_tone_marks == actual_jyutping_tone_marks:
+                    matching_entries_tone_marks += 1
+
             except  pinyin_jyutping.errors.PinyinSyllableNotFound as e:
                 logger.warning(e)
 
         self.assertGreater(matching_entries_tone_numbers, 3758)
+        self.assertGreater(matching_entries_tone_marks, 2313)
