@@ -87,4 +87,4 @@ class JyutpingConversion(unittest.TestCase):
                 logger.warning(e)
 
         self.assertGreater(matching_entries_tone_numbers, 3758)
-        self.assertGreater(matching_entries_tone_marks, 2313)
+        self.assertGreater(matching_entries_tone_marks, 3205)
