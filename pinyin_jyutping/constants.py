@@ -278,6 +278,41 @@ class JyutpingTones(enum.Enum):
     def __init__(self, tone_number):
         self.tone_number = tone_number
 
+JyutpingVowelToneMap = {
+    'e':       {JyutpingTones.tone_1: 'ē',
+                JyutpingTones.tone_2: 'é',
+                JyutpingTones.tone_3: 'ê',
+                JyutpingTones.tone_4: 'è',
+                JyutpingTones.tone_5: 'ě',
+                JyutpingTones.tone_6: 'e'},
+    'a':     {JyutpingTones.tone_1: 'ā',
+                JyutpingTones.tone_2: 'á',
+                JyutpingTones.tone_3: 'â',
+                JyutpingTones.tone_4: 'à',
+                JyutpingTones.tone_5: 'ǎ',
+                JyutpingTones.tone_5: 'a'},
+    'i':     {JyutpingTones.tone_1: 'ī',
+                JyutpingTones.tone_2: 'í',
+                JyutpingTones.tone_3: 'î',
+                JyutpingTones.tone_4: 'ì',
+                JyutpingTones.tone_5: 'ǐ',
+                JyutpingTones.tone_6: 'i'},
+    'o':     {JyutpingTones.tone_1: 'ō',
+                JyutpingTones.tone_2: 'ó',
+                JyutpingTones.tone_3: 'ô',
+                JyutpingTones.tone_4: 'ò',
+                JyutpingTones.tone_5: 'ǒ',
+                JyutpingTones.tone_6: 'o'},
+    'u':     {JyutpingTones.tone_1: 'ū',
+                JyutpingTones.tone_2: 'ú',
+                JyutpingTones.tone_3: 'û',
+                JyutpingTones.tone_4: 'ù',
+                JyutpingTones.tone_5: 'ǔ',
+                JyutpingTones.tone_6: 'u'}
+    }
+
+JYUTPING_ALL_VOWELS = list(JyutpingVowelToneMap.keys())
+
 
 # when supplying user corrections, use this occurences value so that the result goes to the top
 OCCURENCES_MAX = 10000

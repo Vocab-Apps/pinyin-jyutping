@@ -190,14 +190,33 @@ def jyutping_valid_combination(initial, final):
             return False
     return True
 
-def jyutping_render_tone_number(initial, final, tone):
+def jyutping_get_initial_str(initial):
     initial_str = initial.name
     if initial == constants.JyutpingInitials.empty:
         initial_str = ''
+    return initial_str
+
+def jyutping_render_tone_number(initial, final, tone):
     final_str = final.name
     if final == constants.JyutpingFinals.in_:
         final_str = 'in'
-    result = f'{initial_str}{final_str}{tone.tone_number}'
+    result = f'{jyutping_get_initial_str(initial)}{final_str}{tone.tone_number}'
+    return result
+
+def jyutping_apply_tone_mark(final, tone):
+    # the tone mark placement for jyutping are simpler than pinyin, so creating a separate function
+    final_str = final.name
+    if final == constants.JyutpingFinals.in_:
+        final_str = 'in'
+    location = vowel_location(final_str)
+    vowel = final_str[location]
+    tone_mark_vowel = constants.JyutpingVowelToneMap[vowel][tone]
+    with_tone = final_str.replace(vowel, tone_mark_vowel)
+    return with_tone
+
+def jyutping_render_tone_mark(initial, final, tone):
+    # logger.warning(f'render_tone_mark {initial} {final}')
+    result = f'{jyutping_get_initial_str(initial)}{jyutping_apply_tone_mark(final, tone)}'
     return result
 
 def solution_generator(word_list, solution):
