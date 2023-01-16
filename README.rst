@@ -27,7 +27,10 @@ Usage
     >>> p.pinyin('忘拿一些东西了', tone_numbers=True, spaces=True)[0]
     'wang4 na2 yi1 xie1 dong1 xi1 le5'    
 
+
 **Jyutping:**
+
+.. code:: python
     >>> import pinyin_jyutping
     >>> j = pinyin_jyutping.PinyinJyutping()
     >>> j.jyutping('我出去攞野食')[0]
