@@ -258,7 +258,7 @@ class PinyinConversion(unittest.TestCase):
         self.assertEqual(output, expected_output)
 
 
-    @pytest.mark.skip(reason="skip for now")
+    # @pytest.mark.skip(reason="skip for now")
     def test_long_input(self):
         # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_long_input
 
@@ -296,5 +296,7 @@ class PinyinConversion(unittest.TestCase):
 30、他们不得不自污其行，对那些奸臣们虚与委蛇，为的是获得为国尽忠的机会，免得打草惊蛇，四面树敌，以致遭受奸臣们的嫉恨与陷害。        
         """
         output = self.pinyin_jyutping.pinyin(input)[0]
-        logger.debug(output)
-        self.assertTrue(False)
+
+        # count number of lines
+        lines = output.split('\n')
+        self.assertEqual(len(lines), 33)  # including lines above,below
