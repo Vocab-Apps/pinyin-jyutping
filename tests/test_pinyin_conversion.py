@@ -239,13 +239,16 @@ class PinyinConversion(unittest.TestCase):
         self.update_baserow_records(record_updates)
         record_updates = []        
 
+    def test_convert_pinyin_single_solution(self):
+        # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_convert_pinyin_single_solution
+        self.assertEqual(self.pinyin_jyutping.pinyin_single_solution('没有'), ['méiyǒu'])
+
     def test_pathological_input_1(self):
         # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_pathological_input_1
 
         input = """        """
         output = self.pinyin_jyutping.pinyin(input)[0]
         self.assertEqual(output, ' ')
-
 
     # @pytest.mark.skip(reason="skip for now")
     def test_long_input(self):

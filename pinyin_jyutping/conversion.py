@@ -1,6 +1,7 @@
 import jieba
 import logging
 import copy
+import pprint
 from . import syllables
 from . import logic
 
@@ -86,11 +87,44 @@ def render_all_romanization_solutions(word_map, word_list, tone_numbers, spaces)
     expanded_solution_list = expand_all_romanization_solutions(word_map, word_list)
     return [render_solution(solution, tone_numbers, spaces) for solution in expanded_solution_list]
 
-def convert_to_romanization(word_map, text, tone_numbers, spaces):
-    solution_list = []
+def render_single_solution(word_map, word_list, tone_numbers, spaces):
+    output = ''
+    for word in word_list:
+        entry = word_map.get(word, None)
+        if entry != None:
+            logger.debug(f'located {word} as word')
+            output += render_word(entry[0].syllables, tone_numbers, spaces)
+        else:
+            logger.debug(f'breaking down {word} into characters')
+            for character in list(word):
+                entry = word_map.get(character, None)
+                if entry != None:
+                    syllable = entry[0].syllables[0]
+                    if tone_numbers:
+                        output += syllable.render_tone_number()
+                    else:
+                        output += syllable.render_tone_mark()
+                else:
+                    # implement pass through syllable here
+                    syllable = syllables.PassThroughSyllable(character)
+                    output += syllable.render_tone_mark()
+    return [output]
+
+def tokenize_to_word_list(word_map, text):
     word_list = tokenize(text)
     word_list = improve_tokenization(word_map, word_list)
+    return word_list
+
+def convert_to_romanization(word_map, text, tone_numbers, spaces):
+    solution_list = []
+    word_list = tokenize_to_word_list(word_map, text)
+    logger.debug(f'word_list length: {len(word_list)}')
     return render_all_romanization_solutions(word_map, word_list, tone_numbers, spaces)
+
+def convert_pinyin_single_solution(data, text, tone_numbers, spaces):
+    word_map = data.pinyin_map
+    word_list = tokenize_to_word_list(word_map, text)
+    return render_single_solution(word_map, word_list, tone_numbers, spaces)
 
 def convert_pinyin(data, text, tone_numbers, spaces):
     return convert_to_romanization(data.pinyin_map, text, tone_numbers, spaces)
