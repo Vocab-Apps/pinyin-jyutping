@@ -4,6 +4,7 @@ import copy
 import pprint
 from . import syllables
 from . import logic
+from . import constants
 
 logger = logging.getLogger(__file__)
 
@@ -89,26 +90,37 @@ def render_all_romanization_solutions(word_map, word_list, tone_numbers, spaces)
 
 def render_single_solution(word_map, word_list, tone_numbers, spaces):
     output = ''
+    character_spacing = ''
+    word_spacing = ' '
+    if spaces:
+        character_spacing = ' '
+    rendered_word_list = []
     for word in word_list:
         entry = word_map.get(word, None)
         if entry != None:
             logger.debug(f'located {word} as word')
-            output += render_word(entry[0].syllables, tone_numbers, spaces)
+            rendered_word_list.append(render_word(entry[0].syllables, tone_numbers, spaces))
         else:
             logger.debug(f'breaking down {word} into characters')
+            syllable_list = []
             for character in list(word):
                 entry = word_map.get(character, None)
                 if entry != None:
                     syllable = entry[0].syllables[0]
-                    if tone_numbers:
-                        output += syllable.render_tone_number()
-                    else:
-                        output += syllable.render_tone_mark()
+                    syllable_list.append(syllable)
                 else:
                     # implement pass through syllable here
                     syllable = syllables.PassThroughSyllable(character)
-                    output += syllable.render_tone_mark()
-    return [output]
+                    syllable_list.append(syllable)
+            # render syllable_list to text
+            if tone_numbers:
+                rendered_word = character_spacing.join([syllable.render_tone_number() for syllable in syllable_list])
+            else:
+                rendered_word = character_spacing.join([syllable.render_tone_mark() for syllable in syllable_list])
+            rendered_word_list.append(rendered_word)
+    
+    rendered_solution = word_spacing.join(rendered_word_list)
+    return [rendered_solution]
 
 def tokenize_to_word_list(word_map, text):
     word_list = tokenize(text)
@@ -119,11 +131,15 @@ def convert_to_romanization(word_map, text, tone_numbers, spaces):
     solution_list = []
     word_list = tokenize_to_word_list(word_map, text)
     logger.debug(f'word_list length: {len(word_list)}')
-    return render_all_romanization_solutions(word_map, word_list, tone_numbers, spaces)
+    if len(word_list) > constants.MULTI_SOLUTION_MAX_WORD_COUNT:
+        return render_single_solution(word_map, word_list, tone_numbers, spaces)
+    else:
+        return render_all_romanization_solutions(word_map, word_list, tone_numbers, spaces)
 
 def convert_pinyin_single_solution(data, text, tone_numbers, spaces):
     word_map = data.pinyin_map
     word_list = tokenize_to_word_list(word_map, text)
+    logger.debug(f'word_list: {pprint.pformat(word_list)}')
     return render_single_solution(word_map, word_list, tone_numbers, spaces)
 
 def convert_pinyin(data, text, tone_numbers, spaces):

@@ -2,6 +2,10 @@ import enum
 
 PICKLE_DATA_FILENAME='pinyin_jyutping.pkl'
 
+# by default, we'll try to return all possible solutions. however the number of combinations
+# quickly explodes with long inputs. if we exceed this number of words, just return the most likely solution.
+MULTI_SOLUTION_MAX_WORD_COUNT = 50
+
 class PinyinInitials(enum.Enum):
     b  =  1
     p  =  2

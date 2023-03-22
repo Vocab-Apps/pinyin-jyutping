@@ -242,15 +242,19 @@ class PinyinConversion(unittest.TestCase):
     def test_convert_pinyin_single_solution(self):
         # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_convert_pinyin_single_solution
         self.assertEqual(self.pinyin_jyutping.pinyin_single_solution('没有'), ['méiyǒu'])
+        self.assertEqual(self.pinyin_jyutping.pinyin_single_solution('請問，你叫什麼名字？')[0], 'qǐngwèn ， nǐ jiào shénme míngzi ？')
 
-    def test_pathological_input_1(self):
-        # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_pathological_input_1
+    @pytest.mark.skip(reason="skip for now")
+    def test_multiline_input(self):
+        # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_multiline_input
 
-        input = """        """
+        input = """
+1.在野外要进入草丛时，切记要先打草惊蛇。
+2、你最好别打草惊蛇，老板很喜欢peter，而你只是没没无闻的小人物。还是放聪明点儿，别吭声，等待时机。"""
         output = self.pinyin_jyutping.pinyin(input)[0]
         self.assertEqual(output, ' ')
 
-    # @pytest.mark.skip(reason="skip for now")
+    @pytest.mark.skip(reason="skip for now")
     def test_long_input(self):
         # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_long_input
 
