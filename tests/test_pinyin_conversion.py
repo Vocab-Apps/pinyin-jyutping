@@ -242,6 +242,9 @@ class PinyinConversion(unittest.TestCase):
     def test_convert_pinyin_single_solution(self):
         # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_convert_pinyin_single_solution
         self.assertEqual(self.pinyin_jyutping.pinyin_single_solution('没有'), ['méiyǒu'])
+        self.assertEqual(self.pinyin_jyutping.pinyin_single_solution('没有', spaces=True), ['méi yǒu'])
+        self.assertEqual(self.pinyin_jyutping.pinyin_single_solution('没有', tone_numbers=True), ['mei2you3'])
+        self.assertEqual(self.pinyin_jyutping.pinyin_single_solution('没有', tone_numbers=True, spaces=True), ['mei2 you3'])
         self.assertEqual(self.pinyin_jyutping.pinyin_single_solution('請問，你叫什麼名字？')[0], 'qǐngwèn ， nǐ jiào shénme míngzi ？')
 
     @pytest.mark.skip(reason="skip for now")
