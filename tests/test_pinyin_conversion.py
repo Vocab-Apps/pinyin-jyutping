@@ -238,3 +238,52 @@ class PinyinConversion(unittest.TestCase):
         # flush to baserow
         self.update_baserow_records(record_updates)
         record_updates = []        
+
+    def test_pathological_input_1(self):
+        # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_pathological_input_1
+
+        input = """        """
+        output = self.pinyin_jyutping.pinyin(input)[0]
+        self.assertEqual(output, ' ')
+
+
+    # @pytest.mark.skip(reason="skip for now")
+    def test_long_input(self):
+        # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_long_input
+
+        input = """
+1.在野外要进入草丛时，切记要先打草惊蛇。
+2、你最好别打草惊蛇，老板很喜欢peter，而你只是没没无闻的小人物。还是放聪明点儿，别吭声，等待时机。
+3、警方守候多日，就是怕打草惊蛇，让歹徒溜了。
+4、连长告诉我们,不要打草惊蛇,要对敌人进行围攻。
+5、你打草惊蛇了惊什么蛇？
+6、我爬山时一定带根棍子，既可以当柺杖，又可以打草惊蛇。
+7、这个计谋的关键在于避免打草惊蛇，等对方松懈后，可一举进攻。
+7、造 句 网zaojv.com是一部在线造句词典,其宗旨是让大家更快地造出更优秀的句子.
+8、对方似仍未察觉，我们先按兵不动，免得打草惊蛇。
+9、最后他们决定最好不要打草惊蛇并且不再进一步讨论这个问题。
+10、他的第二个冲动是不必打草惊蛇。
+11、你这样轻举妄动只会打草惊蛇，给下一步的工作带来困难。
+12、大家先不动声色，免得打草惊蛇，让他跑了。
+13、我爬山时一定带根棍子，既可以当拐杖，又可以打草惊蛇。
+14、你调动这么多警力，岂不打草惊蛇？歹徒当然早就跑掉了。
+15、这个计谋的关键在于避免打草惊蛇，等对方鬆懈后，可一举进攻。
+16、记者象是一群狗，但有打草惊蛇，就开端吠个不绝。
+17、我是说我不想打草惊蛇zaojv.com。
+18、为了不打草惊蛇，他只是旁敲侧击地询问了来人几个问题。
+19、侦破工作应谨慎保密，不要打草惊蛇。
+20、这是敌人的先头部队，放他们过去，以免打草惊蛇，影响全歼敌人主力的计划。
+21、这次行动千万要保密,不能打草惊蛇。
+22、消息指她们都比平日"格外小心"，以免打草惊蛇，故媒体也未能得知她们的身份。
+23、这件事得不动声色慢慢跟他磨，否则一打草惊蛇后，很难说服他。
+24、警方为了避免打草惊蛇，所以派出便衣警察埋伏在四周。
+25、这件事急不得，表面要装镇定，以免打草惊蛇。
+26、不要做那种打草惊蛇的蠢事，不动则已，要动就必须使罪犯全部落网。
+27、小偷已经进来了，所以最好不要打草惊蛇，免着他发现家里有人。
+28、你就打听些这样的小消息，还让我埋伏的死士都给暴光了，打草惊蛇了还想要报酬啊。
+29、现在的局势非常紧张，我们要不动声色的观察敌情，以免打草惊蛇。
+30、他们不得不自污其行，对那些奸臣们虚与委蛇，为的是获得为国尽忠的机会，免得打草惊蛇，四面树敌，以致遭受奸臣们的嫉恨与陷害。        
+        """
+        output = self.pinyin_jyutping.pinyin(input)[0]
+        logger.debug(output)
+        self.assertTrue(False)
