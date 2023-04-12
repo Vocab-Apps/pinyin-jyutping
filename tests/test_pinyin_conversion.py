@@ -72,20 +72,20 @@ class PinyinConversion(unittest.TestCase):
 
     # @pytest.mark.skip(reason="too many alternatives")
     def test_pinyin_sentences(self):
-        self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了')[0], 'wàng ná yīxiē dōngxī le')
-        self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了', tone_numbers=True)[0], 'wang4 na2 yi1xie1 dong1xi1 le5')
-        self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了', tone_numbers=True, spaces=True)[0], 'wang4 na2 yi1 xie1 dong1 xi1 le5')
-        self.assertEqual(self.pinyin_jyutping.pinyin('投资银行', tone_numbers=False, spaces=True)[0], 'tóu zī yín háng')
+        self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了'), 'wàng ná yīxiē dōngxī le')
+        self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了', tone_numbers=True), 'wang4 na2 yi1xie1 dong1xi1 le5')
+        self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了', tone_numbers=True, spaces=True), 'wang4 na2 yi1 xie1 dong1 xi1 le5')
+        self.assertEqual(self.pinyin_jyutping.pinyin('投资银行', tone_numbers=False, spaces=True), 'tóu zī yín háng')
         
         self.assertIn('bùjǐn 。 。 。 ,   hái ...', self.pinyin_jyutping.pinyin('不仅。。。, 还...', tone_numbers=False, spaces=False))
 
     def test_tone_changes(self):
-        self.assertEqual(self.pinyin_jyutping.pinyin('穿不上')[0], 'chuān bú shàng')
-        self.assertEqual(self.pinyin_jyutping.pinyin('不够亮')[0], 'búgòu liàng')
-        self.assertEqual(self.pinyin_jyutping.pinyin('不成熟')[0], 'bù chéngshú')
+        self.assertEqual(self.pinyin_jyutping.pinyin('穿不上'), 'chuān bú shàng')
+        self.assertEqual(self.pinyin_jyutping.pinyin('不够亮'), 'búgòu liàng')
+        self.assertEqual(self.pinyin_jyutping.pinyin('不成熟'), 'bù chéngshú')
         # dosen't seem to be applied by azure
         # self.assertEqual(self.pinyin_jyutping.pinyin('一起')[0], 'yìqǐ')
-        self.assertEqual(self.pinyin_jyutping.pinyin('一个')[0], 'yígè')
+        self.assertEqual(self.pinyin_jyutping.pinyin('一个'), 'yígè')
 
     def test_pinyin_conversion_data_1(self):
         # large test 
@@ -98,7 +98,7 @@ class PinyinConversion(unittest.TestCase):
             expected_pinyin = entry['expected_pinyin']
 
             expected_pinyin = pinyin_jyutping.parser.clean_romanization(expected_pinyin)
-            converted_pinyin = pinyin_jyutping.parser.clean_romanization(self.pinyin_jyutping.pinyin(chinese, spaces=True)[0])
+            converted_pinyin = pinyin_jyutping.parser.clean_romanization(self.pinyin_jyutping.pinyin(chinese, spaces=True))
 
             expected_pinyin_syllables = pinyin_jyutping.parser.parse_pinyin(expected_pinyin)
             converted_pinyin_syllables = pinyin_jyutping.parser.parse_pinyin(converted_pinyin)
@@ -109,7 +109,12 @@ class PinyinConversion(unittest.TestCase):
     def test_alternatives(self):
         # self.assertEqual(self.pinyin_jyutping.pinyin('举起来'), ['jǔ qǐ lai'])
         # 往后面坐
-        self.assertEqual(self.pinyin_jyutping.pinyin('往后面坐'), ['wǎnghòu miàn zuò', 'wǎnghòu mian zuò'])
+        self.assertEqual(self.pinyin_jyutping.pinyin_all_solutions('往后面坐'), 
+                         [
+                            ['wǎnghòu'],
+                            ['miàn', 'mian'], 
+                            ['zuò']
+                        ])
 
 
     def test_user_corrections(self):
@@ -123,7 +128,7 @@ class PinyinConversion(unittest.TestCase):
                 }
             ]
         )
-        self.assertEqual(pinyin_jyutping_instance_1.pinyin('忘拿一些东西了')[0], 'wàng ná yīxiē dōngxi le')
+        self.assertEqual(pinyin_jyutping_instance_1.pinyin('忘拿一些东西了'), 'wàng ná yīxiē dōngxi le')
 
 
     def get_baserow_records(self):
@@ -269,11 +274,11 @@ class PinyinConversion(unittest.TestCase):
 
     def test_convert_pinyin_single_solution(self):
         # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_convert_pinyin_single_solution
-        self.assertEqual(self.pinyin_jyutping.pinyin_single_solution('没有'), ['méiyǒu'])
-        self.assertEqual(self.pinyin_jyutping.pinyin_single_solution('没有', spaces=True), ['méi yǒu'])
-        self.assertEqual(self.pinyin_jyutping.pinyin_single_solution('没有', tone_numbers=True), ['mei2you3'])
-        self.assertEqual(self.pinyin_jyutping.pinyin_single_solution('没有', tone_numbers=True, spaces=True), ['mei2 you3'])
-        self.assertEqual(self.pinyin_jyutping.pinyin_single_solution('請問，你叫什麼名字？')[0], 'qǐngwèn ， nǐ jiào shénme míngzi ？')
+        self.assertEqual(self.pinyin_jyutping.pinyin('没有'), 'méiyǒu')
+        self.assertEqual(self.pinyin_jyutping.pinyin('没有', spaces=True), 'méi yǒu')
+        self.assertEqual(self.pinyin_jyutping.pinyin('没有', tone_numbers=True), 'mei2you3')
+        self.assertEqual(self.pinyin_jyutping.pinyin('没有', tone_numbers=True, spaces=True), 'mei2 you3')
+        self.assertEqual(self.pinyin_jyutping.pinyin('請問，你叫什麼名字？'), 'qǐngwèn ， nǐ jiào shénme míngzi ？')
 
     def test_multiline_input(self):
         # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_multiline_input
@@ -282,7 +287,7 @@ class PinyinConversion(unittest.TestCase):
 請問，你叫什麼名字？"""
         expected_output = """méiyǒu 
  qǐngwèn ， nǐ jiào shénme míngzi ？"""
-        output = self.pinyin_jyutping.pinyin(input)[0]
+        output = self.pinyin_jyutping.pinyin(input)
         self.assertEqual(output, expected_output)
 
 
@@ -323,7 +328,7 @@ class PinyinConversion(unittest.TestCase):
 29、现在的局势非常紧张，我们要不动声色的观察敌情，以免打草惊蛇。
 30、他们不得不自污其行，对那些奸臣们虚与委蛇，为的是获得为国尽忠的机会，免得打草惊蛇，四面树敌，以致遭受奸臣们的嫉恨与陷害。        
         """
-        output = self.pinyin_jyutping.pinyin(input)[0]
+        output = self.pinyin_jyutping.pinyin(input)
 
         # count number of lines
         lines = output.split('\n')
