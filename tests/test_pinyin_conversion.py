@@ -68,7 +68,7 @@ class PinyinConversion(unittest.TestCase):
 
 
     def test_simple_chars(self):
-        self.assertEqual(self.pinyin_jyutping.pinyin('忘'), ['wàng'])
+        self.assertEqual(self.pinyin_jyutping.pinyin('忘'), 'wàng')
 
     # @pytest.mark.skip(reason="too many alternatives")
     def test_pinyin_sentences(self):
@@ -80,6 +80,7 @@ class PinyinConversion(unittest.TestCase):
         self.assertIn('bùjǐn 。 。 。 ,   hái ...', self.pinyin_jyutping.pinyin('不仅。。。, 还...', tone_numbers=False, spaces=False))
 
     def test_tone_changes(self):
+        # pytest tests/test_pinyin_conversion.py -k test_tone_changes -s -rPP  --log-cli-level=DEBUG
         self.assertEqual(self.pinyin_jyutping.pinyin('穿不上'), 'chuān bú shàng')
         self.assertEqual(self.pinyin_jyutping.pinyin('不够亮'), 'búgòu liàng')
         self.assertEqual(self.pinyin_jyutping.pinyin('不成熟'), 'bù chéngshú')

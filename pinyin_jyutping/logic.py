@@ -264,6 +264,7 @@ def apply_pinyin_tone_change(word_list, solutions_array):
         if prev_character != None:
             if prev_character['chinese_character'] == '不':
                 if character['syllable'].tone == constants.PinyinTones.tone_4:
+                    logger.debug(f'performing tone change, 不 tone 4 to tone 2')
                     solution_change_tone(solutions_array, 
                                         prev_character['word_index'], 
                                         prev_character['word_solution_index'], 
@@ -271,6 +272,7 @@ def apply_pinyin_tone_change(word_list, solutions_array):
                                         constants.PinyinTones.tone_2)
             elif prev_character['chinese_character'] == '一':
                 if character['syllable'].tone == constants.PinyinTones.tone_4:
+                    logger.debug(f'performing tone change, 一 tone 4 to tone 2')
                     solution_change_tone(solutions_array, 
                                          prev_character['word_index'], 
                                          prev_character['word_solution_index'], 
