@@ -232,39 +232,50 @@ def jyutping_render_tone_mark(initial, final, tone):
     result = f'{jyutping_get_initial_str(initial)}{jyutping_apply_tone_mark(final, tone)}'
     return result
 
-def solution_generator(word_list, solution):
+def solution_generator(word_list, solutions_array):
     word_index = 0
-    character_index = 0
-    for word, word_solution in zip(word_list, solution):
-        character_index = 0
-        for chinese_character, syllable in zip(word, word_solution):
-            yield {
-                'word_index': word_index,
-                'character_index': character_index,
-                'chinese_character': chinese_character,
-                'syllable': syllable
-            }
-            character_index += 1
+    for word, word_solutions in zip(word_list, solutions_array):
+        word_solution_index = 0
+        for word_solution in word_solutions:
+            character_index = 0
+            for chinese_character, syllable in zip(word, word_solution):
+                yield {
+                    'word_index': word_index,
+                    'word_solution_index': word_solution_index,
+                    'character_index': character_index,
+                    'chinese_character': chinese_character,
+                    'syllable': syllable
+                }
+                character_index += 1
+            word_solution_index += 1
         word_index += 1
 
-def solution_change_tone(solution, word_index, character_index, new_tone):
-    word_copy = copy.copy(solution[word_index])
+def solution_change_tone(solutions_array, word_index, word_solution_index, character_index, new_tone):
+    word_copy = copy.copy(solutions_array[word_index][word_solution_index])
     syllable_copy = copy.copy(word_copy[character_index]) 
     syllable_copy.tone = new_tone
 
     word_copy[character_index] = syllable_copy
-    solution[word_index] = word_copy    
+    solutions_array[word_index][word_solution_index] = word_copy
 
-def apply_pinyin_tone_change(word_list, solution):
+def apply_pinyin_tone_change(word_list, solutions_array):
     prev_character = None
-    for character in solution_generator(word_list, solution):
+    for character in solution_generator(word_list, solutions_array):
         if prev_character != None:
             if prev_character['chinese_character'] == '不':
                 if character['syllable'].tone == constants.PinyinTones.tone_4:
-                    solution_change_tone(solution, prev_character['word_index'], prev_character['character_index'], constants.PinyinTones.tone_2)
+                    solution_change_tone(solutions_array, 
+                                        prev_character['word_index'], 
+                                        prev_character['word_solution_index'], 
+                                        prev_character['character_index'], 
+                                        constants.PinyinTones.tone_2)
             elif prev_character['chinese_character'] == '一':
                 if character['syllable'].tone == constants.PinyinTones.tone_4:
-                    solution_change_tone(solution, prev_character['word_index'], prev_character['character_index'], constants.PinyinTones.tone_2)
+                    solution_change_tone(solutions_array, 
+                                         prev_character['word_index'], 
+                                         prev_character['word_solution_index'], 
+                                         prev_character['character_index'], 
+                                         constants.PinyinTones.tone_2)
                 else:
                     # doesn't seem to be universally applied
                     #solution_change_tone(solution, prev_character['word_index'], prev_character['character_index'], constants.PinyinTones.tone_4)
@@ -273,4 +284,4 @@ def apply_pinyin_tone_change(word_list, solution):
 
         prev_character = character
 
-    return solution
+    return solutions_array

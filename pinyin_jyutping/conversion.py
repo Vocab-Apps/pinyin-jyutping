@@ -100,11 +100,11 @@ def render_solutions_array(solutions, tone_numbers, spaces):
     return [render_word(word, tone_numbers, spaces) for word in solutions]
 
 def render_all_romanization_solutions(word_map, word_list, tone_numbers, spaces):
-    # expanded_solution_list = expand_all_romanization_solutions(word_map, word_list)
-    # return [render_solution(solution, tone_numbers, spaces) for solution in expanded_solution_list]
-
     # first, build array of arrays
     solutions_array = [solutions_array_for_word(word_map, word) for word in word_list]
+
+    # apply pinyin tone change rules
+    logic.apply_pinyin_tone_change(word_list, solutions_array)
     
     # now, render everything to the proper romanization
     rendered_solution = [render_solutions_array(solutions, tone_numbers, spaces) for solutions in solutions_array]
