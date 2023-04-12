@@ -23,10 +23,10 @@ class PinyinConversion(unittest.TestCase):
         cls.pinyin_jyutping = pinyin_jyutping.PinyinJyutping()
 
     def test_character_conversion(self):
-        self.assertEqual(self.pinyin_jyutping.pinyin('了'), ['le', 'liǎo', 'liào'])
+        self.assertEqual(self.pinyin_jyutping.pinyin_all_solutions('了'), [['le', 'liǎo', 'liào']])
 
     def test_simple_pinyin(self):
-        self.assertEqual(self.pinyin_jyutping.pinyin('没有'), ['méiyǒu'])
+        self.assertEqual(self.pinyin_jyutping.pinyin('没有'), 'méiyǒu')
         # self.assertEqual(self.pinyin_jyutping.pinyin('忘拿'), ['wàng ná'])
 
     def test_many_solutions(self):
@@ -49,7 +49,7 @@ class PinyinConversion(unittest.TestCase):
         self.assertEqual(output, expected_output)
 
     def test_simple_pinyin_traditional(self):
-        self.assertEqual(self.pinyin_jyutping.pinyin('上課'), ['shàngkè'])
+        self.assertEqual(self.pinyin_jyutping.pinyin('上課'), 'shàngkè')
 
     def test_pinyin_non_recognized_chars(self):
         # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_pinyin_non_recognized_chars

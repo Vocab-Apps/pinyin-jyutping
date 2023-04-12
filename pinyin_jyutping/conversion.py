@@ -145,7 +145,7 @@ def render_single_solution(word_map, word_list, tone_numbers, spaces):
             rendered_word_list.append(rendered_word)
     
     rendered_solution = word_spacing.join(rendered_word_list)
-    return [rendered_solution]
+    return rendered_solution
 
 def tokenize_to_word_list(word_map, text):
     word_list = tokenize(text)
