@@ -44,10 +44,13 @@ class PinyinJyutping():
                 logger.exception(e)                
 
     def pinyin(self, text, tone_numbers=False, spaces=False):
-        return conversion.convert_pinyin(self.data, text, tone_numbers, spaces)
+        return conversion.convert_pinyin_single_solution(self.data, text, tone_numbers, spaces)
 
     def jyutping(self, text, tone_numbers=False, spaces=False):
-        return conversion.convert_jyutping(self.data, text, tone_numbers, spaces)
+        return conversion.convert_jyutping_single_solution(self.data, text, tone_numbers, spaces)
     
+    def pinyin_all_solutions(self, text, tone_numbers=False, spaces=False):
+        return conversion.convert_pinyin_all_solutions(self.data, text, tone_numbers, spaces)
+
     def pinyin_single_solution(self, text, tone_numbers=False, spaces=False):
-        return conversion.convert_pinyin_single_solution(self.data, text, tone_numbers, spaces)    
+        return conversion.convert_jyutping_all_solutions(self.data, text, tone_numbers, spaces)    

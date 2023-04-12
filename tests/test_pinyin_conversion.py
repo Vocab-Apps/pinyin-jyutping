@@ -29,6 +29,27 @@ class PinyinConversion(unittest.TestCase):
         self.assertEqual(self.pinyin_jyutping.pinyin('没有'), ['méiyǒu'])
         # self.assertEqual(self.pinyin_jyutping.pinyin('忘拿'), ['wàng ná'])
 
+    def test_many_solutions(self):
+        # pytest tests/test_pinyin_conversion.py -k test_many_solutions -s -rPP  --log-cli-level=DEBUG
+        input_str = '对不起，这个字我会读，不会写。'
+        expected_output = [
+            ['duìbuqǐ'],
+            ['，'],
+            ['zhège'],
+            ['zì', 'zi'],
+            ['wǒhuì', 'wǒkuài'],
+            ['dú', 'dòu'],
+            ['，'],
+            ['búhuì'],
+            ['xiě', 'xiè'],
+            ['。']
+        ]
+        output = self.pinyin_jyutping.pinyin_all_solutions(input_str)
+        logger.debug(f'output: {pprint.pformat(output)}')
+        self.assertEqual(output, expected_output)
+        self.assertTrue(False)
+        # self.assertEqual(self.pinyin_jyutping.pinyin('忘拿'), ['wàng ná'])
+
     def test_simple_pinyin_traditional(self):
         self.assertEqual(self.pinyin_jyutping.pinyin('上課'), ['shàngkè'])
 

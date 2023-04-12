@@ -63,6 +63,7 @@ def expand_solutions(word_map, word_list, current_solution, expanded_solution_li
 def expand_all_romanization_solutions(word_map, word_list):
     expanded_solution_list = []
     solutions = get_romanization_solutions(word_map, word_list)
+    logger.debug(f'solutions: {pprint.pformat(solutions)}')
     expand_solutions(word_map, solutions, [], expanded_solution_list)
 
     # apply tone change logic
@@ -81,12 +82,36 @@ def render_word(word, tone_numbers, spaces):
         rendered_list = [syllable.render_tone_mark() for syllable in word]
     return join_syllables_character.join(rendered_list)
 
+# rewrite
 def render_solution(solution, tone_numbers, spaces):
     return ' '.join([render_word(word, tone_numbers, spaces) for word in solution])
 
+
+def solutions_array_for_word(word_map, word):
+    entry = word_map.get(word, None)
+    if entry != None:
+        logger.debug(f'located {word} as word')
+        return [mapping.syllables for mapping in entry]
+    else:
+        logger.debug(f'breaking down {word} into characters')
+        return get_romanization_solutions_for_characters(word_map, word)    
+
+def render_solutions_array(solutions, tone_numbers, spaces):
+    return [render_word(word, tone_numbers, spaces) for word in solutions]
+
 def render_all_romanization_solutions(word_map, word_list, tone_numbers, spaces):
-    expanded_solution_list = expand_all_romanization_solutions(word_map, word_list)
-    return [render_solution(solution, tone_numbers, spaces) for solution in expanded_solution_list]
+    # expanded_solution_list = expand_all_romanization_solutions(word_map, word_list)
+    # return [render_solution(solution, tone_numbers, spaces) for solution in expanded_solution_list]
+
+    # first, build array of arrays
+    solutions_array = [solutions_array_for_word(word_map, word) for word in word_list]
+    
+    # now, render everything to the proper romanization
+    rendered_solution = [render_solutions_array(solutions, tone_numbers, spaces) for solutions in solutions_array]
+
+    return rendered_solution
+
+    
 
 def render_single_solution(word_map, word_list, tone_numbers, spaces):
     output = ''
@@ -130,22 +155,25 @@ def tokenize_to_word_list(word_map, text):
 def convert_to_romanization(word_map, text, tone_numbers, spaces):
     solution_list = []
     word_list = tokenize_to_word_list(word_map, text)
-    logger.debug(f'word_list length: {len(word_list)}')
-    if len(word_list) > constants.MULTI_SOLUTION_MAX_WORD_COUNT:
-        return render_single_solution(word_map, word_list, tone_numbers, spaces)
-    else:
-        return render_all_romanization_solutions(word_map, word_list, tone_numbers, spaces)
+    return render_all_romanization_solutions(word_map, word_list, tone_numbers, spaces)
 
-def convert_pinyin_single_solution(data, text, tone_numbers, spaces):
-    word_map = data.pinyin_map
+def convert_single_solution(word_map, text, tone_numbers, spaces):
     word_list = tokenize_to_word_list(word_map, text)
     logger.debug(f'word_list: {pprint.pformat(word_list)}')
     return render_single_solution(word_map, word_list, tone_numbers, spaces)
 
-def convert_pinyin(data, text, tone_numbers, spaces):
+def convert_pinyin_single_solution(data, text, tone_numbers, spaces):
+    word_map = data.pinyin_map
+    return convert_single_solution(word_map, text, tone_numbers, spaces)
+
+def convert_jyutping_single_solution(data, text, tone_numbers, spaces):
+    word_map = data.jyutping_map
+    return convert_single_solution(word_map, text, tone_numbers, spaces)
+
+def convert_pinyin_all_solutions(data, text, tone_numbers, spaces):
     return convert_to_romanization(data.pinyin_map, text, tone_numbers, spaces)
 
-def convert_jyutping(data, text, tone_numbers, spaces):
+def convert_jyutping_all_solutions(data, text, tone_numbers, spaces):
     return convert_to_romanization(data.jyutping_map, text, tone_numbers, spaces)
 
 def tokenize(text):
