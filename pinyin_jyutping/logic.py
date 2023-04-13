@@ -253,7 +253,6 @@ def solution_generator(word_list, solutions_array):
             prev_chinese_character = data['chinese_character']
             yield data
             character_index += 1
-            word_solution_index += 1
         word_index += 1
 
 def solution_change_tone(solutions_array, word_index, word_solution_index, character_index, new_tone):
