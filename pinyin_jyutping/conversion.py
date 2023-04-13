@@ -45,33 +45,6 @@ def get_romanization_solutions_for_word(word_map, word):
 def get_romanization_solutions(word_map, word_list):
     return [get_romanization_solutions_for_word(word_map, word) for word in word_list]
 
-
-def expand_solutions(word_map, word_list, current_solution, expanded_solution_list):
-    if len(word_list) == 0:
-        expanded_solution_list.append(current_solution)
-        return
-
-    current_word = word_list[0]
-    remaining_words = word_list[1:]
-
-    for alternative in current_word:
-        new_solution = copy.copy(current_solution)
-        new_solution.append(alternative)
-        expand_solutions(word_map, remaining_words, new_solution, expanded_solution_list)
-
-
-def expand_all_romanization_solutions(word_map, word_list):
-    expanded_solution_list = []
-    solutions = get_romanization_solutions(word_map, word_list)
-    logger.debug(f'solutions: {pprint.pformat(solutions)}')
-    expand_solutions(word_map, solutions, [], expanded_solution_list)
-
-    # apply tone change logic
-    expanded_solution_list = [logic.apply_pinyin_tone_change(word_list, solution) for solution in expanded_solution_list]
-
-    return expanded_solution_list
-
-
 def render_word(word, tone_numbers, spaces): 
     join_syllables_character = ''
     if spaces:
@@ -81,11 +54,6 @@ def render_word(word, tone_numbers, spaces):
     else:
         rendered_list = [syllable.render_tone_mark() for syllable in word]
     return join_syllables_character.join(rendered_list)
-
-# rewrite
-def render_solution(solution, tone_numbers, spaces):
-    return ' '.join([render_word(word, tone_numbers, spaces) for word in solution])
-
 
 def solutions_array_for_word(word_map, word):
     entry = word_map.get(word, None)
@@ -111,41 +79,6 @@ def render_all_romanization_solutions(word_map, word_list, tone_numbers, spaces)
 
     return rendered_solution
 
-    
-
-def render_single_solution(word_map, word_list, tone_numbers, spaces):
-    output = ''
-    character_spacing = ''
-    word_spacing = ' '
-    if spaces:
-        character_spacing = ' '
-    rendered_word_list = []
-    for word in word_list:
-        entry = word_map.get(word, None)
-        if entry != None:
-            logger.debug(f'located {word} as word')
-            rendered_word_list.append(render_word(entry[0].syllables, tone_numbers, spaces))
-        else:
-            logger.debug(f'breaking down {word} into characters')
-            syllable_list = []
-            for character in list(word):
-                entry = word_map.get(character, None)
-                if entry != None:
-                    syllable = entry[0].syllables[0]
-                    syllable_list.append(syllable)
-                else:
-                    # implement pass through syllable here
-                    syllable = syllables.PassThroughSyllable(character)
-                    syllable_list.append(syllable)
-            # render syllable_list to text
-            if tone_numbers:
-                rendered_word = character_spacing.join([syllable.render_tone_number() for syllable in syllable_list])
-            else:
-                rendered_word = character_spacing.join([syllable.render_tone_mark() for syllable in syllable_list])
-            rendered_word_list.append(rendered_word)
-    
-    rendered_solution = word_spacing.join(rendered_word_list)
-    return rendered_solution
 
 def tokenize_to_word_list(word_map, text):
     word_list = tokenize(text)
