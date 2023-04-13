@@ -80,7 +80,7 @@ class BuildTests(unittest.TestCase):
             ('什么', 'shen2 me5'),
         ]
         data = self.build_data_from_input(input_data)    
-        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '没有什么', True, False), ['mei2you3 shen2me5'])
+        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin_single_solution(data, '没有什么', True, False), 'mei2you3 shen2me5')
 
     def test_convert_pinyin_sentences(self):
         input_data = [
@@ -91,7 +91,7 @@ class BuildTests(unittest.TestCase):
             ('了', 'le'),
         ]
         data = self.build_data_from_input(input_data)    
-        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '忘拿一些东西了', True, False)[0], 'wang4 na2 yi1xie1 dong1xi5 le5')
+        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin_single_solution(data, '忘拿一些东西了', True, False), 'wang4 na2 yi1xie1 dong1xi5 le5')
 
     def test_get_pinyin_solutions_for_word(self):
         input_data = [
@@ -170,63 +170,6 @@ class BuildTests(unittest.TestCase):
 
         output = pinyin_jyutping.conversion.get_romanization_solutions(data.pinyin_map, ['忘', '拿', '东西'])
         self.assertEqual(output,  expected_result)        
-
-    def test_expand_all_pinyin_solutions(self):
-        input_data = [
-            ('忘', 'wang4'),
-            ('拿', 'na2'),
-            ('拿', 'na3'),
-            ('东西', 'dong1 xi5')
-        ]
-        data = self.build_data_from_input(input_data)    
-
-        solution_1 = [
-                [ # syllables
-                    PinyinSyllable(PinyinInitials.empty, PinyinFinals.uang, PinyinTones.tone_4),
-                ],
-                [ # syllables
-                    PinyinSyllable(PinyinInitials.n, PinyinFinals.a, PinyinTones.tone_2),
-                ],
-                [ # syllables
-                    PinyinSyllable(PinyinInitials.d, PinyinFinals.ong, PinyinTones.tone_1),
-                    PinyinSyllable(PinyinInitials.x, PinyinFinals.i, PinyinTones.tone_neutral),
-                ],
-        ]
-        solution_2 = [
-                [ # syllables
-                    PinyinSyllable(PinyinInitials.empty, PinyinFinals.uang, PinyinTones.tone_4),
-                ],
-                [ # syllables
-                    PinyinSyllable(PinyinInitials.n, PinyinFinals.a, PinyinTones.tone_3),
-                ],
-                [ # syllables
-                    PinyinSyllable(PinyinInitials.d, PinyinFinals.ong, PinyinTones.tone_1),
-                    PinyinSyllable(PinyinInitials.x, PinyinFinals.i, PinyinTones.tone_neutral),
-                ],
-        ]        
-
-        expected_result = [solution_1, solution_2]
-
-        output = pinyin_jyutping.conversion.expand_all_romanization_solutions(data.pinyin_map, ['忘', '拿', '东西'])
-
-        pprint.pprint(output)
-        pprint.pprint(expected_result)
-        self.assertEqual(output,  expected_result)        
-
-    def test_render_all_pinyin_solutions(self):
-        input_data = [
-            ('忘', 'wang4'),
-            ('拿', 'na2'),
-            ('拿', 'na3'),
-            ('东西', 'dong1 xi5')
-        ]
-        data = self.build_data_from_input(input_data)    
-        word_list = ['忘', '拿', '东西']
-
-        expected_result = ['wàng ná dōngxi', 'wàng nǎ dōngxi']
-
-        output = pinyin_jyutping.conversion.render_all_romanization_solutions(data.pinyin_map, word_list, False, False)
-        self.assertEqual(output, expected_result)
 
     def test_improve_tokenization(self):
         input_data = [
