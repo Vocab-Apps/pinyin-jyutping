@@ -24,7 +24,7 @@ class JyutpingConversion(unittest.TestCase):
 
 
     def test_simple_jyutping(self):
-        self.assertEqual(self.pinyin_jyutping.jyutping('全身按摩'), ['cyùnsān ônmō'])
+        self.assertEqual(self.pinyin_jyutping.jyutping('全身按摩'), 'cyùnsān ônmō')
 
     def test_multiple_jyutping(self):
         # pytest tests/test_jyutping_conversion.py -k test_multiple_jyutping -s -rPP  --log-cli-level=INFO
@@ -39,7 +39,7 @@ class JyutpingConversion(unittest.TestCase):
         for entry in data:
             chinese = entry['chinese']
             expected_jyutping = entry['expected_jyutping']
-            self.assertEqual(self.pinyin_jyutping.jyutping(chinese)[0], expected_jyutping)
+            self.assertEqual(self.pinyin_jyutping.jyutping(chinese), expected_jyutping)
     
 
     def test_user_corrections(self):
@@ -53,7 +53,7 @@ class JyutpingConversion(unittest.TestCase):
                 }
             ]
         )
-        self.assertEqual(pinyin_jyutping_instance_1.jyutping('全身按摩')[0], 'cyùnsān ōnmō')
+        self.assertEqual(pinyin_jyutping_instance_1.jyutping('全身按摩'), 'cyùnsān ōnmō')
 
 
     def test_load_anki_deck(self):
@@ -71,13 +71,13 @@ class JyutpingConversion(unittest.TestCase):
             try:
                 # try tone number conversion
                 expected_syllables = pinyin_jyutping.parser.parse_jyutping(expected_jyutping_tone_numbers)
-                actual_syllables = pinyin_jyutping.parser.parse_jyutping(self.pinyin_jyutping.jyutping(chinese, tone_numbers=True)[0])
+                actual_syllables = pinyin_jyutping.parser.parse_jyutping(self.pinyin_jyutping.jyutping(chinese, tone_numbers=True))
 
                 if expected_syllables == actual_syllables:
                     matching_entries_tone_numbers += 1
 
                 # try tone mark conversion
-                actual_jyutping_tone_marks = self.pinyin_jyutping.jyutping(chinese)[0]
+                actual_jyutping_tone_marks = self.pinyin_jyutping.jyutping(chinese)
                 if expected_jyutping_tone_marks == actual_jyutping_tone_marks:
                     matching_entries_tone_marks += 1
                 else:
