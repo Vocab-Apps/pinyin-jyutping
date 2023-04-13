@@ -16,26 +16,39 @@ Usage
 -----
 
 **Pinyin**
-
+generate the best solution:
 >>> import pinyin_jyutping
 >>> p = pinyin_jyutping.PinyinJyutping()
->>> p.pinyin('忘拿一些东西了')[0]
+>>> p.pinyin('忘拿一些东西了')
 'wàng ná yīxiē dōngxī le'
->>> p.pinyin('忘拿一些东西了', tone_numbers=True)[0]
+>>> p.pinyin('忘拿一些东西了', tone_numbers=True)
 'wang4 na2 yi1xie1 dong1xi1 le5'    
->>> p.pinyin('忘拿一些东西了', tone_numbers=True, spaces=True)[0]
+>>> p.pinyin('忘拿一些东西了', tone_numbers=True, spaces=True)
 'wang4 na2 yi1 xie1 dong1 xi1 le5'    
+
+generate all possible solutions:
+>>> import pinyin_jyutping
+>>> p = pinyin_jyutping.PinyinJyutping()
+>>> p.pinyin_all_solutions('忘拿一些东西了')
+[['wàng'], ['ná'], ['yīxiē'], ['dōngxī', 'dōngxi'], ['le', 'liǎo', 'liào']]
 
 **Jyutping**
 
+generate the best solution:
 >>> import pinyin_jyutping
 >>> j = pinyin_jyutping.PinyinJyutping()
->>> j.jyutping('我出去攞野食')[0]
+>>> j.jyutping('我出去攞野食')
 'ngǒ cēothêoi ló jěsik'
->>> j.jyutping('我出去攞野食', tone_numbers=True)[0]
+>>> j.jyutping('我出去攞野食', tone_numbers=True)
 'ngo5 ceot1heoi3 lo2 je5sik6'
->>> j.jyutping('我出去攞野食', tone_numbers=True, spaces=True)[0]
+>>> j.jyutping('我出去攞野食', tone_numbers=True, spaces=True)
 'ngo5 ceot1 heoi3 lo2 je5 sik6'    
+
+generate all possible solutions:
+>>> import pinyin_jyutping
+>>> j = pinyin_jyutping.PinyinJyutping()
+>>> j.jyutping_all_solutions('我出去攞野食')
+[['ngǒ'], ['cēothêoi'], ['ló', 'lō'], ['jěsik', 'jězi', 'jěsit', 'jězik']]
 
 How it works
 ------------
