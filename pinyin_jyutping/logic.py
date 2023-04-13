@@ -235,7 +235,7 @@ def jyutping_render_tone_mark(initial, final, tone):
 
 def solution_generator(word_list, solutions_array):
     word_index = 0
-    last_character = None
+    prev_chinese_character = None
     for word, word_solutions in zip(word_list, solutions_array):
         # add the current word length
         word_solution_index = 0
@@ -243,14 +243,14 @@ def solution_generator(word_list, solutions_array):
         character_index = 0
         for chinese_character, syllable in zip(word, word_solution):
             data = {
-                'prev_character': last_character,
+                'prev_chinese_character': prev_chinese_character,
                 'word_index': word_index,
                 'word_solution_index': word_solution_index,
                 'character_index': character_index,
                 'chinese_character': chinese_character,
                 'syllable': syllable
             }
-            last_character = data
+            prev_chinese_character = data['chinese_character']
             yield data
             character_index += 1
             word_solution_index += 1
@@ -271,28 +271,27 @@ def apply_pinyin_tone_change(word_list, solutions_array):
     logger.debug(f'solutions_array before: {pprint.pformat(solutions_array)}')
     for character in solution_generator(word_list, solutions_array):
         logger.debug(f'processing character: {pprint.pformat(character)}')
-        prev_character = character['prev_character']
-        if prev_character != None:
-            if prev_character['chinese_character'] == '不':
-                if character['syllable'].tone == constants.PinyinTones.tone_4:
-                    logger.debug(f'performing tone change, 不 tone 4 to tone 2')
-                    solution_change_tone(solutions_array, 
+        prev_chinese_character = character['prev_chinese_character']
+        if prev_chinese_character == '不':
+            if character['syllable'].tone == constants.PinyinTones.tone_4:
+                logger.debug(f'performing tone change, 不 tone 4 to tone 2')
+                solution_change_tone(solutions_array, 
+                                    prev_character['word_index'], 
+                                    prev_character['word_solution_index'], 
+                                    prev_character['character_index'], 
+                                    constants.PinyinTones.tone_2)
+        elif prev_chinese_character == '一':
+            if character['syllable'].tone == constants.PinyinTones.tone_4:
+                logger.debug(f'performing tone change, 一 tone 4 to tone 2')
+                solution_change_tone(solutions_array, 
                                         prev_character['word_index'], 
                                         prev_character['word_solution_index'], 
                                         prev_character['character_index'], 
                                         constants.PinyinTones.tone_2)
-            elif prev_character['chinese_character'] == '一':
-                if character['syllable'].tone == constants.PinyinTones.tone_4:
-                    logger.debug(f'performing tone change, 一 tone 4 to tone 2')
-                    solution_change_tone(solutions_array, 
-                                         prev_character['word_index'], 
-                                         prev_character['word_solution_index'], 
-                                         prev_character['character_index'], 
-                                         constants.PinyinTones.tone_2)
-                else:
-                    # doesn't seem to be universally applied
-                    #solution_change_tone(solution, prev_character['word_index'], prev_character['character_index'], constants.PinyinTones.tone_4)
-                    pass
+            else:
+                # doesn't seem to be universally applied
+                #solution_change_tone(solution, prev_character['word_index'], prev_character['character_index'], constants.PinyinTones.tone_4)
+                pass
 
 
         prev_character = character

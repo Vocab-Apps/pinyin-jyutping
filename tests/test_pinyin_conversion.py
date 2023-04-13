@@ -294,7 +294,7 @@ class PinyinConversion(unittest.TestCase):
 
     # @pytest.mark.skip(reason="skip for now")
     def test_long_input(self):
-        # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_long_input
+        # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_long_input -s -rPP
 
         input = """
 1.在野外要进入草丛时，切记要先打草惊蛇。
