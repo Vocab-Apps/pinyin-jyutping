@@ -10,3 +10,7 @@ reset coverage report
 ```
 coverage erase
 ```
+start up http server:
+```
+python -m http.server --bind :: 8000
+```
