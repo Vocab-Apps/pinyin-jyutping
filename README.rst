@@ -16,6 +16,7 @@ Usage
 -----
 
 **Pinyin**
+
 generate the best solution:
 
 >>> import pinyin_jyutping
