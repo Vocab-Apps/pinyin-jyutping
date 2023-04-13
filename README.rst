@@ -17,6 +17,7 @@ Usage
 
 **Pinyin**
 generate the best solution:
+
 >>> import pinyin_jyutping
 >>> p = pinyin_jyutping.PinyinJyutping()
 >>> p.pinyin('忘拿一些东西了')
@@ -27,6 +28,7 @@ generate the best solution:
 'wang4 na2 yi1 xie1 dong1 xi1 le5'    
 
 generate all possible solutions:
+
 >>> import pinyin_jyutping
 >>> p = pinyin_jyutping.PinyinJyutping()
 >>> p.pinyin_all_solutions('忘拿一些东西了')
@@ -35,6 +37,7 @@ generate all possible solutions:
 **Jyutping**
 
 generate the best solution:
+
 >>> import pinyin_jyutping
 >>> j = pinyin_jyutping.PinyinJyutping()
 >>> j.jyutping('我出去攞野食')
@@ -45,6 +48,7 @@ generate the best solution:
 'ngo5 ceot1 heoi3 lo2 je5 sik6'    
 
 generate all possible solutions:
+
 >>> import pinyin_jyutping
 >>> j = pinyin_jyutping.PinyinJyutping()
 >>> j.jyutping_all_solutions('我出去攞野食')
