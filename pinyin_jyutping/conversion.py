@@ -158,9 +158,10 @@ def convert_to_romanization(word_map, text, tone_numbers, spaces):
     return render_all_romanization_solutions(word_map, word_list, tone_numbers, spaces)
 
 def convert_single_solution(word_map, text, tone_numbers, spaces):
-    word_list = tokenize_to_word_list(word_map, text)
-    logger.debug(f'word_list: {pprint.pformat(word_list)}')
-    return render_single_solution(word_map, word_list, tone_numbers, spaces)
+    # first, get all solutions
+    all_solutions = convert_to_romanization(word_map, text, tone_numbers, spaces)
+    # just assemble the most probable solution for each word
+    return ' '.join(word_solutions[0] for word_solutions in all_solutions)
 
 def convert_pinyin_single_solution(data, text, tone_numbers, spaces):
     word_map = data.pinyin_map

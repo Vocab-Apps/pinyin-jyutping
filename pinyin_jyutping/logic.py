@@ -1,6 +1,7 @@
 import functools
 import logging
 import copy
+import pprint
 
 from . import constants
 from . import syllables
@@ -234,23 +235,29 @@ def jyutping_render_tone_mark(initial, final, tone):
 
 def solution_generator(word_list, solutions_array):
     word_index = 0
+    last_character = None
     for word, word_solutions in zip(word_list, solutions_array):
+        # add the current word length
         word_solution_index = 0
-        for word_solution in word_solutions:
-            character_index = 0
-            for chinese_character, syllable in zip(word, word_solution):
-                yield {
-                    'word_index': word_index,
-                    'word_solution_index': word_solution_index,
-                    'character_index': character_index,
-                    'chinese_character': chinese_character,
-                    'syllable': syllable
-                }
-                character_index += 1
+        word_solution = word_solutions[0]
+        character_index = 0
+        for chinese_character, syllable in zip(word, word_solution):
+            data = {
+                'prev_character': last_character,
+                'word_index': word_index,
+                'word_solution_index': word_solution_index,
+                'character_index': character_index,
+                'chinese_character': chinese_character,
+                'syllable': syllable
+            }
+            last_character = data
+            yield data
+            character_index += 1
             word_solution_index += 1
         word_index += 1
 
 def solution_change_tone(solutions_array, word_index, word_solution_index, character_index, new_tone):
+    logger.debug(f'solution_change_tone: word_index: {word_index} word_solution_index: {word_solution_index}: character_index: {character_index}, new_tone: {new_tone}')
     word_copy = copy.copy(solutions_array[word_index][word_solution_index])
     syllable_copy = copy.copy(word_copy[character_index]) 
     syllable_copy.tone = new_tone
@@ -259,8 +266,12 @@ def solution_change_tone(solutions_array, word_index, word_solution_index, chara
     solutions_array[word_index][word_solution_index] = word_copy
 
 def apply_pinyin_tone_change(word_list, solutions_array):
-    prev_character = None
+    # note: pinyin tone change can really only be applied on the most likely solution
+    # otherwise, it gets very complicated
+    logger.debug(f'solutions_array before: {pprint.pformat(solutions_array)}')
     for character in solution_generator(word_list, solutions_array):
+        logger.debug(f'processing character: {pprint.pformat(character)}')
+        prev_character = character['prev_character']
         if prev_character != None:
             if prev_character['chinese_character'] == '不':
                 if character['syllable'].tone == constants.PinyinTones.tone_4:
@@ -286,4 +297,5 @@ def apply_pinyin_tone_change(word_list, solutions_array):
 
         prev_character = character
 
+    logger.debug(f'solutions_array after: {pprint.pformat(solutions_array)}')
     return solutions_array
