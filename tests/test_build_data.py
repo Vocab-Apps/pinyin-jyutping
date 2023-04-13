@@ -59,9 +59,9 @@ class BuildTests(unittest.TestCase):
         data = self.build_data_from_input(input_data)
 
         # no spaces    
-        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '没有', True, False), ['mei2you3'])
+        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin_single_solution(data, '没有', True, False), 'mei2you3')
         # spaces
-        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '没有', True, True), ['mei2 you3'])
+        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin_single_solution(data, '没有', True, True), 'mei2 you3')
 
     def test_convert_pinyin_multiple_alternatives(self):
         input_data = [
@@ -72,7 +72,7 @@ class BuildTests(unittest.TestCase):
         data = self.build_data_from_input(input_data)
 
         # no spaces    
-        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin(data, '没有', True, False), ['mei2you3', 'mei2you4'])
+        self.assertEqual(pinyin_jyutping.conversion.convert_pinyin_all_solutions(data, '没有', True, False), [['mei2you3', 'mei2you4']])
 
     def test_convert_pinyin_words(self):
         input_data = [
