@@ -33,7 +33,7 @@ generate all possible solutions:
 >>> import pinyin_jyutping
 >>> p = pinyin_jyutping.PinyinJyutping()
 >>> p.pinyin_all_solutions('忘拿一些东西了')
-[['wàng'], ['ná'], ['yīxiē'], ['dōngxī', 'dōngxi'], ['le', 'liǎo', 'liào']]
+{'word_list': ['忘', '拿', '一些', '东西', '了'], 'solutions': [['wàng'], ['ná'], ['yīxiē'], ['dōngxī', 'dōngxi'], ['le', 'liǎo', 'liào']]}
 
 **Jyutping**
 
@@ -53,7 +53,7 @@ generate all possible solutions:
 >>> import pinyin_jyutping
 >>> j = pinyin_jyutping.PinyinJyutping()
 >>> j.jyutping_all_solutions('我出去攞野食')
-[['ngǒ'], ['cēothêoi'], ['ló', 'lō'], ['jěsik', 'jězi', 'jěsit', 'jězik']]
+{'word_list': ['我', '出去', '攞', '野食'], 'solutions': [['ngǒ'], ['cēothêoi'], ['ló', 'lō'], ['jěsik', 'jězi', 'jěsit', 'jězik']]}
 
 How it works
 ------------
