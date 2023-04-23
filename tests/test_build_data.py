@@ -52,7 +52,8 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(pinyin_jyutping.conversion.convert_pinyin_all_solutions(data, '没', True, False), [['mei2', 'mei3']])
         self.assertEqual(pinyin_jyutping.conversion.convert_pinyin_all_solutions(data, '没', False, False), [['méi', 'měi']])
 
-    def test_convert_pinyin(self):
+    def test_convert_pinyin_simple(self):
+        # pytest --log-cli-level=DEBUG tests/test_build_data.py -k test_convert_pinyin_simple
         input_data = [
             ('没有', 'mei2 you3')
         ]

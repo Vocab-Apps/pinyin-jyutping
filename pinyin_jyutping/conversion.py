@@ -88,12 +88,18 @@ def tokenize_to_word_list(word_map, text):
 def convert_to_romanization(word_map, text, tone_numbers, spaces):
     solution_list = []
     word_list = tokenize_to_word_list(word_map, text)
-    return render_all_romanization_solutions(word_map, word_list, tone_numbers, spaces)
+    solutions = render_all_romanization_solutions(word_map, word_list, tone_numbers, spaces)
+    return {
+        'word_list': word_list, 
+        'solutions': solutions
+    }
 
 def convert_single_solution(word_map, text, tone_numbers, spaces):
     # first, get all solutions
-    all_solutions = convert_to_romanization(word_map, text, tone_numbers, spaces)
+    data = convert_to_romanization(word_map, text, tone_numbers, spaces)
+    all_solutions = data['solutions']
     # just assemble the most probable solution for each word
+    logger.debug(f'convert_single_solution, all_solutions: {pprint.pformat(all_solutions)}')
     return ' '.join(word_solutions[0] for word_solutions in all_solutions)
 
 def convert_pinyin_single_solution(data, text, tone_numbers, spaces):
