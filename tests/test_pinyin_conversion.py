@@ -23,7 +23,7 @@ class PinyinConversion(unittest.TestCase):
         cls.pinyin_jyutping = pinyin_jyutping.PinyinJyutping()
 
     def test_character_conversion(self):
-        self.assertEqual(self.pinyin_jyutping.pinyin_all_solutions('了'), [['le', 'liǎo', 'liào']])
+        self.assertEqual(self.pinyin_jyutping.pinyin_all_solutions('了'), {'word_list': ['了'], 'solutions': [['le', 'liǎo', 'liào']]})
 
     def test_simple_pinyin(self):
         self.assertEqual(self.pinyin_jyutping.pinyin('没有'), 'méiyǒu')
@@ -32,7 +32,9 @@ class PinyinConversion(unittest.TestCase):
     def test_many_solutions(self):
         # pytest tests/test_pinyin_conversion.py -k test_many_solutions -s -rPP  --log-cli-level=DEBUG
         input_str = '对不起，这个字我会读，不会写。'
-        expected_output = [
+        expected_output = {
+        'word_list': ['对不起', '，', '这个', '字', '我会', '读','，', '不会', '写', '。'],
+        'solutions': [
             ['duìbuqǐ'],
             ['，'],
             ['zhège'],
@@ -43,7 +45,8 @@ class PinyinConversion(unittest.TestCase):
             ['búhuì'],
             ['xiě', 'xiè'],
             ['。']
-        ]
+        ]}
+
         output = self.pinyin_jyutping.pinyin_all_solutions(input_str)
         logger.debug(f'output: {pprint.pformat(output)}')
         self.assertEqual(output, expected_output)
@@ -55,7 +58,9 @@ class PinyinConversion(unittest.TestCase):
         # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_pinyin_non_recognized_chars
         self.assertEqual(self.pinyin_jyutping.pinyin('請問，你叫什麼名字？'), 'qǐngwèn ， nǐ jiào shénme míngzi ？')
         self.assertEqual(self.pinyin_jyutping.pinyin_all_solutions('請問，你叫什麼名字？'), 
-            [
+            {
+            'word_list': ['請問', '，', '你', '叫', '什麼', '名字', '？'],
+            'solutions': [
                 ['qǐngwèn'],
                 ['，'],
                 ['nǐ'],
@@ -64,6 +69,7 @@ class PinyinConversion(unittest.TestCase):
                 ['míngzi', 'míngzì'],
                 ['？']
             ]
+            }
             )
 
 
@@ -113,11 +119,14 @@ class PinyinConversion(unittest.TestCase):
         # self.assertEqual(self.pinyin_jyutping.pinyin('举起来'), ['jǔ qǐ lai'])
         # 往后面坐
         self.assertEqual(self.pinyin_jyutping.pinyin_all_solutions('往后面坐'), 
-                         [
+                         {'word_list':
+                          ['往后', '面', '坐'],
+                         'solutions': [
                             ['wǎnghòu'],
                             ['miàn', 'mian'], 
                             ['zuò']
-                        ])
+                        ]
+                        })
 
 
     def test_user_corrections(self):
