@@ -1,7 +1,12 @@
 pinyin-jyutping
 ===============
 
-Python module which converts a Chinese sentence from Simplified/Traditional to Mandarin/Pinyin and Traditional/Simplified to Cantonese/Jyutping, outputting diacritics (accented characters). I designed this library to create Mandarin and Cantonese flashcards.
+Python module which converts a Chinese sentence from Simplified/Traditional to Mandarin/Pinyin and Traditional/Simplified to Cantonese/Jyutping, outputting diacritics (accented characters), or tone numbers. I designed this library to create Mandarin and Cantonese flashcards.
+
+Compared to other Pinyin python modules, this one offers the following particular features:
+
+* It can intelligently translate a full sentence, using spaces between words for clarity.
+* It will tell you about all the possible transliterations, giving you the option to choose which one is the correct one.
 
 Want to support my work on this module ? Become a supporter: https://www.patreon.com/lucw
 
