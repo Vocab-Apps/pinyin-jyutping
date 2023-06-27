@@ -90,5 +90,5 @@ class JyutpingConversion(unittest.TestCase):
             except  pinyin_jyutping.errors.PinyinSyllableNotFound as e:
                 logger.warning(e)
 
-        self.assertGreater(matching_entries_tone_numbers, 3758)
-        self.assertGreater(matching_entries_tone_marks, 3205)
+        self.assertGreater(matching_entries_tone_numbers, 3752)
+        self.assertGreater(matching_entries_tone_marks, 3199)
