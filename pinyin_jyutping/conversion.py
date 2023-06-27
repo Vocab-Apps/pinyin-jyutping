@@ -1,4 +1,5 @@
 import jieba
+import hanzidentifier
 import logging
 import copy
 import pprint
@@ -61,6 +62,9 @@ def solutions_array_for_word(word_map, word):
         logger.debug(f'located {word} as word')
         return [mapping.syllables for mapping in entry]
     else:
+        if not hanzidentifier.has_chinese(word):
+            # not chinese text, return unmodified
+            return [[syllables.PassThroughSyllable(word)]]
         logger.debug(f'breaking down {word} into characters')
         return get_romanization_solutions_for_characters(word_map, word)    
 
@@ -88,6 +92,7 @@ def tokenize_to_word_list(word_map, text):
 def convert_to_romanization(word_map, text, tone_numbers, spaces):
     solution_list = []
     word_list = tokenize_to_word_list(word_map, text)
+    logger.debug(f'tokenization result: {pprint.pformat(word_list)}')
     solutions = render_all_romanization_solutions(word_map, word_list, tone_numbers, spaces)
     return {
         'word_list': word_list, 
@@ -131,7 +136,11 @@ def improve_tokenization(word_map, word_list):
 
     final_word_list = []
     for word in word_list:
-        if len(word) == 1 or word in word_map:
+        #
+        if not hanzidentifier.has_chinese(word):
+            # word is not chinese
+            final_word_list.append(word)
+        elif len(word) == 1 or word in word_map:
             final_word_list.append(word)
         else:
             logger.debug(f'attempting improved tokenization for {word}')

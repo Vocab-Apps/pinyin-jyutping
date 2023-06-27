@@ -76,6 +76,12 @@ class PinyinConversion(unittest.TestCase):
     def test_simple_chars(self):
         self.assertEqual(self.pinyin_jyutping.pinyin('忘'), 'wàng')
 
+    def test_mixed_chinese_english(self):
+        # pytest --log-cli-level=DEBUG tests/test_pinyin_conversion.py -k test_mixed_chinese_english
+        self.assertEqual(self.pinyin_jyutping.pinyin('这是ATM', tone_numbers=True, spaces=True), 'zhe4 shi4 ATM')
+        self.assertEqual(self.pinyin_jyutping.pinyin('这是ER', tone_numbers=True, spaces=True), 'zhe4 shi4 ER')
+        # self.assertEqual(self.pinyin_jyutping.pinyin('这是E', tone_numbers=True, spaces=True), 'zhe4 shi4 E')
+
     # @pytest.mark.skip(reason="too many alternatives")
     def test_pinyin_sentences(self):
         self.assertEqual(self.pinyin_jyutping.pinyin('忘拿一些东西了'), 'wàng ná yīxiē dōngxī le')
